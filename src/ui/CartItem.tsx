@@ -2,13 +2,16 @@ import { FaTrash } from "react-icons/fa";
 import styled from "styled-components";
 import Button from "./Button";
 import { useState } from "react";
+import CartItemRemove from "../features/Cart/CartItemRemove";
+import CartItemCounter from "../features/Cart/CartItemCounter";
 
 const Container = styled.div`
+    border: 2px solid var(--color-brand-100);
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
-    padding: 2rem 0;
+    padding: 1rem 2rem;
 `;
 
 const Img = styled.img`
@@ -28,40 +31,26 @@ const ProductDetails = styled.div`
    gap: 1rem;
 `;
 
-const ProductCounter = styled.div`
-   display: flex;
-   max-width: 100px;
-   gap: 1rem;
+const ProductPrice = styled.h5`
+    /* font-family: var(--font-secondary); */
 `;
 
 
-function CartItem() {
-    const [quantity,setQuantity] = useState(1)
 
-    function incQuantity(){
-        setQuantity(prev=>prev + 1)
-    }
 
-    function decQuantity(){
-        setQuantity(prev=>prev - 1)
-    }
-
+function CartItem({Item}) {
     return (
         <Container>
             <ProductContainer>
                 <Img src="/hero-img1.jpg" />
                 <ProductDetails>
-                    <h3>Product name</h3>
-                    <p>$400</p>
-                    <p>Delivary 4-5 days</p>
+                    <h3>{Item.name}</h3>
+                    <ProductPrice>₹ {Item.price}</ProductPrice>
+                    <p>{Item.size} / {Item.color.name}</p>
                 </ProductDetails>
             </ProductContainer>
-            <ProductCounter>
-                <Button size="small" onClick={()=>incQuantity()}>+</Button>
-                <span>{quantity}</span>
-                <Button size="small" onClick={()=>decQuantity()}>-</Button>
-            </ProductCounter>
-            <FaTrash size={20} />
+            <CartItemCounter itemQty={Item.qty} cartItemId={Item.id}/>
+            <CartItemRemove cartId={Item.id}/>
         </Container>
     )
 }

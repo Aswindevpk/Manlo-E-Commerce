@@ -3,8 +3,12 @@ import Heading from "../../ui/Heading";
 import StyledDivider from "../../ui/StyledDivider";
 import ColorPicker from "../../ui/ColorPicker";
 import SizePicker from "../../ui/SizePicker";
-import { CiHeart } from "react-icons/ci";
-import Button from "../../ui/Button";
+import useProductItem from "./useProductItem";
+import ProductImages from "./ProductImages";
+import ProductAction from "./productAction";
+import StarRating from "../../ui/StarRating";
+
+
 
 const Main = styled.main`
     padding: 4rem 0;
@@ -13,63 +17,89 @@ const Main = styled.main`
     grid-template-columns: 60vw 1fr;
 `;
 
-const ProductImages = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-`;
-
-const ProductImg = styled.img`
-    width: 100%;
-    height: 600px;
-    cursor: pointer;
+const Details = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 `;
 
 const Section = styled.div`
-    padding: 2rem 0rem;
-`
-
-const Cta = styled.div`
     display: flex;
-    align-items: center;
-    gap: 2rem;
-`
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+
+
+const BrandName = styled.p`
+    font-size: 12px;
+    letter-spacing:1px;
+    color: var(--color-grey-500);
+`;
+
+const ProductName = styled.h3`
+    font-size: 24px;
+    font-weight:600;
+    font-family:var(--font-secondary);
+    color: var(--color-brand-700);
+`;
+
+const Price = styled.span`
+    font-size: 20px;
+    font-weight:600;
+    font-family:var(--font-secondary);
+    color: var(--color-brand-700);
+`;
+
+const Para = styled.span`
+    padding-left:1rem;
+    font-size: 10px;
+    color: var(--color-grey-500);
+`;
+
+const SectionHeader = styled.p`
+    font-size: 14px;
+    color: var(--color-grey-500);
+    text-transform:uppercase;
+`;
+
+
 
 
 function ProductDetail() {
+    const { isLoading, productItem } = useProductItem()
+
+    if (isLoading || !productItem) {
+        return <h1>loading</h1>
+    }
     return (
         <Main>
-            <ProductImages>
-                <ProductImg src="/hero-img1.jpg" />
-                <ProductImg src="/hero-img3.jpg" />
-                <ProductImg src="/hero-img3.jpg" />
-                <ProductImg src="/hero-img1.jpg" />
-            </ProductImages>
-
-            <div>
-                <Section>
-                    <p>Category</p>
-                    <Heading>Product title</Heading>
-                    <p>Rs:999/-</p>
-                    <p>MRP including all taxes.</p>
-                </Section>
+            <ProductImages />
+            <Details>
+                <div>
+                    <BrandName>NIKE</BrandName>
+                    <ProductName>{productItem?.name}</ProductName>
+                    <Price>Rs. 799/-</Price>
+                    <Para>MRP including all taxes.</Para>
+                    <StarRating size={20}/>
+                </div>
                 <StyledDivider />
-
                 <Section>
+                    <SectionHeader>Colors</SectionHeader>
                     <ColorPicker />
                 </Section>
                 <StyledDivider />
                 <Section>
+                    <SectionHeader>sizes</SectionHeader>
                     <SizePicker />
                 </Section>
-                <Cta>
-                    <Button size="large">Add to cart</Button>
-                    <CiHeart fontSize={30} />
-                </Cta>
+                <ProductAction />
                 <Section>
-                    <p>ETA introduces this taupe polo t-shirt, crafted with a knit-textured pattern for a soft and comfortable feel. Designed in a relaxed silhouette, it features a classic polo neck collar and half sleeves.</p>
+                    <SectionHeader>SKU : {productItem.SKU}</SectionHeader>
+                    <SectionHeader>Description : {productItem?.product?.description}</SectionHeader>
+                    <SectionHeader>care Instruction : {productItem?.product?.care_instruction}</SectionHeader>
                 </Section>
-            </div>
+            </Details>
         </Main>
     )
 }

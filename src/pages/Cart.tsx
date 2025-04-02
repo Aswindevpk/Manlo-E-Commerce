@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import CartItem from "../ui/CartItem";
-import StyledDivider from "../ui/StyledDivider";
-import Button from "../ui/Button";
-import { Link } from "react-router-dom";
+
+import useCart from "../features/Cart/useCart";
+import CartSummary from "../features/Cart/CartSummary";
+import EmptyCart from "../ui/EmptyCart";
 
 const StyledCart = styled.main`
     display: flex;
@@ -10,11 +11,6 @@ const StyledCart = styled.main`
     justify-content: space-between;
 `;
 
-const Row = styled.div`
-    display: flex;
-    padding: 0.5rem 0;
-    justify-content: space-between;
-`;
 
 const Wrapper = styled.div`
     display: flex;
@@ -28,55 +24,28 @@ const CartProducts = styled.div`
 `;
 
 
-
-const CartSummary = styled.div`
-    width: 100%;
-`;
-
-
-
-
 function Cart() {
+    const { isLoading, cartItems } = useCart()
+    if (isLoading || !cartItems) {
+        return <h1>loading</h1>
+    }
+    if(cartItems.length ===0){
+        return <EmptyCart/>
+    }
+
     return (
         <StyledCart>
             <Wrapper>
                 <h2>Shopping cart</h2>
                 <CartProducts>
-                    <CartItem />
-                    <StyledDivider />
-                    <CartItem />
-                    <StyledDivider />
-                    <CartItem />
+                    {cartItems.map(Item => (
+                        <CartItem key={Item.id} Item={Item}/>
+                    ))}
                 </CartProducts>
             </Wrapper>
             <Wrapper>
                 <h2>Summary</h2>
-                <CartSummary>
-                    <Row>
-                        <p>ENTER COUPON CODE</p>
-                    </Row>
-                    <StyledDivider />
-                    <Row>
-                        <p>SUB TOTAL</p>
-                        <p>$400</p>
-                    </Row>
-                    <Row>
-                        <p>SHIPPING</p>
-                        <p>FREE</p>
-                    </Row>
-                    <Row>
-                        <p>TAXES</p>
-                        <p>$0</p>
-                    </Row>
-                    <StyledDivider />
-                    <Row>
-                        <h2>TOTAL</h2>
-                        <p>$400</p>
-                    </Row>
-                    <Link to="/checkout">
-                        <Button style={{ width: "100%" }} size="medium">Proceed to Checkout</Button>
-                    </Link>
-                </CartSummary>
+                <CartSummary cartItems={cartItems}/>
             </Wrapper>
         </StyledCart>
     )

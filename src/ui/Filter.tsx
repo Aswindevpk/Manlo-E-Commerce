@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useSearchParams } from "react-router-dom";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import FilterSummary from "./FilterSummary";
+import useGetColors from "../features/Filter/useGetColors";
+import useGetSizes from "../features/Filter/useGetSizes";
 
 
 
@@ -36,8 +38,6 @@ const Input = styled.input`
 `;
 
 
-
-
 const DropdownContent = styled.div<{ isOpen: boolean }>`
   display: ${(props) => (props.isOpen ? "block" : "none")};
   padding: 10px 0;
@@ -52,6 +52,9 @@ const Filter = () => {
         color: false,
         size: false,
     });
+
+    const {colors} = useGetColors()
+    const {sizes} = useGetSizes()
     
 
     const toggleFilter = (filter: FilterType) => {
@@ -77,25 +80,10 @@ const Filter = () => {
     return (
         <StyledFilter>
             <FilterSummary/>
-            {/* <Title onClick={() => toggleFilter("price")}>{openFilters.price ? <GoChevronUp /> : <GoChevronDown />}PRICE </Title>
-            <DropdownContent isOpen={openFilters.price}>
-                <Input
-                    type="number"
-                    placeholder="Min"
-                    onChange={(e) => handleFilterChange("minPrice", e.target.value)}
-                    value={searchParams.get("minPrice") || ""}
-                />
-                <Input
-                    type="number"
-                    placeholder="Max"
-                    onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
-                    value={searchParams.get("maxPrice") || ""}
-                />
-            </DropdownContent> */}
 
             <Title onClick={() => toggleFilter("color")}>{openFilters.color ? <GoChevronUp /> : <GoChevronDown />}COLOR </Title>
             <DropdownContent isOpen={openFilters.color}>
-                {["Red", "Blue", "Green", "Black", "White"].map((color) => (
+                {colors?.map((color) => (
                     <Label key={color}>
                         <Input
                             type="checkbox"
@@ -107,9 +95,9 @@ const Filter = () => {
                 ))}
             </DropdownContent>
 
-            <Title onClick={() => toggleFilter("size")}>{openFilters.price ? <GoChevronUp /> : <GoChevronDown />}SIZE </Title>
+            <Title onClick={() => toggleFilter("size")}>{openFilters.size ? <GoChevronUp /> : <GoChevronDown />}SIZE </Title>
             <DropdownContent isOpen={openFilters.size}>
-                {["S", "M", "L", "XL"].map((size) => (
+                {sizes?.map((size) => (
                     <Label key={size}>
                         <Input
                             type="checkbox"

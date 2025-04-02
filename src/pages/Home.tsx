@@ -2,8 +2,6 @@ import styled from "styled-components";
 import Button from "../ui/Button";
 import Heading from "../ui/Heading";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getProduct } from "../services/apiProduct";
 
 const HeroSection = styled.section`
   display: grid;
@@ -49,13 +47,6 @@ const HeroHeader = styled.h1`
 
 
 export default function Home() {
-    const [product, setProduct] = useState(null);
-
-    useEffect(()=>{
-        getProduct().then(setProduct).catch(console.error)
-    },[])
-
-    console.log(product)
     return (
         <>
             <HeroSection>

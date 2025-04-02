@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { MainCategory } from "../types";
 
 const CategoryList = styled.ul`
   display: flex;
@@ -51,18 +52,15 @@ const CategoryText = styled.div`
   }
 `;
 
-function Categories() {
-  const categories = [
-    { name: "Top wear", image: "/hero-img1.jpg" },
-    { name: "Bottom wear", image: "/hero-img2.jpg" },
-    { name: "Accessories", image: "/hero-img1.jpg" },
-    { name: "New Arrivals", image: "/hero-img3.jpg" },
-  ];
+interface Props{
+  categories:MainCategory[]
+}
 
+function Categories({categories}:Props) {
   return (
     <CategoryList>
       {categories.map((cat, index) => (
-        <Link to={"/category/" + cat.name}>
+        <Link key={cat.id} to={"/collection/" + cat.slug}>
           <Category key={index}>
             <CategoryImage src={cat.image} alt={cat.name} />
             <CategoryText>{cat.name}</CategoryText>

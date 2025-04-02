@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import Categories from "../ui/Categories"
 import ProductItem from "../ui/ProductItem";
+import MainCategory from "../features/Categories/MainCategory";
+
 
 
 const ProductWrapper = styled.div`
@@ -40,10 +41,11 @@ const ProductList = styled.div`
 function Shop() {
   return (
     <div>
-      <Categories />
-      <h2 style={{textAlign:"center"}}>New Arrivals</h2>
+      <MainCategory />
+      <h2 style={{ textAlign: "center" }}>New Arrivals</h2>
       <ProductWrapper>
         <ProductList>
+          {/* <ProductItem />
           <ProductItem />
           <ProductItem />
           <ProductItem />
@@ -51,8 +53,7 @@ function Shop() {
           <ProductItem />
           <ProductItem />
           <ProductItem />
-          <ProductItem />
-          <ProductItem />
+          <ProductItem /> */}
         </ProductList>
       </ProductWrapper>
     </div>

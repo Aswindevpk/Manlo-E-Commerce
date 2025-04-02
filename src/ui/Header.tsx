@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { CiHeart, CiShoppingCart, CiUser } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
+import Logout from "../features/Auth/Logout";
+import CartIcon from "./CartIcon";
 
 
 
@@ -101,11 +103,12 @@ const Header = () => {
           <CiHeart size={30} />
         </Link>
         <Link to="cart">
-          <CiShoppingCart size={30} />
+          <CartIcon />
         </Link>
-        <Link to="profile">
+        <Link to="user">
           <CiUser size={30} />
         </Link>
+        <Logout />
       </Navlinks>
     </NavBar>
   );

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ProductItem from "../../ui/ProductItem"
 import Filter from "../../ui/Filter";
 import SortBy from "../../ui/SortBy";
+import { Product } from "../../types";
 
 const StyledProductList = styled.div`
     display: grid;
@@ -28,24 +29,17 @@ const Container = styled.div`
 
 
 
-function ProductList() {
+function ProductList({ products }: { products: Product[] }) {
     return (
         <StyledProductList>
             <SideBar>
                 <Filter />
             </SideBar>
             <TopBar>
-                <SortBy/>
+                <SortBy />
             </TopBar>
             <Container>
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
-                <ProductItem />
+                {products.map(prod => (<ProductItem key={prod.id} product={prod} />))}
             </Container>
         </StyledProductList>
     )
