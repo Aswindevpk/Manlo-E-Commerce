@@ -6,6 +6,17 @@ import Input from "../../ui/Input";
 import FormRowVertical from "../../ui/FormRowVertical";
 import useSignup from "./useSignup";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+const StyledRedirect = styled.p`
+   align-self: center;
+`;
+
+const StyledRedirectLink = styled(Link)`
+   text-decoration:underline;
+   font-weight:500;
+   color:var(--color-brand-800);
+`;
 
 function SignupForm() {
   const [email, setEmail] = useState("test@example.com");
@@ -17,11 +28,12 @@ function SignupForm() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     if (!email || !password || !confirmPassword) return
-    
-    signup({ email, password },{
-      onSettled:()=>{
+
+    signup({ email, password }, {
+      onSettled: () => {
         setEmail("")
         setPassword("")
+        setConfirmPassword("")
       }
     })
   }
@@ -60,13 +72,16 @@ function SignupForm() {
         />
       </FormRowVertical>
       <FormRowVertical>
-        <Button
-          size="large"
-          disabled={isPending}
-        >
-          {isPending ? <SpinnerMini /> : "Sign Up"}</Button>
+        <>
+          <Button
+            size="large"
+            disabled={isPending}
+          >
+            {isPending ? <SpinnerMini /> : "Sign Up"}</Button>
+          <StyledRedirect>I already have an account? <StyledRedirectLink to="/login">Login</StyledRedirectLink></StyledRedirect>
+        </>
       </FormRowVertical>
-      <Link to="/login">login</Link>
+
     </Form>
   );
 }

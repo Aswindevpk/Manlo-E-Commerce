@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
-import { useUser } from "./useUser"
+import { useUser } from "../../features/Auth/useUser"
 import Spinner from "../../ui/Spinner"
 
 
@@ -17,14 +17,16 @@ const FullPage = styled.div`
   justify-content: center;
 `
 
-function ProtectedRoute({ children }: Props) {
+function ProtectedAdminRoute({ children }: Props) {
   const navigate = useNavigate()
-  //1.load the authenticated user
-  const { isPending, isAuthenticated } = useUser()
+
+  const { isPending, isAuthenticated, user } = useUser()
 
   useEffect(() => {
-    if (!isAuthenticated && !isPending) navigate("/login")
-  }, [isAuthenticated, navigate, isPending])
+    if (!isPending && (!isAuthenticated || user?.role !== "admin")) {
+      navigate("/login", { replace: true });
+    }
+  }, [isAuthenticated, navigate, isPending, user])
 
   if (isPending)
     return (
@@ -33,7 +35,9 @@ function ProtectedRoute({ children }: Props) {
       </FullPage>
     )
 
-  if(isAuthenticated) return children
+  if (!isAuthenticated || user?.role !== "admin") return null;
+
+  if (isAuthenticated) return children
 }
 
-export default ProtectedRoute
+export default ProtectedAdminRoute

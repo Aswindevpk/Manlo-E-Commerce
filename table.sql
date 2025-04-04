@@ -3,8 +3,10 @@
 CREATE TABLE users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) DEFAULT gen_random_uuid(),
   username TEXT,
-  role TEXT DEFAULT 'user'
+  role TEXT DEFAULT 'user',
+  email TEXT NOT NULL
 );
+
 
 
 --addresses
@@ -74,12 +76,13 @@ CREATE TABLE product_variant_images (
 );
 
 
---sizes
 CREATE TABLE sizes (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL UNIQUE,
-    category_id UUID NOT NULL REFERENCES categories(id) ON DELETE CASCADE
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  category_id UUID NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+  UNIQUE (name, category_id) 
 );
+
 
 
 --product_units (for sizes of variants)

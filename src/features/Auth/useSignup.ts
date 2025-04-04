@@ -10,10 +10,11 @@ function useSignup() {
     mutationFn: signupApi,
     onSuccess: (data) => {
       toast.success("OTP Sent to email!");
-      navigate(`/verify-otp?email=${encodeURIComponent(data.user?.email)}`);
+      if(data.user?.email){
+        navigate(`/verify-otp?email=${encodeURIComponent(data.user?.email)}`);
+      }
     },
     onError: (err) => {
-      console.log(err);
       toast.error(err.message);
     },
   });
