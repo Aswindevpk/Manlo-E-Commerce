@@ -6,7 +6,7 @@ import supabase from "../../services/supabase";
 function useAddWishlist() {
   const queryClient = useQueryClient();
   const { user } = useUser();
-  const userId = user?.userId;
+  const userId = user?.id;
 
   const { mutate: addToWishlist, isPending: isAdding } = useMutation({
     mutationFn: async (variationId: number) => {
@@ -14,7 +14,7 @@ function useAddWishlist() {
 
       const { data, error } = await supabase
         .from("wishlist")
-        .insert([{ user_id: userId, product_variation_id: variationId }]);
+        .insert([{ user_id: userId, product_unit_id: variationId }]);
 
       if (error) throw new Error(error.message);
       return data;

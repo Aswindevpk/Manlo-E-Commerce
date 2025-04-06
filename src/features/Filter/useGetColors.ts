@@ -10,7 +10,7 @@ function useGetColors() {
     queryKey: ["colors"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("color")
+        .from("colors")
         .select("name");
 
       if (error) throw new Error(error.message);

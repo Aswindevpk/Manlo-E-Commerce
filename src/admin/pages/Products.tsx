@@ -1,8 +1,12 @@
-import React from 'react'
+
+
 
 function Products() {
   return (
-    <div>Products</div>
+    <>
+      <h1>products</h1>
+
+    </>
   )
 }
 

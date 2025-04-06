@@ -20,7 +20,7 @@ function WishlistButton() {
 
   let variationId = null
   if (searchParams) {
-      variationId = Number(searchParams.get("variation"))
+      variationId = searchParams.get("variation")
   }
 
   const handleToggleWishlist = () => {

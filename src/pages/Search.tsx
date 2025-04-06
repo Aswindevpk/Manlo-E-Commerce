@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import ProductList from "../features/Products/ProductList"
 import useSearchProducts from "../features/Products/useSearchProducts";
+import Spinner from "../ui/Spinner";
 
 function Search() {
     const [searchParams] = useSearchParams();
@@ -8,7 +9,7 @@ function Search() {
     const { isLoading, products} = useSearchProducts({query:searchQuery});
     
     if(isLoading || !products){
-        return <h1>loading</h1>
+        return <Spinner/>
     }
 
     return (

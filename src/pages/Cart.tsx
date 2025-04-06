@@ -4,6 +4,7 @@ import CartItem from "../ui/CartItem";
 import useCart from "../features/Cart/useCart";
 import CartSummary from "../features/Cart/CartSummary";
 import EmptyCart from "../ui/EmptyCart";
+import Spinner from "../ui/Spinner";
 
 const StyledCart = styled.main`
     display: flex;
@@ -27,7 +28,7 @@ const CartProducts = styled.div`
 function Cart() {
     const { isLoading, cartItems } = useCart()
     if (isLoading || !cartItems) {
-        return <h1>loading</h1>
+        return <Spinner/>
     }
     if(cartItems.length ===0){
         return <EmptyCart/>
@@ -52,3 +53,5 @@ function Cart() {
 }
 
 export default Cart
+
+

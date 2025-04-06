@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useProductItem from "../features/Products/useProductItem";
 import SimilarProducts from "../ui/SimilarProducts";
+import Spinner from "../ui/Spinner";
 // import ProductItem from "../ui/ProductItem";
 
 const Section = styled.div`
@@ -29,10 +30,11 @@ const ReviewWrapper = styled.div`
 function Product() {
   const { isLoading, productItem } = useProductItem()
   if (isLoading || !productItem) {
-    return <h1>loading</h1>
+    return <Spinner/>
   }
 
-  const categoryId = productItem.product.category_id
+
+  const categoryId = productItem.products.category_id
 
   return (
     <>

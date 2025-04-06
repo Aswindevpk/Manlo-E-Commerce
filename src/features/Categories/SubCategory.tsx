@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import Categories from "../../ui/Categories";
 import Heading from "../../ui/Heading";
 import useSubCategory from "./useSubCategory";
+import Spinner from "../../ui/Spinner";
 
 
 function SubCategory() {
@@ -9,7 +10,7 @@ function SubCategory() {
     const {collectionSlug} = useParams()
 
     if (isLoading || !categories) {
-        return <h1>loading</h1>
+        return <Spinner/>
     }
 
     return (

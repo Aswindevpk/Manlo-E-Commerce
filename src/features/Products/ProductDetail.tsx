@@ -96,8 +96,8 @@ function ProductDetail() {
                 <ProductAction />
                 <Section>
                     <SectionHeader>SKU : {productItem.SKU}</SectionHeader>
-                    <SectionHeader>Description : {productItem?.product?.description}</SectionHeader>
-                    <SectionHeader>care Instruction : {productItem?.product?.care_instruction}</SectionHeader>
+                    <SectionHeader>Description : {productItem?.products?.description}</SectionHeader>
+                    <SectionHeader>care Instruction : {productItem?.products?.care_instruction}</SectionHeader>
                 </Section>
             </Details>
         </Main>

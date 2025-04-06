@@ -33,7 +33,8 @@ const SizeButton = styled.button<{ selected: boolean }>`
 
 function SizePicker() {
     const { isLoading: ProductLoading, productItem } = useProductItem()
-    const sizeCategoryId = productItem?.product.productCategory.size_category_id
+
+    const sizeCategoryId = productItem?.products.categories.parent_id
     const { isLoading, sizes } = useProductSizes(sizeCategoryId)
     const { availableSizes } = useProductItemSizes(productItem?.id)
     const [selectedSize, setSelectedSize] = useState<number>();

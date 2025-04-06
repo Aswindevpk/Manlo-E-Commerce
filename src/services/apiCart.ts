@@ -1,14 +1,14 @@
 import supabase from "./supabase";
 
 interface getCartProps {
-  userId: string;
+  userId: string | undefined;
 }
 
 export async function getCart({ userId }: getCartProps) {
   const { data, error: cartItemsError } = await supabase
-    .from("shoppingCartItem")
+    .from("carts")
     .select(
-      "id,qty,productVariation(id,sizeOption(id,name),productItem(id,name,color(id,name,hex_code),product(id,price)))"
+      "id,quantity,product_units(sizes(name),product_variants(name,products(price),colors(*)))"
     )
     .eq("user_id", userId);
 
@@ -20,36 +20,35 @@ export async function getCart({ userId }: getCartProps) {
   // Map through the data to structure the cart items properly
   const cartItems = data.map((item) => ({
     id: item.id,
-    qty: item.qty,
-    size: item.productVariation?.sizeOption?.name,
-    name: item.productVariation?.productItem?.name,
-    color: item.productVariation?.productItem?.color,
-    price: item.productVariation?.productItem?.product?.price,
+    qty: item.quantity,
+    size: item.product_units?.sizes?.name,
+    name: item.product_units?.product_variants?.name,
+    color: item.product_units?.product_variants?.colors,
+    price: item.product_units?.product_variants?.products?.price,
   }));
-
 
   return cartItems;
 }
 
 interface AddtoCartProps {
-  variationId: number;
+  variationId: string | undefined;
   userId: string;
 }
 
 export async function AddtoCart({ variationId, userId }: AddtoCartProps) {
   // Check if the item already exists
   const { data: existingItem } = await supabase
-    .from("shoppingCartItem")
+    .from("carts")
     .select("*")
     .eq("user_id", userId)
-    .eq("product_variation_id", variationId)
-    .single();
+    .eq("product_unit_id", variationId)
+    .maybeSingle();
 
   if (existingItem) {
     // If exists, update the quantity
     const { data, error } = await supabase
-      .from("shoppingCartItem")
-      .update({ qty: existingItem.qty + 1 })
+      .from("carts")
+      .update({ quantity: existingItem.quantity + 1 })
       .eq("id", existingItem.id);
 
     if (error) throw error;
@@ -57,8 +56,8 @@ export async function AddtoCart({ variationId, userId }: AddtoCartProps) {
   } else {
     // Otherwise, insert a new row
     const { data, error } = await supabase
-      .from("shoppingCartItem")
-      .insert([{ user_id: userId, product_variation_id: variationId, qty: 1 }]);
+      .from("carts")
+      .insert([{ user_id: userId, product_unit_id: variationId, quantity: 1 }]);
 
     if (error) throw error;
     return data;

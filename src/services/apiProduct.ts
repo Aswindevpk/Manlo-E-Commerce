@@ -19,7 +19,7 @@ export async function getSubCategories({
 
   // Step 1: Get Parent Category ID
   const { data: mainCategory, error: error1 } = await supabase
-    .from("productCategory")
+    .from("categories")
     .select("id")
     .eq("slug", categorySlug)
     .single(); // Fetch only one result
@@ -31,9 +31,9 @@ export async function getSubCategories({
 
   // Step 2: Use Parent ID to Fetch Subcategories
   const { data, error } = await supabase
-    .from("productCategory")
-    .select("*")
-    .eq("parent_category_id", mainCategory.id); // ✅ Pass parent ID dynamically
+    .from("categories")
+    .select("*,parent:parent_id(id,slug,name)")
+    .eq("parent_id", mainCategory.id); 
 
   if (error || !data) {
     console.error(error);
@@ -45,8 +45,8 @@ export async function getSubCategories({
 
 export async function searchProducts(query: string): Promise<Product[]> {
   const { data, error } = await supabase
-    .from("productItem")
-    .select("id,name,color(*),product(price,brand(name)),productImage(image_url)")
+    .from("product_variants")
+    .select("id,name,colors(*),products(price,brands(name)),product_variant_images(image_url)")
     .ilike("name", `%${query}%`);
 
   if (error) {
@@ -57,10 +57,10 @@ export async function searchProducts(query: string): Promise<Product[]> {
   const filteredData = data.map((item) => ({
     id:item.id,
     productName: item.name,
-    color:item.color,
-    price:item.product.price,
-    brand:item.product.brand.name,
-    images:item.productImage,
+    color:item.colors,
+    price:item.products.price,
+    brand:item.products.brands.name,
+    images:item.product_variant_images,
   }));
 
   return filteredData;
@@ -68,9 +68,9 @@ export async function searchProducts(query: string): Promise<Product[]> {
 
 export async function getMainCategories(): Promise<Category[]> {
   const { data, error } = await supabase
-    .from("productCategory")
+    .from("categories")
     .select("*")
-    .is("parent_category_id", null);
+    .is("parent_id", null);
 
   if (error || !data) {
     console.error(error);
@@ -101,7 +101,7 @@ export async function getProduct({ productId }: getProductProps) {
 }
 
 interface getProductColorsProps {
-  productId: number;
+  productId:string;
 }
 
 export async function getProductColors({
@@ -109,8 +109,8 @@ export async function getProductColors({
 }: getProductColorsProps): Promise<ProductColor[]> {
   //product
   const { data, error } = await supabase
-    .from("productItem")
-    .select("color(id,name, hex_code)")
+    .from("product_variants")
+    .select("colors(id,name, hex_code)")
     .eq("product_id", productId);
 
   if (error || !data) {
@@ -118,7 +118,7 @@ export async function getProductColors({
     throw new Error("Product not found!");
   }
 
-  const colors = data.map((item) => item.color);
+  const colors = data.map((item) => item.colors);
 
   return colors;
 }
@@ -132,9 +132,9 @@ export async function getProductSizes({
 }: getProductSizesProps): Promise<ProductSize[]> {
   //product
   const { data, error } = await supabase
-    .from("sizeOption")
-    .select("id,name,sort_order")
-    .eq("size_category_id", sizeCategoryId);
+    .from("sizes")
+    .select("id,name")
+    .eq("category_id", sizeCategoryId);
 
   if (error || !data) {
     console.error(error);
@@ -145,7 +145,7 @@ export async function getProductSizes({
 }
 
 interface getProductItemProps {
-  productItemId: number;
+  productItemId: string;
 }
 
 export async function getProductItem({
@@ -153,8 +153,8 @@ export async function getProductItem({
 }: getProductItemProps): Promise<ProductItem> {
   //product
   const { data, error } = await supabase
-    .from("productItem")
-    .select("*,product(*,brand(*),productCategory(*)),orderLine(userReview(rating_value))")
+    .from("product_variants")
+    .select("*,products(*,brands(*),categories(*))")
     .eq("id", productItemId)
     .single();
 
@@ -176,17 +176,17 @@ export async function getProductItemSizes({
   //product
 
   const { data, error } = await supabase
-    .from("productVariation")
-    .select("sizeOption(id)")
-    .eq("product_item_id", productItemId)
-    .gt("qty_in_stock", 0);
+    .from("product_units")
+    .select("sizes(id)")
+    .eq("variant_id", productItemId)
 
   if (error) {
     console.error(error);
     throw new Error("sizes not found!");
   }
 
-  const sizes = data.map((item) => item.sizeOption);
+
+  const sizes = data.map((item) => item.sizes);
   return sizes;
 }
 
@@ -201,9 +201,9 @@ export async function getProductVariation({
 }: getProductVariationProps): Promise<ProductVariation> {
   //product
   const { data, error } = await supabase
-    .from("productVariation")
+    .from("product_units")
     .select("*")
-    .eq("product_item_id", productItemId)
+    .eq("variant_id", productItemId)
     .eq("size_id", sizeId)
     .single();
 

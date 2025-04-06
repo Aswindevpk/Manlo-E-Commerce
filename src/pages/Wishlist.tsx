@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import useGetWishlists from "../features/Wishlist/useGetWishlists";
-import WishlistItem from "../features/Wishlist/WishlistItem"
 import useDeleteWishlist from "../features/Wishlist/useDeleteWishlist";
 import ProductItem from "../ui/ProductItem";
 import Button from "../ui/Button";
+import Spinner from "../ui/Spinner";
 
 const Container = styled.div`
     display: grid;
@@ -17,15 +17,15 @@ function Wishlist() {
   const { removeFromWishlist, isRemoving } = useDeleteWishlist();
 
   if (isLoading) {
-    return <h1>loading</h1>
+    return <Spinner/>
   }
   return (
     <Container>
       {wishlist?.map(product => (
-        <div key={product.variationId}>
+        <div key={product.id}>
           <ProductItem product={product} size="sm" />
           <Button
-            onClick={() => removeFromWishlist(product.variationId)}
+            onClick={() => removeFromWishlist(product.productUnitId)}
             disabled={isRemoving}
           >
             Remove

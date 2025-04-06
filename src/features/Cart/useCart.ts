@@ -3,11 +3,13 @@ import { useUser } from "../Auth/useUser";
 import { getCart } from "../../services/apiCart";
 
 function useCart() {
-  const { user, isAuthenticated } = useUser();
+  const { user,isAuthenticated } = useUser();
+
+  const userId = user?.id
 
   const { isLoading, data:cartItems, error } = useQuery({
-    queryKey: ["cart"],
-    queryFn: () => getCart({ userId: user?.userId }),
+    queryKey: ["cart", user?.id],
+    queryFn: () => getCart({ userId }),
     enabled: isAuthenticated,
     retry: false,
   });

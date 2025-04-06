@@ -9,7 +9,7 @@ function useRemoveFromCart() {
   const { mutate: removeFromCart, isPending: isRemoving } = useMutation({
     mutationFn: async (cartItemId: number) => {
       const { error } = await supabase
-        .from("shoppingCartItem")
+        .from("carts")
         .delete()
         .eq("id", cartItemId); // Remove item by ID
 

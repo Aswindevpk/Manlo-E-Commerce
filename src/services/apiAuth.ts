@@ -8,23 +8,24 @@ interface SignupProps {
   password: string;
 }
 export async function signup({ email, password }: SignupProps) {
-  // Check if email exists in the database
-  const { data: userData, error: fetchError } = await supabase
-    .from("users")
-    .select("id")
-    .eq("email", email)
-    .maybeSingle();
+  // // Check if email exists in the database
+  // const { data: userData, error: fetchError } = await supabase
+  //   .from("users")
+  //   .select("id")
+  //   .eq("email", email)
+  //   .maybeSingle();
 
-  //User already exist with that email
-  if (userData) throw new Error("User Exist with this email!");
+  // //User already exist with that email
+  // if (userData) throw new Error("User Exist with this email!");
 
-  if (fetchError) throw new Error(fetchError.message);
+  // if (fetchError) throw new Error(fetchError.message);
 
   //signup
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
   });
+
   if (error) throw new Error(error.message);
 
   return data;
@@ -37,22 +38,6 @@ interface LoginProps {
 }
 export async function login({ email, password }: LoginProps) {
   let isEmailVerified = true;
-
-  // Check role of user
-  const { data: userData, error: fetchError } = await supabase
-    .from("users")
-    .select("role")
-    .eq("email", email)
-    .maybeSingle();
-
-  if (fetchError) throw new Error(fetchError.message);
-
-  //making sure this user is not admin
-  if (userData?.role && userData?.role === "admin") {
-    throw new Error("Invalid Credentials");
-  }
-
-
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -74,6 +59,24 @@ export async function login({ email, password }: LoginProps) {
   }
 
   if (error) throw new Error(error.message);
+  
+
+  // Check role of user
+  const { data: userData, error: fetchError } = await supabase
+    .from("users")
+    .select("role")
+    .eq("email", email)
+    .maybeSingle();
+
+  if (fetchError) throw new Error(fetchError.message);
+
+  //making sure this user is not admin
+  if (userData?.role && userData?.role === "admin") {
+     //if admin logout immediatly
+     const { error } = await supabase.auth.signOut();
+     if(error) console.log("issue is logout")
+     throw new Error("invalid credentials")
+  }
 
   return { isEmailVerified, email };
 }

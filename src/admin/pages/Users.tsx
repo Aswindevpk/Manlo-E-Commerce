@@ -1,9 +1,12 @@
-import React from 'react'
+import UsersTable from "../features/Customers/CustomersTable";
 
 function Users() {
   return (
-    <div>Users</div>
-  )
+    <>
+      <h1>Customers</h1>
+      <UsersTable />
+    </>
+  );
 }
 
-export default Users
+export default Users;

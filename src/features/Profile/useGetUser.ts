@@ -2,31 +2,33 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../Auth/useUser";
 import supabase from "../../services/supabase";
 
-function useGetAddressList() {
+function useGetUser() {
   const { user } = useUser();
 
   const userId = user?.id;
 
   const {
     isLoading,
-    data: addressList,
+    data: userDetail,
     error,
   } = useQuery({
-    queryKey: ["address", userId],
+    queryKey: ["user", userId],
     queryFn: async () => {
       if (!userId) return null;
       const { data, error } = await supabase
-        .from("addresses")
+        .from("users")
         .select("*")
-        .eq("user_id", userId);
+        .eq("id", userId)
+        .single();
 
       if (error) throw new Error(error.message);
       return data;
     },
     enabled: !!userId,
+    retry:false
   });
 
-  return { addressList, isLoading, error };
+  return { userDetail, isLoading, error };
 }
 
-export default useGetAddressList;
+export default useGetUser;

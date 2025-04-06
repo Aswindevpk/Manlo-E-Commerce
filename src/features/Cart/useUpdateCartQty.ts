@@ -11,8 +11,8 @@ function useUpdateCartQty() {
       if (newQty < 1) throw new Error("Quantity must be at least 1");
 
       const { error } = await supabase
-        .from("shoppingCartItem")
-        .update({ qty: newQty })
+        .from("carts")
+        .update({ quantity: newQty })
         .eq("id", cartItemId);
 
       if (error) throw new Error("Could not update quantity");

@@ -7,9 +7,9 @@ import { AddtoCart } from "../../services/apiCart";
 function useAddCart() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
-  const variationId = Number(searchParams.get("variation"));
+  const variationId = searchParams.get("variation");
   const { user } = useUser();
-  const userId = user?.userId;
+  const userId = user?.id;
 
   const { mutate: addCart, isPending: isAddingToCart } = useMutation({
     mutationFn: () => AddtoCart({ variationId, userId }),

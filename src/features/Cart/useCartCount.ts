@@ -6,8 +6,8 @@ async function fetchCartCount(userId: string) {
   if (!userId) return 0; // Return 0 if user is not logged in
 
   const { data, error } = await supabase
-    .from("shoppingCartItem")
-    .select("qty") // Count the items in cart
+    .from("carts")
+    .select("quantity") // Count the items in cart
     .eq("user_id", userId); // Filter by user ID
 
   if (error) {
@@ -15,7 +15,7 @@ async function fetchCartCount(userId: string) {
     return 0;
   }
 
-  const totalQty = data.reduce((sum,item)=>sum + item.qty,0)
+  const totalQty = data.reduce((sum,item)=>sum + item.quantity,0)
 
   return totalQty; // Return the count of cart items
 }

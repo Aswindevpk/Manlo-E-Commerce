@@ -3,6 +3,7 @@ import Button from "../ui/Button";
 import AddressItem from "../ui/AddressItem";
 import AddressForm from "../features/Cart/AddressForm";
 import useGetAddressList from "../features/Profile/useGetAddressList";
+import Spinner from "../ui/Spinner";
 
 
 
@@ -15,20 +16,20 @@ const AddressList = styled.section`
 
 
 function Addresses() {
-    const {addressList,isLoading}=useGetAddressList()
+    const { addressList, isLoading } = useGetAddressList()
 
-    if(isLoading || !addressList){
-        return <h1>h</h1>
+    if (isLoading || !addressList) {
+        return <Spinner/>
     }
 
     return (
         <>
             <h1>Saved Addresses</h1>
             <AddressList>
-                {addressList.map(address=><AddressItem address={address}/>)}
+                {addressList.map(address => <AddressItem key={address.id} address={address} />)}
             </AddressList>
             <Button type="submit">Add New Address</Button>
-            {/* <AddressForm /> */}
+            <AddressForm />
         </>
     )
 }

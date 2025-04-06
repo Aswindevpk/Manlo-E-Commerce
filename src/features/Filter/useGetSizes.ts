@@ -10,7 +10,7 @@ function useGetSizes() {
     queryKey: ["sizes"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("sizeOption")
+        .from("sizes")
         .select("name");
 
       if (error) throw new Error(error.message);

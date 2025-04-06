@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { HiOutlineCog6Tooth, HiOutlineHome, HiOutlineUsers } from "react-icons/hi2";
 import styled from "styled-components";
+import { BsCartCheck } from "react-icons/bs";
+import { CiBoxes, CiBoxList } from "react-icons/ci";
 
 const NavList = styled.ul`
   display: flex;
@@ -62,7 +64,39 @@ function MainNav() {
         <StyledNavLink to="users">
           <HiOutlineUsers />
           <span>
-            Users
+            Customers
+          </span>
+        </StyledNavLink>
+      </li>
+      <li>
+        <StyledNavLink to="products">
+          <CiBoxes />
+          <span>
+            Products
+          </span>
+        </StyledNavLink>
+      </li>
+      <li>
+        <StyledNavLink to="categories">
+          <CiBoxList />
+          <span>
+            Categories
+          </span>
+        </StyledNavLink>
+      </li>
+      <li>
+        <StyledNavLink to="attributes">
+          <CiBoxList />
+          <span>
+            Attributes
+          </span>
+        </StyledNavLink>
+      </li>
+      <li>
+        <StyledNavLink to="orders">
+          <BsCartCheck />
+          <span>
+            Orders
           </span>
         </StyledNavLink>
       </li>

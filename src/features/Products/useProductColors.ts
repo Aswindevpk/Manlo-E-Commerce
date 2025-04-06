@@ -12,7 +12,7 @@ function useProductColors() {
     error,
   } = useQuery({
     queryKey: ["color",productId],
-    queryFn: () => getProductColors({productId:Number(productId)}),
+    queryFn: () => getProductColors({productId}),
     enabled:!!productId,
     retry: false,
   });

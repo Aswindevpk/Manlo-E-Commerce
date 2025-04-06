@@ -15,7 +15,7 @@ const Container = styled.div`
 
 function AddressItem({address}) {
     const recipent = `${address.first_name} ${address.last_name} - ${address.phone}`
-    const fullAddress = `${address.address_line1}, ${address.address_line2}, ${address.city}, ${address.country.country_name} - ${address.pincode}`
+    const fullAddress = `${address.line1}, ${address.line2}, ${address.city} - ${address.pincode}`
     return (
         <Container>
             <div>

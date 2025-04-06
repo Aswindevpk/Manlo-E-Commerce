@@ -9,14 +9,14 @@ function useDeleteWishlist() {
   const userId = user?.id;
 
   const { mutate: removeFromWishlist, isPending: isRemoving } = useMutation({
-    mutationFn: async (variationId: number) => {
+    mutationFn: async (productUnitId: number) => {
       if (!userId) throw new Error("User not logged in");
 
       const { error } = await supabase
         .from("wishlist")
         .delete()
         .eq("user_id", userId)
-        .eq("product_variation_id", variationId);
+        .eq("product_unit_id", productUnitId);
 
       if (error) throw new Error(error.message);
     },
