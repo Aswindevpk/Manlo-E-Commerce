@@ -4,6 +4,8 @@ import Button from "../ui/Button";
 import { useUser } from "../features/Auth/useUser";
 import useGetUser from "../features/Profile/useGetUser";
 import Spinner from "../ui/Spinner";
+import Modal from "../ui/Modal";
+import UserForm from "../features/Profile/userForm";
 
 const Profile = styled.div`
   display: flex;
@@ -17,7 +19,7 @@ function UserDetails() {
   const { isLoading, userDetail } = useGetUser()
 
   if (isLoading) {
-    return <Spinner/>
+    return <Spinner />
   }
   return (
     <div>
@@ -27,11 +29,16 @@ function UserDetails() {
           <h4>{userDetail?.username}</h4>
           <h4>Email: {userDetail?.email}</h4>
         </div>
-        <div>
+        <Modal>
+          <Modal.Open opens="cabin-form">
           <Button size="small">
             <CiEdit size={20} />
           </Button>
-        </div>
+          </Modal.Open>
+          <Modal.Window name="cabin-form">
+            <UserForm />
+          </Modal.Window>
+        </Modal>
       </Profile>
     </div>
   )

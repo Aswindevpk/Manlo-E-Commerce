@@ -26,6 +26,7 @@ const ColorButton = styled.button<{ selected: boolean }>`
 const ColorSwatch = styled.div<{ color: string }>`
     aspect-ratio:1/1;
     width: 1.5rem;
+    border: 1px solid var(--color-grey-400);
     background-color: ${({ color }) => (color)};
 `;
 
@@ -35,7 +36,7 @@ const ColorSwatch = styled.div<{ color: string }>`
 function ColorPicker() {
     const { isLoading: ProductLoading, productItem } = useProductItem()
     const [selectedColor, setSelectedColor] = useState<number>()
-    const { isLoading, colors } = useProductColors()
+    const { isLoading, colors } = useProductColors({productId:productItem?.product_id})
     const navigate = useNavigate()
 
 

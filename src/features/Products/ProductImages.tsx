@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import useProductImages from "./useProductImages";
+import Spinner from "../../ui/Spinner";
 
 const Images = styled.div`
     display: grid;
@@ -17,7 +18,7 @@ function ProductImages() {
     const { isLoading, productImages } = useProductImages()
 
     if(isLoading || !productImages){
-        return <h1>hi</h1>
+        return <Spinner/>
     }
 
     return (

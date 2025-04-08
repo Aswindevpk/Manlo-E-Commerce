@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Product as ProductType } from "../types";
 import { CiHeart } from "react-icons/ci";
 import AnimatedProductImages from "./AnimatedProductImages";
+import ColorSwatch from "./ColorSwatch";
 
 
 const Product = styled(Link) <{ size: "sm" | "md" }>`
@@ -71,13 +72,13 @@ function ProductItem({ product, size = "md" }: ProductItemProps) {
       <ProductInfo>
         <BrandName>{product.brand}</BrandName>
         <ProductName>{product.productName}</ProductName>
-        {/* <ColorSwatch /> */}
+        <ColorSwatch productId={product.product_id} />
         <Price>RS. {product.price}.00</Price>
       </ProductInfo>
       <WishlistToggle>
         <CiHeart size={30} color="white" />
       </WishlistToggle>
-      <NewTag>new</NewTag>
+      {product?.is_new && <NewTag>new</NewTag>}
     </Product>
   )
 }

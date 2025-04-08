@@ -34,6 +34,7 @@ const Section = styled.div`
 const BrandName = styled.p`
     font-size: 12px;
     letter-spacing:1px;
+    text-transform: uppercase;
     color: var(--color-grey-500);
 `;
 
@@ -77,11 +78,11 @@ function ProductDetail() {
             <ProductImages />
             <Details>
                 <div>
-                    <BrandName>NIKE</BrandName>
+                    <BrandName>{productItem?.brand.name}</BrandName>
                     <ProductName>{productItem?.name}</ProductName>
-                    <Price>Rs. 799/-</Price>
+                    <Price>Rs. {productItem?.price}/-</Price>
                     <Para>MRP including all taxes.</Para>
-                    <StarRating size={20}/>
+                    {/* <StarRating size={20}/> */}
                 </div>
                 <StyledDivider />
                 <Section>
@@ -95,9 +96,9 @@ function ProductDetail() {
                 </Section>
                 <ProductAction />
                 <Section>
-                    <SectionHeader>SKU : {productItem.SKU}</SectionHeader>
-                    <SectionHeader>Description : {productItem?.products?.description}</SectionHeader>
-                    <SectionHeader>care Instruction : {productItem?.products?.care_instruction}</SectionHeader>
+                    <SectionHeader>SKU : {productItem.sku}</SectionHeader>
+                    <SectionHeader>Description : {productItem?.description}</SectionHeader>
+                    <SectionHeader>care Instruction : {productItem?.care_instruction}</SectionHeader>
                 </Section>
             </Details>
         </Main>

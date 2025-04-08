@@ -1,3 +1,16 @@
+export type Address = {
+  id?: string;
+  user_id?: string; // Usually filled from auth context
+  first_name: string;
+  last_name: string;
+  phone: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  pincode: string;
+};
+
 export type Category = {
   id: number;
   created_at: string;
@@ -18,17 +31,23 @@ export type Product = {
   about: string;
   regular_price: number;
   sale_price: number;
-  brand: {
-    name: string;
-    description: string;
-  }[] | null;
-  category: {
-    id: number;
-    name: string;
-    sizeCategory: {
-      id: number;
-    }[] | null;
-  }[] | null;
+  brand:
+    | {
+        name: string;
+        description: string;
+      }[]
+    | null;
+  category:
+    | {
+        id: number;
+        name: string;
+        sizeCategory:
+          | {
+              id: number;
+            }[]
+          | null;
+      }[]
+    | null;
 };
 
 export type ProductColor = {

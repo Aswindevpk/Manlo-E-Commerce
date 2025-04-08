@@ -1,12 +1,19 @@
-
 --users table references auth.users
 CREATE TABLE users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) DEFAULT gen_random_uuid(),
   username TEXT,
   role TEXT DEFAULT 'user',
   email TEXT NOT NULL
+  is_blocked BOOLEAN DEFAULT FALSE,
 );
 
+-- database function 
+
+-- create user from the authentication users will automatically creates
+-- use below emails 
+-- test@example.com
+-- test1@example.com
+-- admin@example.com  -- after creation change the role to admin
 
 
 --addresses
@@ -15,13 +22,47 @@ CREATE TABLE addresses (
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
-  phone TEXT NOT NULL
+  phone TEXT NOT NULL,
   line1 TEXT NOT NULL,
   line2 TEXT,
   city TEXT NOT NULL,
   state TEXT NOT NULL,
   pincode TEXT NOT NULL
 );
+
+INSERT INTO addresses (
+  user_id, first_name, last_name, phone, line1, line2, city, state, pincode
+)
+SELECT
+  id,
+  'John',
+  'Doe',
+  '9876543210',
+  '123 Main Street',
+  'Near School',
+  'Mumbai',
+  'Maharashtra',
+  '400001'
+FROM users
+WHERE email = 'test@example.com';
+
+
+INSERT INTO addresses (
+  user_id, first_name, last_name, phone, line1, line2, city, state, pincode
+)
+SELECT
+  id,
+  'Jane',
+  'Smith',
+  '9876543211',
+  '456 Park Avenue',
+  NULL,
+  'Delhi',
+  'Delhi',
+  '110001'
+FROM users
+WHERE email = 'test1@example.com';
+
 
 
 --brands
@@ -48,28 +89,30 @@ CREATE TABLE categories (
 );
 
 -- Parent categories (no parent_id)
-INSERT INTO categories (name, image) VALUES
-('TopWear', 'topwear.jpg'),
-('BottomWear', 'bottomwear.jpg'),
-('Accessories', 'accessories.jpg');
+INSERT INTO categories (name, image, slug) VALUES
+('TopWear', '/categories/topwear.webp','topwear'),
+('BottomWear', '/categories/bottomwear.webp','bottomwear'),
+('Accessories', '/categories/accessories.webp','accessories');
 
 -- Subcategories for TopWear
-INSERT INTO categories (name, image, parent_id)
-SELECT 'Shirt', 'shirt.jpg', id FROM categories WHERE name = 'TopWear';
+INSERT INTO categories (name, image,slug, parent_id)
+SELECT 'Shirt', '/categories/shirt.webp', 'shirt', id FROM categories WHERE name = 'TopWear';
 
-INSERT INTO categories (name, image, parent_id)
-SELECT 'Hoodie', 'hoodie.jpg', id FROM categories WHERE name = 'TopWear';
+INSERT INTO categories (name, image,slug, parent_id)
+SELECT 'Hoodie', '/categories/hoodie.webp','hoodies', id FROM categories WHERE name = 'TopWear';
 
 -- Subcategories for BottomWear
-INSERT INTO categories (name, image, parent_id)
-SELECT 'Jeans', 'jeans.jpg', id FROM categories WHERE name = 'BottomWear';
+INSERT INTO categories (name, image,slug, parent_id)
+SELECT 'Jeans', '/categories/jeans.webp', 'jeans', id FROM categories WHERE name = 'BottomWear';
 
-INSERT INTO categories (name, image, parent_id)
-SELECT 'Linen Pants', 'linen_pants.jpg', id FROM categories WHERE name = 'BottomWear';
+INSERT INTO categories (name, image,slug, parent_id)
+SELECT 'Linen Pants', '/categories/linen-pants.webp','linen-pants', id FROM categories WHERE name = 'BottomWear';
 
 -- Subcategories for Accessories
-INSERT INTO categories (name, image, parent_id)
-SELECT 'Shoes', 'shoes.jpg', id FROM categories WHERE name = 'Accessories';
+INSERT INTO categories (name, image,slug, parent_id)
+SELECT 'Shoes', '/categories/shoes.webp','shoes' id FROM categories WHERE name = 'Accessories';
+
+
 
 
 --products
@@ -80,7 +123,8 @@ CREATE TABLE products (
   category_id UUID NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
   brand_id UUID  REFERENCES brands(id) ON DELETE CASCADE,
   price DECIMAL(10,2) NOT NULL,
-  care_instruction TEXT
+  care_instruction TEXT,
+  is_new BOOLEAN DEFAULT FALSE
 );
 
 -- Example product under TopWear > Shirt
@@ -90,7 +134,7 @@ SELECT
   'Breathable and stylish slim-fit cotton shirt for all seasons.',
   c.id,
   b.id,
-  1999.99,
+  1999.00,
   'Machine wash cold. Do not bleach.'
 FROM categories c
 JOIN brands b ON b.name = 'Zara'
@@ -109,6 +153,56 @@ FROM categories c
 JOIN brands b ON b.name = 'Nike'
 WHERE c.name = 'Shoes';
 
+-- Hoodie 
+INSERT INTO products (name, description, category_id, brand_id, price, care_instruction)
+SELECT
+  'Oversized Graphic Hoodie',
+  'Cozy oversized hoodie with front pocket and bold graphic print.',
+  c.id,
+  b.id,
+  2799.00,
+  'Wash inside out with like colors.'
+FROM categories c
+JOIN brands b ON b.name = 'H&M'
+WHERE c.name = 'Hoodie';
+
+
+INSERT INTO products (name, description, category_id, brand_id, price, care_instruction)
+SELECT
+  'Stretch Slim Jeans',
+  'Slim fit stretchable jeans perfect for daily wear.',
+  c.id,
+  b.id,
+  2299.00,
+  'Wash dark colors separately. Do not bleach.'
+FROM categories c
+JOIN brands b ON b.name = 'H&M'
+WHERE c.name = 'Jeans';
+
+INSERT INTO products (name, description, category_id, brand_id, price, care_instruction)
+SELECT
+  'Linen Pants',
+  'Lightweight breathable linen pants perfect for summer days.',
+  c.id,
+  b.id,
+  1899.00,
+  'Hand wash recommended. Iron at low heat.'
+FROM categories c
+JOIN brands b ON b.name = 'Zara'
+WHERE c.name = 'Linen Pants';
+
+
+INSERT INTO products (name, description, category_id, brand_id, price, care_instruction)
+SELECT
+  'Leather Chelsea Boots',
+  'Classic ankle-length leather boots with side elastic panels.',
+  c.id,
+  b.id,
+  4999.00,
+  'Use leather conditioner. Avoid water exposure.'
+FROM categories c
+JOIN brands b ON b.name = 'H&M'
+WHERE c.name = 'Shoes';
 
 
 
@@ -133,8 +227,6 @@ INSERT INTO colors (name, hex_code) VALUES
 
 
 
-
-
 --product_variants (for color specific product)
 CREATE TABLE product_variants (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -146,26 +238,83 @@ CREATE TABLE product_variants (
   UNIQUE (sku)
 );
 
--- Black Running Shoes Variant
+-- Running Shoes: Black, White
 INSERT INTO product_variants (product_id, color_id, sku, name)
 SELECT 
-  p.id, 
-  c.id, 
-  'RS-BLK-001', 
-  'Running Shoes - Black'
+  p.id, c.id, 'RS-BLK-001', 'Running Shoes - Black'
 FROM products p, colors c
 WHERE p.name = 'Running Shoes' AND c.name = 'Black';
 
--- White Running Shoes Variant
 INSERT INTO product_variants (product_id, color_id, sku, name)
 SELECT 
-  p.id, 
-  c.id, 
-  'RS-WHT-001', 
-  'Running Shoes - White'
+  p.id, c.id, 'RS-WHT-002', 'Running Shoes - White'
 FROM products p, colors c
 WHERE p.name = 'Running Shoes' AND c.name = 'White';
 
+-- Slim Fit Cotton Shirt: Blue, White
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'SF-BLU-003', 'Slim Fit Cotton Shirt - Blue'
+FROM products p, colors c
+WHERE p.name = 'Slim Fit Cotton Shirt' AND c.name = 'Blue';
+
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'SF-WHT-004', 'Slim Fit Cotton Shirt - White'
+FROM products p, colors c
+WHERE p.name = 'Slim Fit Cotton Shirt' AND c.name = 'White';
+
+-- Oversized Graphic Hoodie: Black, Red
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'OG-BLK-005', 'Oversized Graphic Hoodie - Black'
+FROM products p, colors c
+WHERE p.name = 'Oversized Graphic Hoodie' AND c.name = 'Black';
+
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'OG-RED-006', 'Oversized Graphic Hoodie - Red'
+FROM products p, colors c
+WHERE p.name = 'Oversized Graphic Hoodie' AND c.name = 'Red';
+
+-- Stretch Slim Jeans: Navy Blue, Black
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'SS-NAV-007', 'Stretch Slim Jeans - Navy Blue'
+FROM products p, colors c
+WHERE p.name = 'Stretch Slim Jeans' AND c.name = 'Navy Blue';
+
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'SS-BLK-008', 'Stretch Slim Jeans - Black'
+FROM products p, colors c
+WHERE p.name = 'Stretch Slim Jeans' AND c.name = 'Black';
+
+-- Linen Pants: Beige, Olive
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'LP-BEI-009', 'Linen Pants - Beige'
+FROM products p, colors c
+WHERE p.name = 'Linen Pants' AND c.name = 'Beige';
+
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'LP-OLI-010', 'Linen Pants - Olive'
+FROM products p, colors c
+WHERE p.name = 'Linen Pants' AND c.name = 'Olive';
+
+-- Leather Chelsea Boots: Brown, Black
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'LC-BRN-011', 'Leather Chelsea Boots - Brown'
+FROM products p, colors c
+WHERE p.name = 'Leather Chelsea Boots' AND c.name = 'Brown';
+
+INSERT INTO product_variants (product_id, color_id, sku, name)
+SELECT 
+  p.id, c.id, 'LC-BLK-012', 'Leather Chelsea Boots - Black'
+FROM products p, colors c
+WHERE p.name = 'Leather Chelsea Boots' AND c.name = 'Black';
 
 
 
@@ -175,17 +324,23 @@ CREATE TABLE product_variant_images (
   image_url TEXT NOT NULL
 );
 
--- Add two images for Running Shoes - Black variant
-INSERT INTO product_variant_images (variant_id, image_url)
-SELECT v.id, 'https://cdn.example.com/images/rs-black-front.jpg'
-FROM product_variants v
-WHERE v.name = 'Running Shoes - Black';
+-- Insert first image for each product variant
+insert into
+  product_variant_images (variant_id, image_url)
+select
+  v.id,
+  '/products/' || replace(replace(lower(v.name), ' - ', '-'), ' ', '-') || '-1.webp'
+from
+  product_variants v;
 
-INSERT INTO product_variant_images (variant_id, image_url)
-SELECT v.id, 'https://cdn.example.com/images/rs-black-side.jpg'
-FROM product_variants v
-WHERE v.name = 'Running Shoes - Black';
-
+-- Insert second image for each product variant
+insert into
+  product_variant_images (variant_id, image_url)
+select
+  v.id,
+  '/products/' || replace(replace(lower(v.name), ' - ', '-'), ' ', '-') || '-2.webp'
+from
+  product_variants v;
 
 
 
@@ -240,9 +395,6 @@ SELECT '10', id FROM categories WHERE name = 'Accessories';
 
 
 
-
-
-
 --product_units (for sizes of variants)
 CREATE TABLE product_units (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -252,21 +404,27 @@ CREATE TABLE product_units (
   UNIQUE (variant_id, size_id)  
 );
 
--- Example: Add stock for RS-BLK-001 in sizes 6, 7, 8
-INSERT INTO product_units (variant_id, size_id, stock_quantity)
-SELECT v.id, s.id, 15
-FROM product_variants v, sizes s
-WHERE v.sku = 'RS-BLK-001' AND s.name = '6';
-
+-- Accessories: Running Shoes + Leather Chelsea Boots
 INSERT INTO product_units (variant_id, size_id, stock_quantity)
 SELECT v.id, s.id, 10
-FROM product_variants v, sizes s
-WHERE v.sku = 'RS-BLK-001' AND s.name = '7';
+FROM product_variants v
+JOIN sizes s ON s.name IN ('6', '7', '8', '9', '10')
+WHERE v.sku IN ('RS-BLK-001', 'RS-WHT-002', 'LC-BRN-011', 'LC-BLK-012');
 
+-- TopWear: Shirts & Hoodies
 INSERT INTO product_units (variant_id, size_id, stock_quantity)
-SELECT v.id, s.id, 5
-FROM product_variants v, sizes s
-WHERE v.sku = 'RS-BLK-001' AND s.name = '8';
+SELECT v.id, s.id, 20
+FROM product_variants v
+JOIN sizes s ON s.name IN ('XS', 'S', 'M', 'L')
+WHERE v.sku IN ('SF-BLU-003', 'SF-WHT-004', 'OG-BLK-005', 'OG-RED-006');
+
+-- BottomWear: Jeans & Linen Pants
+INSERT INTO product_units (variant_id, size_id, stock_quantity)
+SELECT v.id, s.id, 15
+FROM product_variants v
+JOIN sizes s ON s.name IN ('28', '30', '32', '34')
+WHERE v.sku IN ('SS-NAV-007', 'SS-BLK-008', 'LP-BEI-009', 'LP-OLI-010');
+
 
 
 
@@ -319,6 +477,7 @@ CREATE TABLE orders (
   product_unit_id UUID NOT NULL REFERENCES product_units(id) ON DELETE CASCADE,
   address_id UUID NOT NULL REFERENCES addresses(id) ON DELETE CASCADE,
   quantity INT NOT NULL CHECK (quantity > 0),
+  order_number VARCHAR(100) NOT NULL UNIQUE,
   price DECIMAL(10,2) NOT NULL CHECK (price >= 0),
   shipping_status VARCHAR(20) DEFAULT 'processing', -- processing, shipped, delivered, cancelled
   estimated_delivery TIMESTAMP, -- Expected delivery date
@@ -358,7 +517,7 @@ LIMIT 1;
 CREATE TABLE reviews (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  product_unit_id UUID NOT NULL REFERENCES product_units(id) ON DELETE CASCADE,
+  product_variant_id UUID NOT NULL REFERENCES product_variants(id) ON DELETE CASCADE,
   order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   rating INT CHECK (rating BETWEEN 1 AND 5) NOT NULL, -- 1 to 5 stars
   review_text TEXT,
@@ -368,7 +527,7 @@ CREATE TABLE reviews (
 
 
 INSERT INTO reviews (
-  user_id, product_unit_id, order_id, rating, review_text
+  user_id, product_variant_id, order_id, rating, review_text
 )
 SELECT 
   u.id,
@@ -385,3 +544,27 @@ WHERE u.email = 'test@example.com'
   AND pv.sku = 'RS-BLK-001'
   AND s.name = '7'
 LIMIT 1;
+
+
+
+
+
+-- OTHER TRIGGERS AND FUNCTIONS 
+-- FOR ORDER NUMBER CREATION 
+CREATE OR REPLACE FUNCTION generate_order_number()
+RETURNS TRIGGER AS $$
+DECLARE
+  new_order_number TEXT;
+BEGIN
+  new_order_number := 'ORD-' || TO_CHAR(NOW(), 'YYYYMMDD') || '-' || SUBSTRING(MD5(RANDOM()::TEXT), 1, 6);
+  NEW.order_number := new_order_number;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER order_number_trigger
+BEFORE INSERT ON orders
+FOR EACH ROW
+WHEN (NEW.order_number IS NULL)
+EXECUTE FUNCTION generate_order_number();
+

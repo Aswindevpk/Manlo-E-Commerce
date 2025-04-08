@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Heading from "./Heading";
 import { useParams } from "react-router-dom";
 import { useGetProductsByCategory } from "../features/Products/useGetProductsByCategory";
+import useSearchProducts from "../features/Products/useSearchProducts";
+import ProductItem from "./ProductItem";
 
 const ProductWrapper = styled.div`
     display: flex;
@@ -36,20 +38,18 @@ const ProductList = styled.div`
   }
 `;
 
-function SimilarProducts({categoryId}) {
-    const {} = useGetProductsByCategory(categoryId)
-    return (
-        <>
-            <Heading center={true} as="h1">Similar Products</Heading>
-            <ProductWrapper>
-                <ProductList>
-                    <div>
-                        hi
-                    </div>
-                </ProductList>
-            </ProductWrapper>
-        </>
-    )
+function SimilarProducts({ categoryId }) {
+  const { isLoading, products } = useSearchProducts({ query: "ru" })
+  return (
+    <>
+      <Heading center={true} as="h1">Similar Products</Heading>
+      <ProductWrapper>
+        <ProductList>
+          {products?.map(prod => (<ProductItem size="sm" key={prod.id} product={prod} />))}
+        </ProductList>
+      </ProductWrapper>
+    </>
+  )
 }
 
 export default SimilarProducts

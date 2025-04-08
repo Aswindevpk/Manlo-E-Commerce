@@ -1,4 +1,5 @@
 import OrderItem from "../features/Orders/OrderItem"
+import useOrders from "../features/Orders/useOrders";
 const sampleOrder = {
   orderDate: "Oct 27, 2019",
   total: "120.00",
@@ -13,13 +14,15 @@ const sampleOrder = {
 };
 
 function Order() {
+  const { isLoading, orders } = useOrders()
+
   return (
     <div>
       <h1>Orders</h1>
       <div>
-        <OrderItem order={sampleOrder}/>
-        <OrderItem order={sampleOrder}/>
-        <OrderItem order={sampleOrder}/>
+        {orders?.map(order=>(
+        <OrderItem order={order} />
+        ))}
       </div>
     </div>
   )

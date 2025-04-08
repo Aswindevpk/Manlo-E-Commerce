@@ -59,7 +59,6 @@ export async function login({ email, password }: LoginProps) {
   }
 
   if (error) throw new Error(error.message);
-  
 
   // Check role of user
   const { data: userData, error: fetchError } = await supabase
@@ -72,10 +71,10 @@ export async function login({ email, password }: LoginProps) {
 
   //making sure this user is not admin
   if (userData?.role && userData?.role === "admin") {
-     //if admin logout immediatly
-     const { error } = await supabase.auth.signOut();
-     if(error) console.log("issue is logout")
-     throw new Error("invalid credentials")
+    //if admin logout immediatly
+    const { error } = await supabase.auth.signOut();
+    if (error) console.log("issue is logout");
+    throw new Error("invalid credentials");
   }
 
   return { isEmailVerified, email };
@@ -138,7 +137,7 @@ export async function getCurrentUser() {
   //get my own usertable data
   const { data: userData, error: userError } = await supabase
     .from("users")
-    .select("role")
+    .select("role,is_blocked")
     .eq("id", Authuser.id)
     .single();
 
@@ -149,6 +148,7 @@ export async function getCurrentUser() {
     isAuth: Authuser?.role,
     email: Authuser.email,
     role: userData.role,
+    isBlocked:userData.is_blocked
   };
 }
 

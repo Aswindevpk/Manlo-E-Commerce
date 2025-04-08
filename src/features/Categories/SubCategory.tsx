@@ -15,7 +15,6 @@ function SubCategory() {
 
     return (
         <>
-            <Heading as="h1" style={{ textAlign: "center" }}>{collectionSlug}</Heading>
             <Categories categories={categories} />
         </>
     )

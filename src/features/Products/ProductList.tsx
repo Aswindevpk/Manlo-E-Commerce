@@ -39,7 +39,7 @@ function ProductList({ products }: { products: Product[] }) {
                 <SortBy />
             </TopBar>
             <Container>
-                {products.map(prod => (<ProductItem key={prod.id} product={prod} />))}
+                {products.map(prod => (<ProductItem key={prod.id} size="sm" product={prod} />))}
             </Container>
         </StyledProductList>
     )

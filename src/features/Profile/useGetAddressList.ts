@@ -12,7 +12,7 @@ function useGetAddressList() {
     data: addressList,
     error,
   } = useQuery({
-    queryKey: ["address", userId],
+    queryKey: ["addresses"],
     queryFn: async () => {
       if (!userId) return null;
       const { data, error } = await supabase

@@ -2,10 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getProductImages } from "../../services/apiProduct";
 
-
 function useProductImages() {
     const { productItemId } = useParams();
-
 
     const {
         isLoading,
@@ -13,7 +11,7 @@ function useProductImages() {
         error,
     } = useQuery({
         queryKey: ["productImages",productItemId],
-        queryFn: () => getProductImages({ productItemId:Number(productItemId)}),
+        queryFn: () => getProductImages({ productItemId}),
         enabled: !!productItemId,
         retry: false,
     });

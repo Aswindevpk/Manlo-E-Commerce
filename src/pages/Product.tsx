@@ -8,20 +8,13 @@ import { useEffect, useState } from "react";
 import useProductItem from "../features/Products/useProductItem";
 import SimilarProducts from "../ui/SimilarProducts";
 import Spinner from "../ui/Spinner";
+import ReviewList from "../features/Reviews/ReviewList";
 // import ProductItem from "../ui/ProductItem";
 
 const Section = styled.div`
     padding: 4rem 0rem;
 `
 
-const ReviewWrapper = styled.div`
-    padding-top:2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction:column;
-    gap: 1.5rem;
-`
 
 
 
@@ -33,25 +26,19 @@ function Product() {
     return <Spinner/>
   }
 
-
-  const categoryId = productItem.products.category_id
+  const categoryId = productItem.category.id
 
   return (
     <>
       <ProductDetail />
       <StyledDivider />
-      {/* <Section>
+      <Section>
         <SimilarProducts categoryId={categoryId}/>
-      </Section> */}
+      </Section>
       <StyledDivider />
       <Section>
         <Heading center={true}>Reviews</Heading>
-        <ReviewWrapper>
-          <Review />
-          <Review />
-          <Review />
-          <Review />
-        </ReviewWrapper>
+        <ReviewList/>
       </Section>
     </>
   )

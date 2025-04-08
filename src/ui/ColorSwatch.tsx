@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import useProductColors from "../features/Products/useProductColors";
 
 const Container = styled.div`
     display: flex;
@@ -6,18 +7,22 @@ const Container = styled.div`
     margin: 0.4rem;
 `;
 
-const Swatch = styled.div`
-    background-color:red;
+const Swatch = styled.div<{color:string}>`
+    background-color: ${(props) => props.color || 'transparent'};
     height: 1rem;
     aspect-ratio:1/1;
 `;
 
 
-function ColorSwatch() {
+function ColorSwatch({productId}) {
+  const { isLoading, colors } = useProductColors({productId})
+  if(!productId || isLoading) return null
+
   return (
     <Container>
-        <Swatch/>
-        <Swatch/>
+      {colors?.map(color=>(
+        <Swatch color={color.hex_code}/>
+      ))}
     </Container>
   )
 }

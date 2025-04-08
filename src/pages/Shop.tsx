@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import ProductItem from "../ui/ProductItem";
 import MainCategory from "../features/Categories/MainCategory";
+import useSearchProducts from "../features/Products/useSearchProducts";
+import Spinner from "../ui/Spinner";
+import Heading from "../ui/Heading";
 
 
 
@@ -39,21 +42,18 @@ const ProductList = styled.div`
 
 
 function Shop() {
+  const { isLoading, products } = useSearchProducts({ query: "a" })
+
+  if(isLoading){
+    return <Spinner/>
+  }
   return (
     <div>
       <MainCategory />
-      <h2 style={{ textAlign: "center" }}>New Arrivals</h2>
+      <Heading center={true}>New Arrivals</Heading>
       <ProductWrapper>
-        <ProductList>
-          {/* <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem /> */}
+      <ProductList>
+          {products?.map(prod => (<ProductItem size="sm" key={prod.id} product={prod} />))}
         </ProductList>
       </ProductWrapper>
     </div>

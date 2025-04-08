@@ -148,11 +148,11 @@ const OrderItem = ({ order }) => {
       <OrderHeader>
         <OrderInfo>
           <Label>ORDER #</Label>
-          <Value>{order.orderNumber}</Value>
+          <Value>{order.order_number}</Value>
         </OrderInfo>
         <OrderInfo>
           <Label>TOTAL</Label>
-          <Value>€{order.total}</Value>
+          <Value>€{order.price}</Value>
         </OrderInfo>
         <OrderInfo>
           <Label>SHIP TO</Label>
@@ -170,13 +170,13 @@ const OrderItem = ({ order }) => {
           <Image src={order.image} alt="Product" />
           <ProductInfo>
             <ProductTitle>{order.productName}</ProductTitle>
-            <ShippedTag>Shipped on {order.shipDate}</ShippedTag>
+            <ShippedTag>{order.shipping_status}</ShippedTag>
             <ProductDetails>{order.description}</ProductDetails>
           </ProductInfo>
         </div>
         <QtyContainer>
           <QtyLabel>Qty:</QtyLabel>
-          <QtyValue>{order.qty}</QtyValue>
+          <QtyValue>{order.quantity}</QtyValue>
         </QtyContainer>
         <ButtonContainer>
           <Button>Order Details</Button>
@@ -184,7 +184,7 @@ const OrderItem = ({ order }) => {
       </OrderContent>
 
       {/* Estimated Delivery */}
-      <DeliveryDate>ESTIMATED DELIVERY: {order.deliveryDate}</DeliveryDate>
+      <DeliveryDate>ESTIMATED DELIVERY: {order.estimated_delivery}</DeliveryDate>
     </OrderContainer>
   );
 };

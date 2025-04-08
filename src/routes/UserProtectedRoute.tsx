@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useUser } from "../features/Auth/useUser"
 import Spinner from "../ui/Spinner"
+import toast from "react-hot-toast"
+import supabase from "../services/supabase"
 
 
 interface Props {
@@ -23,10 +25,23 @@ function UserProtectedRoute({ children }: Props) {
   const { isPending, isAuthenticated, user } = useUser()
 
   useEffect(() => {
-    if (!isPending && (!isAuthenticated || user?.role !== "user")) {
+    const logoutAndRedirect = async (message: string) => {
+      toast.error(message);
+      await supabase.auth.signOut(); // Clear the JWT/session
       navigate("/login", { replace: true });
+    };
+
+    if (!isPending) {
+      if (!isAuthenticated) {
+        logoutAndRedirect("You must be logged in to access this page.");
+      } else if (user?.role !== "user") {
+        logoutAndRedirect("Access restricted. Only users can view this page.");
+      } else if (user?.isBlocked) {
+        logoutAndRedirect("You are blocked from accessing the platform.");
+      }
     }
-  }, [isAuthenticated, navigate, isPending, user])
+  }, [isAuthenticated, navigate, isPending, user]);
+
 
   if (isPending)
     return (
@@ -35,7 +50,7 @@ function UserProtectedRoute({ children }: Props) {
       </FullPage>
     )
 
-  if (!isAuthenticated || user?.role !== "user") return null;
+  if (!isAuthenticated || user?.role !== "user" || user.isBlocked) return null;
 
   return <>{children}</>
 }

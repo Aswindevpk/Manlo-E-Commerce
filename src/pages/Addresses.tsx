@@ -4,6 +4,7 @@ import AddressItem from "../ui/AddressItem";
 import AddressForm from "../features/Cart/AddressForm";
 import useGetAddressList from "../features/Profile/useGetAddressList";
 import Spinner from "../ui/Spinner";
+import Modal from "../ui/Modal";
 
 
 
@@ -19,7 +20,7 @@ function Addresses() {
     const { addressList, isLoading } = useGetAddressList()
 
     if (isLoading || !addressList) {
-        return <Spinner/>
+        return <Spinner />
     }
 
     return (
@@ -28,8 +29,15 @@ function Addresses() {
             <AddressList>
                 {addressList.map(address => <AddressItem key={address.id} address={address} />)}
             </AddressList>
-            <Button type="submit">Add New Address</Button>
-            <AddressForm />
+            
+            <Modal>
+                <Modal.Open opens="cabin-form">
+                    <Button type="submit">Add New Address</Button>
+                </Modal.Open>
+                <Modal.Window name="cabin-form">
+                    <AddressForm />
+                </Modal.Window>
+            </Modal>
         </>
     )
 }

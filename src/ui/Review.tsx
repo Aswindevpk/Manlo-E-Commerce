@@ -1,45 +1,37 @@
 import styled from "styled-components"
 import StarRating from "./StarRating"
 
-const Container = styled.div`
-    display: flex;
-    gap: 2rem;
-`
-
 const UserContainer = styled.div`
     display: flex;
-    align-items: center;
-    width: 150px;
-    gap: 2rem;
+    justify-content: space-between;
 `
 
 const CommentContainer = styled.div`
     display: flex;
     max-width: 600px;
+    flex-direction: column;
     gap: 1rem;
+    padding: 2rem 3rem;
+    box-shadow:var(--shadow-md);
+    background-color:white;
 `
 
-const UserAvatar = styled.img`
-    width: 4rem;
-    height: 4rem;
-    border-radius:50%;
-`
 
 function Review() {
     return (
-        <Container>
+        <CommentContainer>
             <UserContainer>
-                <UserAvatar src="https://i.pravatar.cc/200" />
-                <div>
-                    <h4>aswin</h4>
-                    <p>hi sfsdfd</p>
-                    <StarRating size={14}/>
-                </div>
+                <h3>aswin</h3>
+                <p>Jul 3</p>
             </UserContainer>
-            <CommentContainer>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, temporibus minima, cupiditate molestias omnis perferendis corrupti est autem architecto ducimus, esse atque natus consectetur magnam eligendi ex placeat nesciunt alias.
-            </CommentContainer>
-        </Container>
+            <StarRating size={16} />
+            <h3>
+                Superb Product. Awsome....
+            </h3>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, temporibus minima, cupiditate molestias omnis
+            </p>
+        </CommentContainer>
     )
 }
 

@@ -4,14 +4,14 @@ import { MainCategory } from "../types";
 
 const CategoryList = styled.ul`
   display: flex;
-  justify-content: space-between;
-  padding: 4rem 0;
+  justify-content: center;
+  gap: 8rem;
 `;
 
 const Category = styled.li`
   position: relative;
-  width: 275px; /* Fixed width */
-  height: 275px; /* Fixed height */
+  width: 200px; /* Fixed width */
+  height: 125px; /* Fixed height */
   overflow: hidden;
   cursor: pointer;
   border-radius: var(--border-radius-lg);
@@ -62,7 +62,7 @@ function Categories({categories}:Props) {
       {categories.map((cat, index) => (
         <Link key={cat.id} to={"/collection/" + cat.slug}>
           <Category key={index}>
-            <CategoryImage src={cat.image} alt={cat.name} />
+            <CategoryImage src={cat.image} />
             <CategoryText>{cat.name}</CategoryText>
           </Category>
         </Link>
