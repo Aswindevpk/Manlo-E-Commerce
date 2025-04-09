@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import SubCategory from "../features/Categories/SubCategory";
 import ProductList from "../features/Products/ProductList";
-import useSearchProducts from "../features/Products/useSearchProducts";
 import Spinner from "../ui/Spinner";
+import { useGetProductsByCategory } from "../features/Products/useGetProductsByCategory";
+import { useParams } from "react-router-dom";
 
 
 const Container = styled.main`
@@ -12,10 +13,11 @@ const Container = styled.main`
 `;
 
 function Collection() {
- const {isLoading,products}=useSearchProducts({query:"ru"})
- if(isLoading){
-  return <Spinner/>
- }
+  const { collectionSlug } = useParams()
+  const { isLoading, products } = useGetProductsByCategory({ categorySlug: collectionSlug })
+  if (isLoading) {
+    return <Spinner />
+  }
   return (
     <Container>
       <SubCategory />

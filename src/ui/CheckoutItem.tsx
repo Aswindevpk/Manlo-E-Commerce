@@ -19,15 +19,15 @@ const ProductDetails = styled.div`
 
 
 
-function CheckoutItem() {
+function CheckoutItem({cartItem}) {
     return (
         <div>
             <ProductContainer>
-                <Img src="/hero-img1.jpg" />
+                <Img src={cartItem.image} />
                 <ProductDetails>
-                    <h3>Product name</h3>
-                    <p>$400</p>
-                    <p>quantity: 3</p>
+                    <h3>{cartItem.name}</h3>
+                    <p>₹ {cartItem.price}</p>
+                    <p>quantity: {cartItem.qty}</p>
                 </ProductDetails>
             </ProductContainer>
         </div>

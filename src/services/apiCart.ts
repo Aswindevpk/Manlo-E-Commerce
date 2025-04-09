@@ -8,7 +8,7 @@ export async function getCart({ userId }: getCartProps) {
   const { data, error: cartItemsError } = await supabase
     .from("carts")
     .select(
-      "id,quantity,product_units(sizes(name),product_variants(name,products(price),colors(*)))"
+      "id,quantity,product_unit_id,product_units(sizes(name),product_variants(name,products(price),colors(*),product_variant_images(image_url)))"
     )
     .eq("user_id", userId);
 
@@ -21,10 +21,12 @@ export async function getCart({ userId }: getCartProps) {
   const cartItems = data.map((item) => ({
     id: item.id,
     qty: item.quantity,
+    unit_id:item.product_unit_id,
     size: item.product_units?.sizes?.name,
     name: item.product_units?.product_variants?.name,
     color: item.product_units?.product_variants?.colors,
     price: item.product_units?.product_variants?.products?.price,
+    image: item.product_units?.product_variants?.product_variant_images[0].image_url
   }));
 
   return cartItems;

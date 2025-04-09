@@ -15,6 +15,7 @@ import Search from "../pages/Search";
 import Checkout from "../pages/Checkout";
 import Wishlist from "../pages/Wishlist";
 import UpdatePassword from "../pages/UpdatePassword";
+import OrderConfirmation from "../pages/OrderConfirmation";
 
 
 function AppRoutes() {
@@ -41,6 +42,7 @@ function AppRoutes() {
                 <Route path="search" element={<Search />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="wishlist" element={<Wishlist />} />
+                <Route path="order-confirm" element={<OrderConfirmation />} />
                 {/* update password need auth */}
                 <Route path="update-pass" element={<UpdatePassword />} />
             </Route>

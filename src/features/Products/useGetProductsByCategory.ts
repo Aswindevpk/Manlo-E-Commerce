@@ -1,21 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../../services/supabase";
 
-const fetchProductsByCategory = async (categoryId: number) => {
+const fetchProductsByCategory = async (categorySlug: string) => {
   const { data, error } = await supabase
-    .from("product")
-    .select("*,productItem(*)")
-    .eq("category_id", categoryId);
-
+  .rpc('get_filtered_product_variants', { category_slug: categorySlug});
+  
   if (error) throw new Error(error.message);
+
   return data;
 };
 
-export const useGetProductsByCategory = (categoryId: number) => {
+export const useGetProductsByCategory = ({
+  categorySlug,
+}: {
+  categorySlug: string;
+}) => {
   const { isLoading, data: products } = useQuery({
-    queryKey: ["products", categoryId],
-    queryFn: () => fetchProductsByCategory(categoryId),
-    enabled: !!categoryId, // Only fetch if category is provided
+    queryKey: ["products", categorySlug],
+    queryFn: () => fetchProductsByCategory(categorySlug),
+    enabled: !!categorySlug, // Only fetch if category is provided
+    retry:false
   });
   return { isLoading, products };
 };

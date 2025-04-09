@@ -42,7 +42,7 @@ function CartItem({Item}) {
     return (
         <Container>
             <ProductContainer>
-                <Img src="/hero-img1.jpg" />
+                <Img src={Item.image} />
                 <ProductDetails>
                     <h3>{Item.name}</h3>
                     <ProductPrice>₹ {Item.price}</ProductPrice>

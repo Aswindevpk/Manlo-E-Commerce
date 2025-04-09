@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import StyledDivider from "../ui/StyledDivider";
 import Button from "../ui/Button";
-import { useForm } from "react-hook-form";
 import Heading from "../ui/Heading";
 import CheckoutItem from "../ui/CheckoutItem";
-import AddressForm from "../features/Cart/AddressForm";
-import DeliveryOptions from "../features/Cart/DeliveryOptions";
+import AddressOptions from "../features/Cart/AddressOptions.tsx";
+import useCart from "../features/Cart/useCart.ts";
+import Spinner from "../ui/Spinner.tsx";
+import AddressForm from "../features/Cart/AddressForm.tsx";
+import Modal from "../ui/Modal.tsx";
+import { useState } from "react";
+import CheckoutButton from "../features/Orders/CheckOutButton.tsx";
+
 
 const StyledCheckout = styled.main`
     display: grid;
@@ -41,22 +46,47 @@ const ItemsWarpper = styled.div`
     padding-bottom: 2rem;
 `;
 
+const AddressList = styled.section`
+    display: grid;
+    margin: 4rem 0rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+`;
+
 
 function Checkout() {
+    const { isLoading, cartItems } = useCart()
+    const [addressId, setAddressId] = useState<null|string>(null);
+    
+
+    if (isLoading) {
+        return <Spinner />
+    }
+    const subTotal = cartItems?.reduce((acc, item) => acc + (item.price * item.qty), 0)
+
+
     return (
         <>
             <StyledCheckout >
                 <Wrapper>
                     <Heading as="h2">Shipping Details</Heading>
-                    <AddressForm />
-                    <DeliveryOptions/>
+                    <AddressOptions onSelectAddress={setAddressId} />
+                    <Modal>
+                        <Modal.Open opens="cabin-form">
+                            <Button type="submit">Add New Address</Button>
+                        </Modal.Open>
+                        <Modal.Window name="cabin-form">
+                            <AddressForm addressToEdit={false} />
+                        </Modal.Window>
+                    </Modal>
                 </Wrapper>
                 <Wrapper>
                     <Heading as="h2">Summary</Heading>
                     <Summary>
                         <ItemsWarpper>
-                            <CheckoutItem />
-                            <CheckoutItem />
+                            {cartItems?.map(cartItem => (
+                                <CheckoutItem key={cartItem.id} cartItem={cartItem} />
+                            ))}
                         </ItemsWarpper>
                         <Row>
                             <p>ENTER COUPON CODE</p>
@@ -64,7 +94,7 @@ function Checkout() {
                         <StyledDivider />
                         <Row>
                             <p>SUB TOTAL</p>
-                            <p>SUB TOTAL</p>
+                            <p>₹ {subTotal}</p>
                         </Row>
                         <Row>
                             <p>SHIPPING</p>
@@ -72,14 +102,14 @@ function Checkout() {
                         </Row>
                         <Row>
                             <p>TAXES</p>
-                            <p>$0</p>
+                            <p>₹0</p>
                         </Row>
                         <StyledDivider />
                         <Row>
                             <h2>TOTAL</h2>
-                            <p>$635</p>
+                            <p>₹ {subTotal}</p>
                         </Row>
-                        <Button style={{ width: "100%" }} size="medium">Confirm and Pay</Button>
+                        <CheckoutButton cartItems={cartItems} addressId={addressId}/>
                     </Summary>
                 </Wrapper>
             </StyledCheckout>
