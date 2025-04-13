@@ -1,24 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProductItemSizes } from "../../services/apiProduct";
 
-
-function useProductItemSizes(productItemId:number) {
-
-  const {
-    isLoading,
-    data,
-    error,
-  } = useQuery({
-    queryKey: ["productItemsizes",productItemId],
-    queryFn: () => getProductItemSizes({productItemId}),
-    enabled:!!productItemId,
+function useProductItemSizes(productItemId: number) {
+  const { isLoading, data, error } = useQuery({
+    queryKey: ["productItemsizes", productItemId],
+    queryFn: () => getProductItemSizes({ productItemId }),
+    enabled: !!productItemId,
     retry: false,
   });
 
-  const availableSizes = new Set(data?.map(item => item.id));
+  //making it set
+  const availableSizes = new Set<string>(data?.map(item => item));
 
 
-  return { isLoading,availableSizes, error };
+  return { isLoading, availableSizes, error };
 }
 
 export default useProductItemSizes;

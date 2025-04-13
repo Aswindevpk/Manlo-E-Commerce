@@ -43,8 +43,7 @@ function AppRoutes() {
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="wishlist" element={<Wishlist />} />
                 <Route path="order-confirm" element={<OrderConfirmation />} />
-                {/* update password need auth */}
-                <Route path="update-pass" element={<UpdatePassword />} />
+                <Route path="update-pass" element={<UpdatePassword />} /> 
             </Route>
         </Routes>
     );

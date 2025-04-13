@@ -6,10 +6,8 @@ interface getCartProps {
 
 export async function getCart({ userId }: getCartProps) {
   const { data, error: cartItemsError } = await supabase
-    .from("carts")
-    .select(
-      "id,quantity,product_unit_id,product_units(sizes(name),product_variants(name,products(price),colors(*),product_variant_images(image_url)))"
-    )
+    .from("cart_item_view")
+    .select("*")
     .eq("user_id", userId);
 
   if (cartItemsError || !data) {
@@ -17,24 +15,27 @@ export async function getCart({ userId }: getCartProps) {
     throw new Error("Cart not found!");
   }
 
+  console.log(data)
+
   // Map through the data to structure the cart items properly
   const cartItems = data.map((item) => ({
     id: item.id,
     qty: item.quantity,
-    unit_id:item.product_unit_id,
-    size: item.product_units?.sizes?.name,
-    name: item.product_units?.product_variants?.name,
-    color: item.product_units?.product_variants?.colors,
-    price: item.product_units?.product_variants?.products?.price,
-    image: item.product_units?.product_variants?.product_variant_images[0].image_url
+    unit_id: item.product_unit_id,
+    size: item.size_name,
+    name: item.variant_name,
+    color: item.brand_name, // Assuming you want the brand name for color
+    price: item.price,
+    image: item.product_image_url,
   }));
 
   return cartItems;
 }
 
+
 interface AddtoCartProps {
-  variationId: string | undefined;
-  userId: string;
+  variationId: string | null;
+  userId: string | undefined;
 }
 
 export async function AddtoCart({ variationId, userId }: AddtoCartProps) {

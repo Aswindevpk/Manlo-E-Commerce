@@ -20,6 +20,12 @@ width: 100%;
  padding: 0.8rem 1.2rem;
 `;
 
+interface FormValues {
+  username: string;
+  email: string;
+}
+
+
 function UserForm() {
   const { userDetail, isLoading } = useGetUser();
   const { updateUser, isUpdating } = useUpdateUser();
@@ -29,7 +35,7 @@ function UserForm() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<FormValues>({
     defaultValues: {
       username: "",
       email: "",
@@ -44,7 +50,7 @@ function UserForm() {
     }
   }, [userDetail, reset]);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data:FormValues) => {
     updateUser({ userId: userDetail.id, updatedData: data });
   };
 

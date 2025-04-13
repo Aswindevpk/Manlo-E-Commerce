@@ -3,6 +3,7 @@ import Heading from "../../../ui/Heading";
 import Button from "../../../ui/Button";
 import Table from "../../components/Table";
 import useSubCategories from "./useSubCategory";
+import Spinner from "../../../ui/Spinner";
 
 const Container = styled.section`
   display: flex;
@@ -18,6 +19,11 @@ const SectionHeader = styled.section`
 
 function SubTable() {
   const { isLoading, subCategories } = useSubCategories()
+
+  if(isLoading){
+    return <Spinner/>
+  }
+  
   return (
     <Container>
       <SectionHeader>

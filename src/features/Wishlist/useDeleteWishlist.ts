@@ -9,7 +9,7 @@ function useDeleteWishlist() {
   const userId = user?.id;
 
   const { mutate: removeFromWishlist, isPending: isRemoving } = useMutation({
-    mutationFn: async (productUnitId: number) => {
+    mutationFn: async (productUnitId: string | null) => {
       if (!userId) throw new Error("User not logged in");
 
       const { error } = await supabase
@@ -21,7 +21,7 @@ function useDeleteWishlist() {
       if (error) throw new Error(error.message);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["wishlist", userId]);
+      queryClient.invalidateQueries({ queryKey: ["wishlist", userId] });
       toast.success("Removed from wishlist!");
     },
     onError: () => toast.error("Failed to remove from wishlist"),

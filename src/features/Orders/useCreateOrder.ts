@@ -10,7 +10,7 @@ export function useCreateOrder() {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const createOrder = async (orders) => {
+  const createOrder = async (orders:[]) => {
     setLoading(true);
     setError(null);
 
@@ -31,9 +31,8 @@ export function useCreateOrder() {
       });
 
       return data;
-    } catch (err: any) {
-      console.error('Order creation error:', err.message);
-      setError(err.message);
+    } catch (err) {
+      console.error('Order creation error:', err??null);
     } finally {
       setLoading(false);
     }

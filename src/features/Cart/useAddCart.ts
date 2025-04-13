@@ -14,7 +14,7 @@ function useAddCart() {
   const { mutate: addCart, isPending: isAddingToCart } = useMutation({
     mutationFn: () => AddtoCart({ variationId, userId }),
     onSuccess: () => {
-      queryClient.invalidateQueries(["cart", userId]);
+      queryClient.invalidateQueries({queryKey:["cart", userId]});
       toast.success("Added to Cart!");
     },
     onError: () => toast.error("There was an error while adding to cart in."),

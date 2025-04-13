@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { MainCategory } from "../types";
 
 const CategoryList = styled.ul`
   display: flex;
@@ -52,8 +51,15 @@ const CategoryText = styled.div`
   }
 `;
 
+type category = {
+  id:string;
+  image:string;
+  slug:string;
+  name:string;
+}
+
 interface Props{
-  categories:MainCategory[]
+  categories:category[]
 }
 
 function Categories({categories}:Props) {

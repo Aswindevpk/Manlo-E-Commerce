@@ -35,9 +35,10 @@ const ColorSwatch = styled.div<{ color: string }>`
 
 function ColorPicker() {
     const { isLoading: ProductLoading, productItem } = useProductItem()
-    const [selectedColor, setSelectedColor] = useState<number>()
+    const [selectedColor, setSelectedColor] = useState("")
     const { isLoading, colors } = useProductColors({productId:productItem?.product_id})
     const navigate = useNavigate()
+
 
 
     //set the color of selected product

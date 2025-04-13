@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import StarRating from "./StarRating"
 
 const UserContainer = styled.div`
     display: flex;
@@ -24,7 +23,7 @@ function Review() {
                 <h3>aswin</h3>
                 <p>Jul 3</p>
             </UserContainer>
-            <StarRating size={16} />
+            {/* <StarRating size={16} /> */}
             <h3>
                 Superb Product. Awsome....
             </h3>

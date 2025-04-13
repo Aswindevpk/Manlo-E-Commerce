@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import useGetAddressList from "../Profile/useGetAddressList";
 import Heading from "../../ui/Heading";
@@ -32,8 +32,11 @@ const RadioInput = styled.input`
   accent-color: #393e46; /* Dark gray from your color palette */
 `;
 
+interface AddressOptionsProps {
+  onSelectAddress: (id: string) => void; // Type for the onSelectAddress function
+}
 
-const AddressOptions = ({onSelectAddress}) => {
+const AddressOptions = ({onSelectAddress}:AddressOptionsProps) => {
   const { addressList, isLoading } = useGetAddressList()
   const [selectId, setSelectId] = useState<null|string>(null);
 

@@ -4,7 +4,7 @@ interface Props {
     maxRating?: number;
     color?: string;
     size?: number;
-    onSetRating?:React.Dispatch<React.SetStateAction<number>>
+    onSetRating:React.Dispatch<React.SetStateAction<number>>
 }
 
 function StarRating({ maxRating = 5, color = "#fcc419", size = 40 ,onSetRating}: Props) {

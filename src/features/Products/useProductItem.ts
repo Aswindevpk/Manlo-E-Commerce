@@ -11,7 +11,7 @@ function useProductItem() {
         error,
     } = useQuery({
         queryKey: ["productItem",productItemId],
-        queryFn: () => getProductItem({ productItemId }),
+        queryFn: () => getProductItem({ productItemId:productItemId || "" }),
         enabled: !!productItemId,
         retry: false,
     });

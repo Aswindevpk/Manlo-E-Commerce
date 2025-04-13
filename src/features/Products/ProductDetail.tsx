@@ -1,12 +1,10 @@
 import styled from "styled-components";
-import Heading from "../../ui/Heading";
 import StyledDivider from "../../ui/StyledDivider";
 import ColorPicker from "../../ui/ColorPicker";
 import SizePicker from "../../ui/SizePicker";
 import useProductItem from "./useProductItem";
 import ProductImages from "./ProductImages";
 import ProductAction from "./productAction";
-import StarRating from "../../ui/StarRating";
 
 
 

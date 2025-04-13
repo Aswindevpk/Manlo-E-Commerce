@@ -14,13 +14,13 @@ const Swatch = styled.div<{color:string}>`
 `;
 
 
-function ColorSwatch({productId}) {
+function ColorSwatch({productId}:{productId:string}) {
   const { isLoading, colors } = useProductColors({productId})
   if(!productId || isLoading) return null
 
   return (
     <Container>
-      {colors?.map(color=>(
+      {colors?.map((color)=>(
         <Swatch color={color.hex_code}/>
       ))}
     </Container>

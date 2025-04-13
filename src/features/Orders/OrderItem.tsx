@@ -33,15 +33,6 @@ const Value = styled.span`
   color: var(--color-dark-gray);
 `;
 
-const OrderDetailsLink = styled.a`
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--color-muted-blue);
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 const OrderContent = styled.div`
   display: grid;
@@ -106,32 +97,7 @@ const ButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const RegisterButton = styled.button`
-  background: #d87d56;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    background: #c96b45;
-  }
-`;
 
-const ArchiveButton = styled.button`
-  background: var(--color-light-gray);
-  color: var(--color-dark-gray);
-  padding: 8px 12px;
-  border: none;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    background: var(--color-muted-blue);
-    color: white;
-  }
-`;
 
 const DeliveryDate = styled.div`
   font-size: 14px;
@@ -141,8 +107,23 @@ const DeliveryDate = styled.div`
   padding: 8px 16px;
 `;
 
+type Props={
+  order:{
+    price:number;
+    id:string;
+    order_number:string;
+    image:string;
+    productName:string;
+    shipTo:string;
+    orderDate:string;
+    shipping_status:string;
+    quantity:number;
+    description:string;
+    estimated_delivery:string;
+  }
+}
 
-const OrderItem = ({ order }) => {
+const OrderItem = ({ order }:Props) => {
   return (
     <OrderContainer>
       <OrderHeader>

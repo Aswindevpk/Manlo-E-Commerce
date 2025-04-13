@@ -1,9 +1,8 @@
-import { HiOutlineCube, HiOutlineUser } from "react-icons/hi2";
 import styled from "styled-components";
 import { NavLink, Outlet } from "react-router-dom";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import CartIcon from "../ui/CartIcon";
 import { CiLocationOn, CiShoppingCart, CiUser } from "react-icons/ci";
+
+
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;

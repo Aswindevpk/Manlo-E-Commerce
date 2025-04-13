@@ -1,6 +1,6 @@
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import styled from "styled-components";
-import { CiHeart, CiShoppingCart, CiUser } from "react-icons/ci";
+import { CiHeart,  CiUser } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import Logout from "../features/Auth/Logout";

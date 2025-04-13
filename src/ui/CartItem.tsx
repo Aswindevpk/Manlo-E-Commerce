@@ -1,7 +1,4 @@
-import { FaTrash } from "react-icons/fa";
 import styled from "styled-components";
-import Button from "./Button";
-import { useState } from "react";
 import CartItemRemove from "../features/Cart/CartItemRemove";
 import CartItemCounter from "../features/Cart/CartItemCounter";
 
@@ -35,10 +32,23 @@ const ProductPrice = styled.h5`
     /* font-family: var(--font-secondary); */
 `;
 
+interface Props{
+    Item:{
+        id:string;
+        image:string
+        name:string
+        size:string;
+        price:number;
+        color:{
+            name:string
+        }
+        qty:number;
+
+    }
+}
 
 
-
-function CartItem({Item}) {
+function CartItem({Item}:Props) {
     return (
         <Container>
             <ProductContainer>

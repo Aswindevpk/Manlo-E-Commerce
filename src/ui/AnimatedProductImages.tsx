@@ -19,7 +19,7 @@ const ImageContainer = styled.div`
 
 
 
-function AnimatedProductImages({images}) {
+function AnimatedProductImages({images}:{images:{image_url:string}[]}) {
     const [index, setIndex] = useState(0);
     const [hovered, setHovered] = useState(false);
 

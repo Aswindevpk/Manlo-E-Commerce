@@ -1,9 +1,5 @@
 import {
   Category,
-  Product,
-  ProductColor,
-  ProductItem,
-  ProductSize,
   ProductVariation,
 } from "../types";
 import supabase from "./supabase";
@@ -33,7 +29,7 @@ export async function getSubCategories({
   const { data, error } = await supabase
     .from("categories")
     .select("*,parent:parent_id(id,slug,name)")
-    .eq("parent_id", mainCategory.id); 
+    .eq("parent_id", mainCategory.id);
 
   if (error || !data) {
     console.error(error);
@@ -43,28 +39,30 @@ export async function getSubCategories({
   return data;
 }
 
-export async function searchProducts(query: string): Promise<Product[]> {
+
+export async function searchProducts(query: string) {
   const { data, error } = await supabase
-    .from("product_variants")
-    .select("id,name,products(id,price,brands(name),is_new),product_variant_images(image_url)")
-    .ilike("name", `%${query}%`);
+  .from("product_variant_flat")
+  .select("*")
+  .ilike("name", `%${query}%`);
 
   if (error) {
     console.error("Error fetching search results:", error);
     throw new Error("Could not fetch search results.");
   }
 
+
   const filteredData = data.map((item) => ({
-    id:item.id,
+    id: item.id,
     productName: item.name,
-    price:item.products.price,
-    product_id:item.products.id,
-    brand:item.products.brands.name,
-    is_new:item.products.is_new,
-    images:item.product_variant_images
+    product_id: item.product_id,
+    price: item.price,
+    brand: item.brands_name,
+    is_new: item.is_new,
+    images: item.product_variant_images,
   }));
 
-  return filteredData;
+  return filteredData
 }
 
 export async function getMainCategories(): Promise<Category[]> {
@@ -102,12 +100,22 @@ export async function getProduct({ productId }: getProductProps) {
 }
 
 interface getProductColorsProps {
-  productId:string;
+  productId: string;
 }
+
+interface Color{
+  hex_code:string;
+  id:string;
+  name:string;
+}
+
+type ColorResponse = {
+  colors: Color[];
+};
 
 export async function getProductColors({
   productId,
-}: getProductColorsProps): Promise<ProductColor[]> {
+}: getProductColorsProps):Promise<Color[]> {
   //product
   const { data, error } = await supabase
     .from("product_variants")
@@ -119,7 +127,7 @@ export async function getProductColors({
     throw new Error("Product not found!");
   }
 
-  const colors = data.map((item) => item.colors);
+  const colors = (data as ColorResponse[]).map(item => item.colors).flat();
 
   return colors;
 }
@@ -130,7 +138,7 @@ interface getProductSizesProps {
 
 export async function getProductSizes({
   sizeCategoryId,
-}: getProductSizesProps): Promise<ProductSize[]> {
+}: getProductSizesProps) {
   //product
   const { data, error } = await supabase
     .from("sizes")
@@ -149,9 +157,7 @@ interface getProductItemProps {
   productItemId: string;
 }
 
-export async function getProductItem({
-  productItemId,
-}: getProductItemProps) {
+export async function getProductItem({ productItemId }: getProductItemProps) {
   //product
   const { data, error } = await supabase
     .from("product_variants")
@@ -165,17 +171,17 @@ export async function getProductItem({
   }
 
   const formattedData = {
-    id:data.id,
-    name:data.name,
-    color_id:data.color_id,
-    product_id:data.product_id,
-    sku:data.sku,
-    price:data.products.price,
-    brand:data.products.brands,
-    description:data.products.description,
-    care_instruction:data.products.care_instruction,
-    category:data.products.categories
-  }
+    id: data.id,
+    name: data.name,
+    color_id: data.color_id,
+    product_id: data.product_id,
+    sku: data.sku,
+    price: data.products.price,
+    brand: data.products.brands,
+    description: data.products.description,
+    care_instruction: data.products.care_instruction,
+    category: data.products.categories,
+  };
 
   return formattedData;
 }
@@ -186,21 +192,22 @@ interface getProductItemSizesProps {
 
 export async function getProductItemSizes({
   productItemId,
-}: getProductItemSizesProps): Promise<ProductSize[]> {
+}: getProductItemSizesProps){
   //product
 
   const { data, error } = await supabase
     .from("product_units")
-    .select("sizes(id)")
-    .eq("variant_id", productItemId)
+    .select("size_id")
+    .eq("variant_id", productItemId);
 
   if (error) {
     console.error(error);
     throw new Error("sizes not found!");
   }
 
+  const sizes = data.map((item) => item.size_id);
 
-  const sizes = data.map((item) => item.sizes);
+  
   return sizes;
 }
 
@@ -230,8 +237,8 @@ export async function getProductVariation({
 }
 
 interface getProductItemIdByColorProps {
-  productId: number;
-  colorId: number;
+  productId: string;
+  colorId: string;
 }
 
 export async function getProductItemIdByColor({

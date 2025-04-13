@@ -7,7 +7,7 @@ const RemoveBtn = styled.button`
     border: none;
 `;
 
-function CartItemRemove({ cartId }: { cartId: number }) {
+function CartItemRemove({ cartId }: { cartId: string }) {
     const { isRemoving, removeFromCart } = useRemoveFromCart()
     
     return (

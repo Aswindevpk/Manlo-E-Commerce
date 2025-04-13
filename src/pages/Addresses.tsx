@@ -35,7 +35,7 @@ function Addresses() {
                     <Button type="submit">Add New Address</Button>
                 </Modal.Open>
                 <Modal.Window name="cabin-form">
-                    <AddressForm addressToEdit={false} />
+                    <AddressForm addressToEdit={{id:null}} />
                 </Modal.Window>
             </Modal>
         </>

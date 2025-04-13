@@ -7,19 +7,8 @@ interface SignupProps {
   email: string;
   password: string;
 }
+
 export async function signup({ email, password }: SignupProps) {
-  // // Check if email exists in the database
-  // const { data: userData, error: fetchError } = await supabase
-  //   .from("users")
-  //   .select("id")
-  //   .eq("email", email)
-  //   .maybeSingle();
-
-  // //User already exist with that email
-  // if (userData) throw new Error("User Exist with this email!");
-
-  // if (fetchError) throw new Error(fetchError.message);
-
   //signup
   const { data, error } = await supabase.auth.signUp({
     email,

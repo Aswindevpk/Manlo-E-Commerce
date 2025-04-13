@@ -14,8 +14,8 @@ const Container = styled.main`
 
 function Collection() {
   const { collectionSlug } = useParams()
-  const { isLoading, products } = useGetProductsByCategory({ categorySlug: collectionSlug })
-  if (isLoading) {
+  const { isLoading, products } = useGetProductsByCategory({ categorySlug: collectionSlug || "" })
+  if (isLoading || !products) {
     return <Spinner />
   }
   return (

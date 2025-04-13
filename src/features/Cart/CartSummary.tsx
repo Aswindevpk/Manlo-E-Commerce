@@ -14,7 +14,7 @@ const Row = styled.div`
 `;
 
 
-function CartSummary({ cartItems }) {
+function CartSummary({ cartItems }:{cartItems:{price:number,qty:number}[]}) {
 
     const subTotal = cartItems.reduce((acc, item) => acc + (item.price * item.qty), 0)
 

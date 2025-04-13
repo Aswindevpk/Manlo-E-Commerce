@@ -44,7 +44,7 @@ function FilterSummary() {
     const allFilters = Array.from(searchParams.entries()).filter((v) => v[0] !== "q");
 
 
-    function removeFilter(key: "color" | "size", value: string) {
+    function removeFilter(key: string, value: string) {
         const existingValues = searchParams.getAll(key);
         const updatedValues = existingValues.filter((v) => v !== value);
 

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../Auth/useUser";
 import supabase from "../../services/supabase";
 
-async function getOrders({ userId }: { userId: string }) {
+async function getOrders({ userId }: { userId: string |undefined }) {
   const { data, error } = await supabase
     .from("orders")
     .select("*,addresses(*),product:product_units(*,product_variants(*,products(*)))")

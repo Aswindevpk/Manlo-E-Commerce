@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import Heading from "./Heading";
-import { useParams } from "react-router-dom";
-import { useGetProductsByCategory } from "../features/Products/useGetProductsByCategory";
 import useSearchProducts from "../features/Products/useSearchProducts";
 import ProductItem from "./ProductItem";
+import Spinner from "./Spinner";
 
 const ProductWrapper = styled.div`
     display: flex;
@@ -38,8 +37,12 @@ const ProductList = styled.div`
   }
 `;
 
-function SimilarProducts({ categoryId }) {
+function SimilarProducts() {
   const { isLoading, products } = useSearchProducts({ query: "ru" })
+
+  if(isLoading){
+    return <Spinner/>
+  }
   return (
     <>
       <Heading center={true} as="h1">Similar Products</Heading>

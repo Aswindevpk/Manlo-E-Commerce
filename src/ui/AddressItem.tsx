@@ -19,7 +19,19 @@ const Container = styled.div`
     justify-content: space-between;
 `;
 
-function AddressItem({ address }) {
+interface Address {
+    id:string | null
+    first_name: string;
+    last_name: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    pincode: string;
+    phone: string;
+  }
+
+function AddressItem({ address }:{address:Address}) {
     const { isDeleting, deleteAddress } = useDeleteAddress()
 
     const recipent = `${address.first_name} ${address.last_name} - ${address.phone}`
@@ -52,7 +64,7 @@ function AddressItem({ address }) {
                         </Button>
                     </Modal.Open>
                     <Modal.Window name="edit">
-                            <AddressForm addressToEdit={address}/>
+                        <AddressForm addressToEdit={address} />
                     </Modal.Window>
                 </Row>
             </Modal>

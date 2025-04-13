@@ -46,20 +46,14 @@ const ItemsWarpper = styled.div`
     padding-bottom: 2rem;
 `;
 
-const AddressList = styled.section`
-    display: grid;
-    margin: 4rem 0rem;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-`;
 
 
 function Checkout() {
     const { isLoading, cartItems } = useCart()
-    const [addressId, setAddressId] = useState<null|string>(null);
-    
+    const [addressId, setAddressId] = useState<null | string>(null);
 
-    if (isLoading) {
+
+    if (isLoading || !cartItems) {
         return <Spinner />
     }
     const subTotal = cartItems?.reduce((acc, item) => acc + (item.price * item.qty), 0)
@@ -76,7 +70,7 @@ function Checkout() {
                             <Button type="submit">Add New Address</Button>
                         </Modal.Open>
                         <Modal.Window name="cabin-form">
-                            <AddressForm addressToEdit={false} />
+                            <AddressForm addressToEdit={{ id: null }} />
                         </Modal.Window>
                     </Modal>
                 </Wrapper>
@@ -109,7 +103,7 @@ function Checkout() {
                             <h2>TOTAL</h2>
                             <p>₹ {subTotal}</p>
                         </Row>
-                        <CheckoutButton cartItems={cartItems} addressId={addressId}/>
+                        {addressId && <CheckoutButton cartItems={cartItems} addressId={addressId} />}
                     </Summary>
                 </Wrapper>
             </StyledCheckout>

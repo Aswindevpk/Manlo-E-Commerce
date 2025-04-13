@@ -10,7 +10,7 @@ const ProductCounter = styled.div`
    gap: 1rem;
 `;
 
-function CartItemCounter({ cartItemId, itemQty }: { cartItemId: number; itemQty: number }) {
+function CartItemCounter({ cartItemId, itemQty }: { cartItemId: string; itemQty: number }) {
     const [quantity, setQuantity] = useState(itemQty)
     const { updateCartQuantity, isPending } = useUpdateCartQty();
 

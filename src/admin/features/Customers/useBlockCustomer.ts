@@ -23,7 +23,7 @@ function useBlockCustomer() {
 
     onSuccess: () => {
       toast.success("success");
-      queryClient.invalidateQueries(["customers"]); // Refresh cart data
+      queryClient.invalidateQueries({queryKey:["customers"]}); // Refresh cart data
     },
 
     onError: () => {

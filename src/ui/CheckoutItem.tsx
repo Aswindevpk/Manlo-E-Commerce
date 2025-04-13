@@ -17,9 +17,23 @@ const ProductDetails = styled.div`
    gap: 1rem;
 `;
 
+interface Props{
+    cartItem:{
+        id:string;
+        image:string
+        name:string
+        size:string;
+        price:number;
+        color:{
+            name:string
+        }
+        qty:number;
+
+    }
+}
 
 
-function CheckoutItem({cartItem}) {
+function CheckoutItem({cartItem}:Props) {
     return (
         <div>
             <ProductContainer>

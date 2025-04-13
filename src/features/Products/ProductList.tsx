@@ -29,7 +29,8 @@ const Container = styled.div`
 
 
 
-function ProductList({ products }: { products: Product[] }) {
+function 
+ProductList({ products }:{products:Product[]}) {
     return (
         <StyledProductList>
             <SideBar>

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../Auth/useUser";
 import supabase from "../../services/supabase";
 
-async function fetchCartCount(userId: string) {
+async function fetchCartCount(userId: string | undefined) {
   if (!userId) return 0; // Return 0 if user is not logged in
 
   const { data, error } = await supabase

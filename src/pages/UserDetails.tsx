@@ -1,7 +1,6 @@
 import { CiEdit } from "react-icons/ci";
 import styled from "styled-components";
 import Button from "../ui/Button";
-import { useUser } from "../features/Auth/useUser";
 import useGetUser from "../features/Profile/useGetUser";
 import Spinner from "../ui/Spinner";
 import Modal from "../ui/Modal";

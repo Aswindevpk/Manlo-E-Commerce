@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { Product as ProductType } from "../types";
 import { CiHeart } from "react-icons/ci";
 import AnimatedProductImages from "./AnimatedProductImages";
 import ColorSwatch from "./ColorSwatch";
+import { Product as ProductType } from "../types";
 
 
 const Product = styled(Link) <{ size: "sm" | "md" }>`
@@ -57,6 +57,7 @@ const Price = styled.p`
   font-size: 1.8rem;
   color: var(--color-brand-800);
 `;
+
 
 
 interface ProductItemProps {

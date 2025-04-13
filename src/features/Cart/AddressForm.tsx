@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import styled from "styled-components";
 import Button from "../../ui/Button";
 import { useCreateAddress } from "../Profile/useCreateAddress";
@@ -35,7 +35,23 @@ const Input = styled.input`
   padding: 0.8rem 1.6rem;
 `;
 
-function AddressForm({ addressToEdit }) {
+interface AddressData {
+    id:string | null
+    first_name: string;
+    last_name: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    pincode: string;
+    phone: string;
+  }
+
+  interface AddressFormProps {
+    addressToEdit?: AddressData | {id:string|null}
+  }
+
+function AddressForm({ addressToEdit }:AddressFormProps) {
     const isEditSession = Boolean(addressToEdit?.id)
     const { id: editId, ...editValues } = addressToEdit || {};
 
@@ -43,9 +59,8 @@ function AddressForm({ addressToEdit }) {
         register,
         reset,
         handleSubmit,
-        getValues,
         formState: { errors },
-    } = useForm({
+    } = useForm<AddressData>({
         defaultValues: isEditSession ? editValues : {
             first_name: "",
             last_name: "",
@@ -63,7 +78,7 @@ function AddressForm({ addressToEdit }) {
 
     const isWorking = isCreating || isEditing
 
-    const onSubmit = (data) => {
+    const onSubmit: SubmitHandler<AddressData> = (data) => {
         const formattedData = {
             first_name: data.first_name,
             last_name: data.last_name,

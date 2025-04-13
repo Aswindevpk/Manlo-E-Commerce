@@ -9,7 +9,7 @@ function useAddWishlist() {
   const userId = user?.id;
 
   const { mutate: addToWishlist, isPending: isAdding } = useMutation({
-    mutationFn: async (variationId: number) => {
+    mutationFn: async (variationId: string | null) => {
       if (!userId) throw new Error("User not logged in");
 
       const { data, error } = await supabase
@@ -20,7 +20,7 @@ function useAddWishlist() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["wishlist", userId]);
+      queryClient.invalidateQueries({ queryKey: ["wishlist", userId] });
       toast.success("Added to wishlist!");
     },
     onError: () => toast.error("Failed to add to wishlist"),

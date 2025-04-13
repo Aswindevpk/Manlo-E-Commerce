@@ -7,7 +7,7 @@ function useRemoveFromCart() {
   const queryClient = useQueryClient();
 
   const { mutate: removeFromCart, isPending: isRemoving } = useMutation({
-    mutationFn: async (cartItemId: number) => {
+    mutationFn: async (cartItemId: string) => {
       const { error } = await supabase
         .from("carts")
         .delete()
@@ -18,7 +18,7 @@ function useRemoveFromCart() {
 
     onSuccess: () => {
       toast.success("Item removed from cart");
-      queryClient.invalidateQueries(["cart"]); // Refresh cart data
+      queryClient.invalidateQueries({queryKey:["cart"]}); // Refresh cart data
     },
 
     onError: () => {

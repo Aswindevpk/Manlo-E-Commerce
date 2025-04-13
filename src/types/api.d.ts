@@ -12,42 +12,28 @@ export type Address = {
 };
 
 export type Category = {
-  id: number;
-  created_at: string;
-  parent_category_id: number;
-  size_category_id: number;
-  slug: string;
+  id: string;
   name: string;
-  description: string;
+  parent_id: number;
   image: string;
+  slug: string;
+  parent:{
+    id:string;
+    name:string;
+    slug:string;
+  }
 };
 
 export type Product = {
-  id: number;
-  name: string;
-  slug: string;
-  description: string;
-  care_instruction: string;
-  about: string;
-  regular_price: number;
-  sale_price: number;
-  brand:
-    | {
-        name: string;
-        description: string;
-      }[]
-    | null;
-  category:
-    | {
-        id: number;
-        name: string;
-        sizeCategory:
-          | {
-              id: number;
-            }[]
-          | null;
-      }[]
-    | null;
+  id: string,
+  productName: string,
+  product_id:string,
+  price: number,
+  brand: string,
+  is_new: boolean,
+  images: {
+    image_url:string;
+  }[],
 };
 
 export type ProductColor = {

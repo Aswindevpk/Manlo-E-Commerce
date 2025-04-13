@@ -1,7 +1,5 @@
 import supabase from "../../services/supabase";
 
-
-
 interface LoginProps {
   email: string;
   password: string;
@@ -30,7 +28,7 @@ export async function login({ email, password }: LoginProps) {
   if (userData?.role && userData?.role === "user") {
     //if user logout immediatly
     const { error } = await supabase.auth.signOut();
-    if(error) console.log("issue is logout")
+    if (error) console.log("issue is logout")
     throw new Error("invalid credentials")
   }
 
