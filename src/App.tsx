@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { HashRouter as Router, Route, Routes } from "react-router-dom"
 import GlobalStyle from "./styles/Globalstyles"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
@@ -32,7 +32,8 @@ function App() {
       <QueryClientProvider client={queryClient} >
         <ReactQueryDevtools initialIsOpen={false} />
         <GlobalStyle />
-        <BrowserRouter>
+        {/* Hashrouter for git */}
+        <Router>
           <Routes>
             {/* Main Protected Routes (Normal user routes) */}
             <Route path="/*" element={<AppRoutes />}></Route>
@@ -50,7 +51,7 @@ function App() {
             {/* 404 Page */}
             <Route path="*" element={<PageNotFound />} />
           </Routes>
-        </BrowserRouter>
+        </Router>
         <Toaster
           position="top-center"
           gutter={12}
