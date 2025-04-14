@@ -1,26 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import supabase from "../../services/supabase";
+import { RemoveFromCart } from "../../services/apiCart";
 
 
 function useRemoveFromCart() {
   const queryClient = useQueryClient();
-
+  
   const { mutate: removeFromCart, isPending: isRemoving } = useMutation({
-    mutationFn: async (cartItemId: string) => {
-      const { error } = await supabase
-        .from("carts")
-        .delete()
-        .eq("id", cartItemId); // Remove item by ID
-
-      if (error) throw new Error("Could not remove item from cart");
-    },
-
+    mutationFn: RemoveFromCart,
     onSuccess: () => {
       toast.success("Item removed from cart");
-      queryClient.invalidateQueries({queryKey:["cart"]}); // Refresh cart data
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["cartCount"] }),
+        queryClient.invalidateQueries({ queryKey: ["cart"] })
+      ]);
     },
-
     onError: () => {
       toast.error("Failed to remove item from cart");
     },

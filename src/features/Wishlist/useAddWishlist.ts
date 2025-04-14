@@ -1,26 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useUser } from "../Auth/useUser";
-import supabase from "../../services/supabase";
+import { AddToWishlist } from "../../services/apiWishlist";
+
 
 function useAddWishlist() {
   const queryClient = useQueryClient();
-  const { user } = useUser();
-  const userId = user?.id;
-
   const { mutate: addToWishlist, isPending: isAdding } = useMutation({
-    mutationFn: async (variationId: string | null) => {
-      if (!userId) throw new Error("User not logged in");
-
-      const { data, error } = await supabase
-        .from("wishlist")
-        .insert([{ user_id: userId, product_unit_id: variationId }]);
-
-      if (error) throw new Error(error.message);
-      return data;
-    },
+    mutationFn: AddToWishlist,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["wishlist", userId] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
       toast.success("Added to wishlist!");
     },
     onError: () => toast.error("Failed to add to wishlist"),

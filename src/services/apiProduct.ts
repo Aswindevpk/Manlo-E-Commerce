@@ -1,5 +1,6 @@
 import {
   Category,
+  Product,
   ProductVariation,
 } from "../types";
 import supabase from "./supabase";
@@ -40,29 +41,18 @@ export async function getSubCategories({
 }
 
 
-export async function searchProducts(query: string) {
+export async function searchProducts(query: string):Promise<Product[]> {
   const { data, error } = await supabase
-  .from("product_variant_flat")
+  .from("product_view")
   .select("*")
-  .ilike("name", `%${query}%`);
+  .ilike("product_name", `%${query}%`);
 
   if (error) {
     console.error("Error fetching search results:", error);
     throw new Error("Could not fetch search results.");
   }
 
-
-  const filteredData = data.map((item) => ({
-    id: item.id,
-    productName: item.name,
-    product_id: item.product_id,
-    price: item.price,
-    brand: item.brands_name,
-    is_new: item.is_new,
-    images: item.product_variant_images,
-  }));
-
-  return filteredData
+  return data;
 }
 
 export async function getMainCategories(): Promise<Category[]> {

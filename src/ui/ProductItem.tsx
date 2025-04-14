@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CiHeart } from "react-icons/ci";
 import AnimatedProductImages from "./AnimatedProductImages";
-import ColorSwatch from "./ColorSwatch";
+// import ColorSwatch from "./ColorSwatch";
 import { Product as ProductType } from "../types";
 
 
@@ -68,12 +68,12 @@ interface ProductItemProps {
 
 function ProductItem({ product, size = "md" }: ProductItemProps) {
   return (
-    <Product to={`/product/${product.id}`} size={size}>
+    <Product to={`/product/${product.product_id}`} size={size}>
       <AnimatedProductImages images={product.images} />
       <ProductInfo>
         <BrandName>{product.brand}</BrandName>
-        <ProductName>{product.productName}</ProductName>
-        <ColorSwatch productId={product.product_id} />
+        <ProductName>{product.product_name}</ProductName>
+        {/* <ColorSwatch productId={product.product_id} /> */}
         <Price>RS. {product.price}.00</Price>
       </ProductInfo>
       <WishlistToggle>

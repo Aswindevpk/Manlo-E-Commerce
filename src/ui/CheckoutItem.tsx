@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { CartItem } from "../types";
 
 const Img = styled.img`
     width: 90px;
@@ -17,23 +18,9 @@ const ProductDetails = styled.div`
    gap: 1rem;
 `;
 
-interface Props{
-    cartItem:{
-        id:string;
-        image:string
-        name:string
-        size:string;
-        price:number;
-        color:{
-            name:string
-        }
-        qty:number;
-
-    }
-}
 
 
-function CheckoutItem({cartItem}:Props) {
+function CheckoutItem({cartItem}:{cartItem:CartItem}) {
     return (
         <div>
             <ProductContainer>

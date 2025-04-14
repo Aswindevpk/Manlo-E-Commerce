@@ -5,6 +5,7 @@ import useGetWishlist from "./useGetWishlist";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa6";
 import styled from "styled-components";
+import { useUser } from "../Auth/useUser";
 
 const ButtonWishlist = styled.button`
     background-color:transparent;
@@ -13,10 +14,12 @@ const ButtonWishlist = styled.button`
 
 function WishlistButton() {
   const [searchParams] = useSearchParams()
-  
   const { wishlistItem } = useGetWishlist();
   const { addToWishlist, isAdding } = useAddWishlist();
   const { removeFromWishlist, isRemoving } = useDeleteWishlist();
+
+  const { user } = useUser();
+  const userId = user?.id;
 
   let variationId = null
   if (searchParams) {
@@ -25,9 +28,9 @@ function WishlistButton() {
 
   const handleToggleWishlist = () => {
     if (wishlistItem) {
-      removeFromWishlist(variationId);
+      removeFromWishlist({unitId:variationId,userId});
     } else {
-      addToWishlist(variationId);
+      addToWishlist({variationId,userId});
     }
   };
 

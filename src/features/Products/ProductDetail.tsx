@@ -80,7 +80,6 @@ function ProductDetail() {
                     <ProductName>{productItem?.name}</ProductName>
                     <Price>Rs. {productItem?.price}/-</Price>
                     <Para>MRP including all taxes.</Para>
-                    {/* <StarRating size={20}/> */}
                 </div>
                 <StyledDivider />
                 <Section>

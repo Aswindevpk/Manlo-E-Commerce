@@ -1,10 +1,30 @@
+import { CartItem } from "../types";
 import supabase from "./supabase";
 
-interface getCartProps {
-  userId: string | undefined;
+export async function fetchCartCount(userId: string | undefined) {
+  if (!userId) return 0; // Return 0 if user is not logged in
+
+  const { data, error } = await supabase
+    .from("carts")
+    .select("quantity") // Count the items in cart
+    .eq("user_id", userId); // Filter by user ID
+
+  if (error) {
+    console.error("Error fetching cart count:", error);
+    return 0;
+  }
+
+  const totalQty = data.reduce((sum, item) => sum + item.quantity, 0);
+
+  return totalQty; // Return the count of cart items
 }
 
-export async function getCart({ userId }: getCartProps) {
+export async function getCart({
+  userId,
+}: {
+  userId: string | undefined;
+}): Promise<CartItem[]> {
+  if(!userId) return []
   const { data, error: cartItemsError } = await supabase
     .from("cart_item_view")
     .select("*")
@@ -15,30 +35,18 @@ export async function getCart({ userId }: getCartProps) {
     throw new Error("Cart not found!");
   }
 
-  console.log(data)
-
-  // Map through the data to structure the cart items properly
-  const cartItems = data.map((item) => ({
-    id: item.id,
-    qty: item.quantity,
-    unit_id: item.product_unit_id,
-    size: item.size_name,
-    name: item.variant_name,
-    color: item.brand_name, // Assuming you want the brand name for color
-    price: item.price,
-    image: item.product_image_url,
-  }));
-
-  return cartItems;
+  return data;
 }
 
-
-interface AddtoCartProps {
+export async function AddtoCart({
+  variationId,
+  userId,
+}: {
   variationId: string | null;
   userId: string | undefined;
-}
+}) {
 
-export async function AddtoCart({ variationId, userId }: AddtoCartProps) {
+  if(!variationId || !userId) throw new Error("product and user details not provided")
   // Check if the item already exists
   const { data: existingItem } = await supabase
     .from("carts")
@@ -65,4 +73,26 @@ export async function AddtoCart({ variationId, userId }: AddtoCartProps) {
     if (error) throw error;
     return data;
   }
+}
+
+export async function RemoveFromCart(cartItemId: string) {
+  const { error } = await supabase.from("carts").delete().eq("id", cartItemId); // Remove item by ID
+  if (error) throw new Error("Could not remove item from cart");
+}
+
+export async function UpdateCartQty({
+  cartItemId,
+  newQty,
+}: {
+  cartItemId: string;
+  newQty: number;
+}) {
+  if (newQty < 1) throw new Error("Quantity must be at least 1");
+
+  const { error } = await supabase
+    .from("carts")
+    .update({ quantity: newQty })
+    .eq("id", cartItemId);
+
+  if (error) throw new Error("Could not update quantity");
 }

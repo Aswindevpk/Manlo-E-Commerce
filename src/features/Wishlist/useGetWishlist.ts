@@ -23,6 +23,7 @@ function useGetWishlist() {
         .eq("user_id", userId)
         .eq("product_unit_id", variationId)
         .single();
+        
 
       if (error && error.code !== "PGRST116") throw new Error(error.message); // Ignore "No data found" error
       return data;

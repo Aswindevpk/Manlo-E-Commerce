@@ -1,6 +1,7 @@
 import { CiShoppingCart } from "react-icons/ci"
 import styled from "styled-components";
 import { useCartCount } from "../features/Cart/useCartCount";
+import SpinnerMini from "./SpinnerMini";
 
 const CartIconWrapper = styled.div`
   position: relative;
@@ -25,18 +26,18 @@ const CartCount = styled.span`
 
 
 function CartIcon() {
-    const {cartCount,isLoading}=useCartCount()
+  const { cartCount, isLoading } = useCartCount()
 
-    if(isLoading){
-        return <h1>hi</h1>
-    }
-    return (
-        <CartIconWrapper>
-            <CiShoppingCart size={30} />
-            {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
-        </CartIconWrapper>
+  if (isLoading ) {
+    return <SpinnerMini />
+  }
 
-    )
+  return (
+    <CartIconWrapper>
+      <CiShoppingCart size={30} />
+      {cartCount > 0 && <CartCount>{cartCount}</CartCount>}
+    </CartIconWrapper>
+  )
 }
 
 export default CartIcon

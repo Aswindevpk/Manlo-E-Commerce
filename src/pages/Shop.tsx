@@ -53,7 +53,7 @@ function Shop() {
       <Heading center={true}>New Arrivals</Heading>
       <ProductWrapper>
       <ProductList>
-          {products?.map(prod => (<ProductItem size="sm" key={prod.id} product={prod} />))}
+          {products?.map(prod => (<ProductItem size="sm" key={prod.product_id} product={prod} />))}
         </ProductList>
       </ProductWrapper>
     </div>

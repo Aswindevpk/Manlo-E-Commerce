@@ -568,3 +568,79 @@ FOR EACH ROW
 WHEN (NEW.order_number IS NULL)
 EXECUTE FUNCTION generate_order_number();
 
+
+-- cart item view
+create view cart_item_view as 
+select
+  carts.id,
+  carts.user_id,
+  carts.quantity as qty,
+  unit.id as unit_id,
+  sizes.name as size,
+  pv.name as name,
+  colors.name as color,
+  p.price as price,
+  (
+    select image_url
+    from product_variant_images
+    where variant_id = pv.id
+    limit 1
+  ) as image
+from
+  carts
+  inner join product_units unit on carts.product_unit_id = unit.id
+  inner join sizes on unit.size_id = sizes.id
+  inner join product_variants pv on unit.variant_id = pv.id
+  inner join colors on pv.color_id = colors.id
+  inner join products p on pv.product_id = p.id;
+
+
+-- wishlist item view 
+create view wishlist_item_view as
+select
+  wishlist.id,
+  wishlist.user_id,
+  unit.id as unit_id,
+  pv.name as product_name,
+  pv.id as product_id,
+  p.price as price,
+  p.is_new as is_new,
+  brands.name as brand,
+  array_agg(jsonb_build_object('image_url', pi.image_url)) as images
+  from
+  wishlist
+  inner join product_units unit on unit.id = product_unit_id
+  inner join product_variants pv on unit.variant_id = pv.id
+  inner join products p on pv.product_id = p.id
+  inner join brands on brands.id = p.brand_id
+  left join product_variant_images pi on pi.variant_id = pv.id
+group by
+ wishlist.id,
+  wishlist.user_id,
+  unit.id,
+  pv.name,
+  pv.id,
+  p.price,
+  p.is_new,
+  brands.name;
+
+-- product view 
+create view product_view as
+select
+ pv.name as product_name,
+ pv.id as product_id,
+ p.price as price,
+ p.is_new as is_new,
+ brands.name as brand,
+ array_agg(jsonb_build_object('image_url', pi.image_url)) as images
+from 
+product_variants pv
+inner join products p on p.id = pv.product_id
+inner join brands on brands.id = p.brand_id
+left join product_variant_images pi on pi.variant_id = pv.id
+group by
+ pv.name,
+ pv.id,
+ p.price,
+ p.is_new,
+ brands.name;

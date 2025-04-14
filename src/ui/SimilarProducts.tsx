@@ -48,7 +48,7 @@ function SimilarProducts() {
       <Heading center={true} as="h1">Similar Products</Heading>
       <ProductWrapper>
         <ProductList>
-          {products?.map(prod => (<ProductItem size="sm" key={prod.id} product={prod} />))}
+          {products?.map(prod => (<ProductItem size="sm" key={prod.product_id} product={prod} />))}
         </ProductList>
       </ProductWrapper>
     </>

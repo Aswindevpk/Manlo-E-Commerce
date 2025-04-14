@@ -8,7 +8,7 @@ function useCart() {
   const userId = user?.id
 
   const { isLoading, data:cartItems, error } = useQuery({
-    queryKey: ["cart", user?.id],
+    queryKey: ["cart"],
     queryFn: () => getCart({ userId }),
     enabled: isAuthenticated,
     retry: false,

@@ -1,30 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import supabase from "../../services/supabase";
+import { UpdateCartQty } from "../../services/apiCart";
 
 function useUpdateCartQty() {
   const queryClient = useQueryClient();
 
   const { mutate: updateCartQuantity, isPending } = useMutation({
-    mutationFn: async ({
-      cartItemId,
-      newQty,
-    }: {
-      cartItemId: string;
-      newQty: number;
-    }) => {
-      if (newQty < 1) throw new Error("Quantity must be at least 1");
-
-      const { error } = await supabase
-        .from("carts")
-        .update({ quantity: newQty })
-        .eq("id", cartItemId);
-
-      if (error) throw new Error("Could not update quantity");
-    },
-
+    mutationFn: UpdateCartQty,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cart"] }); // Refresh cart data
+      queryClient.invalidateQueries({ queryKey: ["cartCount"] }); // Refresh cart data
     },
 
     onError: () => {

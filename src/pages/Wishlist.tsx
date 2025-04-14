@@ -1,8 +1,10 @@
 import styled from "styled-components";
-import useGetWishlists from "../features/Wishlist/useGetWishlists";
-// import useDeleteWishlist from "../features/Wishlist/useDeleteWishlist";
-// import Button from "../ui/Button";
+import useDeleteWishlist from "../features/Wishlist/useDeleteWishlist";
+import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
+import useGetAllWishlist from "../features/Wishlist/useGetAllWishlist";
+import ProductItem from "../ui/ProductItem";
+import { useUser } from "../features/Auth/useUser";
 
 const Container = styled.div`
     display: grid;
@@ -12,27 +14,27 @@ const Container = styled.div`
 `;
 
 function Wishlist() {
-  const { wishlist, isLoading } = useGetWishlists()
-  // const { removeFromWishlist, isRemoving } = useDeleteWishlist();
+  const { wishlist, isLoading } = useGetAllWishlist()
+  const { removeFromWishlist, isRemoving } = useDeleteWishlist();
+  const {user} = useUser()
 
   if (isLoading || !wishlist) {
     return <Spinner/>
   }
   return (
     <Container>
-      {/* {wishlist?.map(product => (
+       {wishlist?.map(product => (
         <div key={product.id}>
           <ProductItem product={product} size="sm" />
-          <h1>{product.productName}</h1>
           <Button
-            onClick={() => removeFromWishlist(product.productUnitId)}
+            onClick={() => removeFromWishlist({unitId:product.unit_id,userId:user?.id})}
             disabled={isRemoving}
           >
             Remove
           </Button>
         </div>
       )
-      )} */}
+      )} 
     </Container>
   )
 }

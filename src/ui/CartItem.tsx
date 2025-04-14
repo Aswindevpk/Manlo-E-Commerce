@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import CartItemRemove from "../features/Cart/CartItemRemove";
 import CartItemCounter from "../features/Cart/CartItemCounter";
+import { CartItem as CartItemType } from "../types";
 
 const Container = styled.div`
     border: 2px solid var(--color-brand-100);
@@ -32,23 +33,12 @@ const ProductPrice = styled.h5`
     /* font-family: var(--font-secondary); */
 `;
 
-interface Props{
-    Item:{
-        id:string;
-        image:string
-        name:string
-        size:string;
-        price:number;
-        color:{
-            name:string
-        }
-        qty:number;
-
-    }
+interface Props {
+    Item: CartItemType
 }
 
 
-function CartItem({Item}:Props) {
+function CartItem({ Item }: Props) {
     return (
         <Container>
             <ProductContainer>
@@ -56,11 +46,11 @@ function CartItem({Item}:Props) {
                 <ProductDetails>
                     <h3>{Item.name}</h3>
                     <ProductPrice>₹ {Item.price}</ProductPrice>
-                    <p>{Item.size} / {Item.color.name}</p>
+                    <p>{Item.size}/{Item.color}</p>
                 </ProductDetails>
             </ProductContainer>
-            <CartItemCounter itemQty={Item.qty} cartItemId={Item.id}/>
-            <CartItemRemove cartId={Item.id}/>
+            <CartItemCounter itemQty={Item.qty} cartItemId={Item.id} />
+            <CartItemRemove cartId={Item.id} />
         </Container>
     )
 }

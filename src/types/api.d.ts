@@ -1,3 +1,15 @@
+export type CartItem ={
+  id:string;
+  user_id:string;
+  qty:number;
+  unit_id:string;
+  size:string;
+  name:string
+  color:string;
+  price:number;
+  image:string
+}
+
 export type Address = {
   id?: string;
   user_id?: string; // Usually filled from auth context
@@ -14,19 +26,33 @@ export type Address = {
 export type Category = {
   id: string;
   name: string;
-  parent_id: number;
+  parent_id: number | null;
   image: string;
   slug: string;
-  parent:{
+  parent?:{
     id:string;
     name:string;
     slug:string;
   }
 };
 
-export type Product = {
+export type  wishlistItem= {
   id: string,
-  productName: string,
+  product_name: string,
+  product_id:string,
+  unit_id:string,
+  user_id:string,
+  price: number,
+  brand: string,
+  is_new: boolean,
+  images: {
+    image_url:string;
+  }[],
+};
+
+
+export type Product = {
+  product_name: string,
   product_id:string,
   price: number,
   brand: string,
