@@ -52,7 +52,7 @@ export async function login({ email, password }: LoginProps) {
   // Check role of user
   const { data: userData, error: fetchError } = await supabase
     .from("users")
-    .select("role")
+    .select("id,role,email,is_blocked")
     .eq("email", email)
     .maybeSingle();
 
@@ -66,7 +66,15 @@ export async function login({ email, password }: LoginProps) {
     throw new Error("invalid credentials");
   }
 
-  return { isEmailVerified, email };
+  const user = {
+    id: userData?.id,
+    isAuth: "authenticated",
+    email: userData?.email,
+    role: userData?.role,
+    isBlocked: userData?.is_blocked,
+  };
+
+  return { isEmailVerified, email, user };
 }
 
 interface forgotPassProps {
@@ -137,7 +145,7 @@ export async function getCurrentUser() {
     isAuth: Authuser?.role,
     email: Authuser.email,
     role: userData.role,
-    isBlocked:userData.is_blocked
+    isBlocked: userData.is_blocked,
   };
 }
 

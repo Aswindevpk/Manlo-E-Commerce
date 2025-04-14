@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useUser } from "../../features/Auth/useUser"
 import Spinner from "../../ui/Spinner"
+import toast from "react-hot-toast"
 
 
 interface Props {
@@ -19,25 +20,30 @@ const FullPage = styled.div`
 
 function ProtectedAdminRoute({ children }: Props) {
   const navigate = useNavigate()
-
-  const { isPending, isAuthenticated, user } = useUser()
+  const { isPending, user, isAuthenticated } = useUser()
 
   useEffect(() => {
-    if (!isPending && (!isAuthenticated || user?.role !== "admin")) {
-      navigate("/login", { replace: true });
+    if (!isPending) {
+      if (!isAuthenticated) {
+        navigate("/admin-login", { replace: true });
+      } else if (user?.role !== "admin") {
+        navigate("/admin-login", { replace: true });
+        toast.error("Access restricted");
+      }
     }
   }, [isAuthenticated, navigate, isPending, user])
 
-  if (isPending)
+  if (isPending) {
     return (
       <FullPage>
         <Spinner />
       </FullPage>
     )
+  }
 
   if (!isAuthenticated || user?.role !== "admin") return null;
 
-  if (isAuthenticated) return children
+  return children
 }
 
 export default ProtectedAdminRoute

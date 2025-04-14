@@ -16,11 +16,10 @@ export async function login({ email, password }: LoginProps) {
   // Check role of user
   const { data: userData, error: fetchError } = await supabase
     .from("users")
-    .select("role")
+    .select("id,role,email,is_blocked")
     .eq("email", email)
     .maybeSingle();
 
-  console.log(userData)
 
   if (fetchError) throw new Error(fetchError.message);
 
@@ -32,6 +31,14 @@ export async function login({ email, password }: LoginProps) {
     throw new Error("invalid credentials")
   }
 
+  const user = {
+    id: userData?.id,
+    isAuth: "authenticated",
+    email: userData?.email,
+    role: userData?.role,
+    isBlocked: userData?.is_blocked,
+  };
 
-  return;
+
+  return user;
 }

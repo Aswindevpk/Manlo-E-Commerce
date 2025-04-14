@@ -12,7 +12,10 @@ import Attributes from "../pages/Attributes";
 function AdminRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>}>
+      <Route path="/" element={
+        <ProtectedAdminRoute>
+          <AdminLayout />
+        </ProtectedAdminRoute>}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<Users />} />

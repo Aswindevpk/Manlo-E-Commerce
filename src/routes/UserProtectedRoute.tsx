@@ -25,15 +25,15 @@ function UserProtectedRoute({ children }: Props) {
   const { isPending, isAuthenticated, user } = useUser()
 
   useEffect(() => {
-    const logoutAndRedirect = async (message: string) => {
-      toast.error(message);
+    const logoutAndRedirect = async (message?: string) => {
+      if(message) toast.error(message);
       await supabase.auth.signOut(); // Clear the JWT/session
       navigate("/login", { replace: true });
     };
 
     if (!isPending) {
       if (!isAuthenticated) {
-        logoutAndRedirect("You must be logged in to access this page.");
+        navigate("/login", { replace: true });
       } else if (user?.role !== "user") {
         logoutAndRedirect("Access restricted. Only users can view this page.");
       } else if (user?.isBlocked) {
