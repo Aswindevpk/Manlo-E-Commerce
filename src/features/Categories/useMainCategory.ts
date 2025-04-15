@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMainCategories } from "../../services/apiProduct";
+import { getMainCategories } from "../../services/apiCategories";
+
 
 
 function useMainCategory() {

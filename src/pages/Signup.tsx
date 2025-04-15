@@ -1,5 +1,5 @@
 import SignupForm from "../features/Auth/SignupForm";
-import AuthLayout from "../components/AuthLayout";
+import AuthLayout from "../features/Auth/AuthLayout";
 
 function Signup() {
   return (

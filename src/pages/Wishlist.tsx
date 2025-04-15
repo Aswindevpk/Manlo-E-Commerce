@@ -16,25 +16,25 @@ const Container = styled.div`
 function Wishlist() {
   const { wishlist, isLoading } = useGetAllWishlist()
   const { removeFromWishlist, isRemoving } = useDeleteWishlist();
-  const {user} = useUser()
+  const { user } = useUser()
 
   if (isLoading || !wishlist) {
-    return <Spinner/>
+    return <Spinner />
   }
   return (
     <Container>
-       {wishlist?.map(product => (
+      {wishlist?.map(product => (
         <div key={product.id}>
           <ProductItem product={product} size="sm" />
           <Button
-            onClick={() => removeFromWishlist({unitId:product.unit_id,userId:user?.id})}
+            onClick={() => removeFromWishlist({ unitId: product.unit_id, userId: user?.id })}
             disabled={isRemoving}
           >
             Remove
           </Button>
         </div>
       )
-      )} 
+      )}
     </Container>
   )
 }

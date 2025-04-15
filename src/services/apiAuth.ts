@@ -2,13 +2,11 @@ import supabase from "./supabase";
 
 const APP_URL = "http://localhost:5173";
 
-//signup
-interface SignupProps {
+
+export async function signup({ email, password }:  {
   email: string;
   password: string;
-}
-
-export async function signup({ email, password }: SignupProps) {
+}) {
   //signup
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -20,12 +18,11 @@ export async function signup({ email, password }: SignupProps) {
   return data;
 }
 
-//user login
-interface LoginProps {
+
+export async function login({ email, password }: {
   email: string;
   password: string;
-}
-export async function login({ email, password }: LoginProps) {
+}) {
   let isEmailVerified = true;
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -77,10 +74,8 @@ export async function login({ email, password }: LoginProps) {
   return { isEmailVerified, email, user };
 }
 
-interface forgotPassProps {
-  email: string;
-}
-export async function forgotPassword({ email }: forgotPassProps) {
+
+export async function forgotPassword({ email }: { email: string }) {
   // Check if email exists in the database
   const { data: userData, error: fetchError } = await supabase
     .from("users") // Ensure your users table is accessible
@@ -102,12 +97,14 @@ export async function forgotPassword({ email }: forgotPassProps) {
   return;
 }
 
-interface verifyEmailOtpProps {
+// email otp verify
+export async function verifyEmailOtp({
+  email,
+  otp,
+}: {
   email: string;
   otp: string;
-}
-
-export async function verifyEmailOtp({ email, otp }: verifyEmailOtpProps) {
+}) {
   const { error } = await supabase.auth.verifyOtp({
     email,
     token: otp,

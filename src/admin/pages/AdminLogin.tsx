@@ -1,5 +1,5 @@
 import AdminLoginForm from "../features/Auth/AdminLoginForm";
-import AuthLayout from "../../components/AuthLayout";
+import AuthLayout from "../../features/Auth/AuthLayout";
 
 function AdminLogin() {
   return (

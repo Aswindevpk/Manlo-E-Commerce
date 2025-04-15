@@ -10,6 +10,7 @@ function useDeleteWishlist() {
     mutationFn: DeleteFromWishlist,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allWishlist"] });
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
       toast.success("Removed from wishlist!");
     },
     onError: () => toast.error("Failed to remove from wishlist"),

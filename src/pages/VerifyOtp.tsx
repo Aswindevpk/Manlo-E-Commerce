@@ -1,5 +1,5 @@
 import VerifyOtpForm from "../features/Auth/VerifyOtpForm";
-import AuthLayout from "../components/AuthLayout";
+import AuthLayout from "../features/Auth/AuthLayout";
 
 export default function VerifyOtp() {
     return (

@@ -8,6 +8,7 @@ function useAddWishlist() {
   const { mutate: addToWishlist, isPending: isAdding } = useMutation({
     mutationFn: AddToWishlist,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allWishlist"] });
       queryClient.invalidateQueries({ queryKey: ["wishlist"] });
       toast.success("Added to wishlist!");
     },

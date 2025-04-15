@@ -1,44 +1,8 @@
 import {
-  Category,
   Product,
   ProductVariation,
 } from "../types";
 import supabase from "./supabase";
-
-export async function getSubCategories({
-  categorySlug,
-}: {
-  categorySlug: string | undefined;
-}): Promise<Category[]> {
-  if (!categorySlug) {
-    throw new Error("Category slug is required!");
-  }
-
-  // Step 1: Get Parent Category ID
-  const { data: mainCategory, error: error1 } = await supabase
-    .from("categories")
-    .select("id")
-    .eq("slug", categorySlug)
-    .single(); // Fetch only one result
-
-  if (error1 || !mainCategory) {
-    console.error(error1);
-    throw new Error("Main Category not found!");
-  }
-
-  // Step 2: Use Parent ID to Fetch Subcategories
-  const { data, error } = await supabase
-    .from("categories")
-    .select("*,parent:parent_id(id,slug,name)")
-    .eq("parent_id", mainCategory.id);
-
-  if (error || !data) {
-    console.error(error);
-    throw new Error("Subcategories not found!");
-  }
-
-  return data;
-}
 
 
 export async function searchProducts(query: string):Promise<Product[]> {
@@ -55,25 +19,11 @@ export async function searchProducts(query: string):Promise<Product[]> {
   return data;
 }
 
-export async function getMainCategories(): Promise<Category[]> {
-  const { data, error } = await supabase
-    .from("categories")
-    .select("*")
-    .is("parent_id", null);
 
-  if (error || !data) {
-    console.error(error);
-    throw new Error("Main categories not found!");
-  }
 
-  return data;
-}
-
-interface getProductProps {
+export async function getProduct({ productId }:{
   productId: string | undefined;
-}
-
-export async function getProduct({ productId }: getProductProps) {
+}) {
   //product
   const { data, error } = await supabase
     .from("product")
@@ -89,9 +39,6 @@ export async function getProduct({ productId }: getProductProps) {
   return data;
 }
 
-interface getProductColorsProps {
-  productId: string;
-}
 
 interface Color{
   hex_code:string;
@@ -105,7 +52,9 @@ type ColorResponse = {
 
 export async function getProductColors({
   productId,
-}: getProductColorsProps):Promise<Color[]> {
+}: {
+  productId: string;
+}):Promise<Color[]> {
   //product
   const { data, error } = await supabase
     .from("product_variants")
@@ -122,13 +71,12 @@ export async function getProductColors({
   return colors;
 }
 
-interface getProductSizesProps {
-  sizeCategoryId: number;
-}
 
 export async function getProductSizes({
   sizeCategoryId,
-}: getProductSizesProps) {
+}: {
+  sizeCategoryId: number;
+}) {
   //product
   const { data, error } = await supabase
     .from("sizes")
@@ -143,11 +91,11 @@ export async function getProductSizes({
   return data;
 }
 
-interface getProductItemProps {
-  productItemId: string;
-}
 
-export async function getProductItem({ productItemId }: getProductItemProps) {
+
+export async function getProductItem({ productItemId }: {
+  productItemId: string;
+}) {
   //product
   const { data, error } = await supabase
     .from("product_variants")
@@ -176,13 +124,12 @@ export async function getProductItem({ productItemId }: getProductItemProps) {
   return formattedData;
 }
 
-interface getProductItemSizesProps {
-  productItemId: number;
-}
 
 export async function getProductItemSizes({
   productItemId,
-}: getProductItemSizesProps){
+}: {
+  productItemId: number;
+}){
   //product
 
   const { data, error } = await supabase
@@ -201,15 +148,14 @@ export async function getProductItemSizes({
   return sizes;
 }
 
-interface getProductVariationProps {
-  productItemId: number;
-  sizeId?: number;
-}
 
 export async function getProductVariation({
   productItemId,
   sizeId,
-}: getProductVariationProps): Promise<ProductVariation> {
+}: {
+  productItemId: number;
+  sizeId?: number;
+}): Promise<ProductVariation> {
   //product
   const { data, error } = await supabase
     .from("product_units")
@@ -226,15 +172,15 @@ export async function getProductVariation({
   return data;
 }
 
-interface getProductItemIdByColorProps {
-  productId: string;
-  colorId: string;
-}
+
 
 export async function getProductItemIdByColor({
   productId,
   colorId,
-}: getProductItemIdByColorProps) {
+}:{
+  productId: string;
+  colorId: string;
+} ) {
   //product
   const { data, error } = await supabase
     .from("product_variants")
@@ -251,13 +197,12 @@ export async function getProductItemIdByColor({
   return data;
 }
 
-interface getProductImagesProps {
-  productItemId: string | undefined;
-}
 
 export async function getProductImages({
   productItemId,
-}: getProductImagesProps) {
+}: {
+  productItemId: string | undefined;
+}) {
   //product
   const { data, error } = await supabase
     .from("product_variant_images")

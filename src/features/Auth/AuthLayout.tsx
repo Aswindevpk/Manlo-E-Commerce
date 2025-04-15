@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import styled from "styled-components";
-import Heading from "../ui/Heading";
+import Heading from "../../ui/Heading";
 
 const Layout = styled.main`
   min-height: 100vh;

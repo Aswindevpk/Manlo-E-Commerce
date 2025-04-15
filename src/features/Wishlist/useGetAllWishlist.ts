@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../Auth/useUser";
-import supabase from "../../services/supabase";
-import { wishlistItem } from "../../types";
+import { GetAllWishlist } from "../../services/apiWishlist";
 
 
 
@@ -9,25 +8,13 @@ function useGetAllWishlist() {
   const { user } = useUser();
   const userId = user?.id;
 
-
-
   const {
     isLoading,
     data: wishlist,
     error,
   } = useQuery({
     queryKey: ["allWishlist"],
-    queryFn: async ():Promise<wishlistItem[]> => {
-      if (!userId) return [];
-      const { data, error } = await supabase.
-      from("wishlist_item_view")
-      .select("*")
-      .eq("user_id",userId)
-
-      if (error) throw new Error(error.message);
-      
-      return data;
-    },
+    queryFn: ()=> GetAllWishlist({userId}),
     enabled: !!userId, // Only fetch if user is logged in
   });
 

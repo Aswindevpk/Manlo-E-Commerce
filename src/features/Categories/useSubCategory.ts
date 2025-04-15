@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSubCategories } from "../../services/apiProduct";
 import { useParams } from "react-router-dom";
+import { getSubCategories } from "../../services/apiCategories";
 
 function useSubCategory() {
   const { collectionSlug } = useParams<{ collectionSlug?: string }>();

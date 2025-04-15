@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { CiHeart } from "react-icons/ci";
+// import { CiHeart } from "react-icons/ci";
 import AnimatedProductImages from "./AnimatedProductImages";
 // import ColorSwatch from "./ColorSwatch";
 import { Product as ProductType } from "../types";
@@ -14,11 +14,11 @@ const Product = styled(Link) <{ size: "sm" | "md" }>`
   gap: 0.8rem;
 `;
 
-const WishlistToggle = styled.div`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-`;
+// const WishlistToggle = styled.div`
+//   position: absolute;
+//   top: 1rem;
+//   right: 1rem;
+// `;
 
 const NewTag = styled.div`
   position: absolute;
@@ -76,9 +76,9 @@ function ProductItem({ product, size = "md" }: ProductItemProps) {
         {/* <ColorSwatch productId={product.product_id} /> */}
         <Price>RS. {product.price}.00</Price>
       </ProductInfo>
-      <WishlistToggle>
+      {/* <WishlistToggle>
         <CiHeart size={30} color="white" />
-      </WishlistToggle>
+      </WishlistToggle> */}
       {product?.is_new && <NewTag>new</NewTag>}
     </Product>
   )
