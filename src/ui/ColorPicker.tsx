@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import useProductColors from "../features/Products/useProductColors";
-import useProductItem from "../features/Products/useProductItem";
-import { getProductItemIdByColor } from "../services/apiProduct";
+import { getProductVariantByColor } from "../services/apiProduct";
 import { useNavigate } from "react-router-dom";
 
 
@@ -33,30 +32,28 @@ const ColorSwatch = styled.div<{ color: string }>`
 
 
 
-function ColorPicker() {
-    const { isLoading: ProductLoading, productItem } = useProductItem()
+function ColorPicker({ productId, selectedColorId }: { productId: string, selectedColorId: string }) {
     const [selectedColor, setSelectedColor] = useState("")
-    const { isLoading, colors } = useProductColors({productId:productItem?.product_id})
+    const { isLoading, colors } = useProductColors({ productId })
+    
     const navigate = useNavigate()
-
 
 
     //set the color of selected product
     useEffect(() => {
-        if (productItem?.color_id) {
-            setSelectedColor(productItem.color_id);
+        if (selectedColorId) {
+            setSelectedColor(selectedColorId);
         }
-    }, [productItem]);
+    }, [selectedColorId]);
 
 
     //navigate to product page according to color selected
     useEffect(() => {
         const fetchProductId = async () => {
-            if (productItem?.color_id !== selectedColor && productItem && selectedColor) {
+            if (selectedColorId !== selectedColor && selectedColor) {
                 try {
-                    const productId = productItem.product_id;
-                    const productItemId = await getProductItemIdByColor({ productId, colorId: selectedColor });
-                    navigate('/product/' + productItemId.id)
+                    const product = await getProductVariantByColor({ productId, colorId: selectedColor });
+                    navigate(`/product/${product.slug}?unit=${product.unit_id}`)
                 } catch (error) {
                     console.error("Error fetching product ID:", error);
                 }
@@ -64,9 +61,9 @@ function ColorPicker() {
         };
 
         fetchProductId();
-    }, [selectedColor, productItem, navigate]);
+    }, [selectedColor, productId, navigate, selectedColorId]);
 
-    if (isLoading || !colors || ProductLoading) {
+    if (isLoading || !colors) {
         return <h1>loading</h1>
     }
 

@@ -27,7 +27,7 @@ function AppRoutes() {
                 </UserProtectedRoute>
             }>
                 <Route index element={<Home />} />
-                <Route path="product/:productItemId" element={<Product />} />
+                <Route path="product/:productSlug" element={<Product />} />
                 <Route path="order/:orderId" element={<Order />} />
                 <Route path="user" element={<Profile />}>
                     <Route index element={<Navigate to="profile" replace />} />

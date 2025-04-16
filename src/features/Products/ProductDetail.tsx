@@ -2,9 +2,10 @@ import styled from "styled-components";
 import StyledDivider from "../../ui/StyledDivider";
 import ColorPicker from "../../ui/ColorPicker";
 import SizePicker from "../../ui/SizePicker";
-import useProductItem from "./useProductItem";
 import ProductImages from "./ProductImages";
 import ProductAction from "./productAction";
+import Spinner from "../../ui/Spinner";
+import useProductDetail from "./useProductDetail";
 
 
 
@@ -66,36 +67,37 @@ const SectionHeader = styled.p`
 
 
 function ProductDetail() {
-    const { isLoading, productItem } = useProductItem()
+    const { isLoading, productData } = useProductDetail()
 
-    if (isLoading || !productItem) {
-        return <h1>loading</h1>
+    if (isLoading || !productData) {
+        return <Spinner />
     }
+
     return (
         <Main>
-            <ProductImages />
+            <ProductImages images={productData.images} />
             <Details>
                 <div>
-                    <BrandName>{productItem?.brand.name}</BrandName>
-                    <ProductName>{productItem?.name}</ProductName>
-                    <Price>Rs. {productItem?.price}/-</Price>
+                    <BrandName>{productData.brand}</BrandName>
+                    <ProductName>{productData.name}</ProductName>
+                    <Price>Rs. {productData.price}/-</Price>
                     <Para>MRP including all taxes.</Para>
                 </div>
                 <StyledDivider />
                 <Section>
                     <SectionHeader>Colors</SectionHeader>
-                    <ColorPicker />
+                    <ColorPicker productId={productData.product_id} selectedColorId={productData.color_id} />
                 </Section>
                 <StyledDivider />
                 <Section>
                     <SectionHeader>sizes</SectionHeader>
-                    <SizePicker />
+                    <SizePicker parentCategoryId={productData.parent_category_id} variantId={productData.id} />
                 </Section>
                 <ProductAction />
                 <Section>
-                    <SectionHeader>SKU : {productItem.sku}</SectionHeader>
-                    <SectionHeader>Description : {productItem?.description}</SectionHeader>
-                    <SectionHeader>care Instruction : {productItem?.care_instruction}</SectionHeader>
+                    <SectionHeader>SKU : {productData.sku}</SectionHeader>
+                    <SectionHeader>Description : {productData.description}</SectionHeader>
+                    <SectionHeader>care Instruction : {productData.care_instruction}</SectionHeader>
                 </Section>
             </Details>
         </Main>

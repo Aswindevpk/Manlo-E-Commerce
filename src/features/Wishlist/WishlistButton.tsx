@@ -1,4 +1,3 @@
-import { useSearchParams } from "react-router-dom";
 import useAddWishlist from "./useAddWishlist";
 import useDeleteWishlist from "./useDeleteWishlist";
 import useGetWishlist from "./useGetWishlist";
@@ -12,30 +11,25 @@ const ButtonWishlist = styled.button`
     border: none;
 `
 
-function WishlistButton() {
-  const [searchParams] = useSearchParams()
+function WishlistButton({unitId}:{unitId:string | null}) {
   const { wishlistItem } = useGetWishlist();
   const { addToWishlist, isAdding } = useAddWishlist();
   const { removeFromWishlist, isRemoving } = useDeleteWishlist();
-
   const { user } = useUser();
+
   const userId = user?.id;
 
-  let variationId = null
-  if (searchParams) {
-      variationId = searchParams.get("variation")
-  }
 
   const handleToggleWishlist = () => {
     if (wishlistItem) {
-      removeFromWishlist({unitId:variationId,userId});
+      removeFromWishlist({unitId,userId});
     } else {
-      addToWishlist({variationId,userId});
+      addToWishlist({unitId,userId});
     }
   };
 
   return (
-    <ButtonWishlist onClick={handleToggleWishlist} disabled={isAdding || isRemoving || !variationId}>
+    <ButtonWishlist onClick={handleToggleWishlist} disabled={isAdding || isRemoving || !unitId}>
       {wishlistItem ? <FaHeart fontSize={30} /> : <CiHeart fontSize={30} />}
     </ButtonWishlist>
   );

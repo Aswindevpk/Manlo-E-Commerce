@@ -61,6 +61,7 @@ CREATE TABLE product_variants (
   product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   color_id UUID NOT NULL REFERENCES colors(id) ON DELETE CASCADE,
   sku TEXT NOT NULL,
+  slug NOT NULL VARCHAR(255) UNIQUE,
   name TEXT,
   UNIQUE (product_id, color_id),
   UNIQUE (sku)

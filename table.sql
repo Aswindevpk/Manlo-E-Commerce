@@ -233,6 +233,7 @@ CREATE TABLE product_variants (
   product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   color_id UUID NOT NULL REFERENCES colors(id) ON DELETE CASCADE,
   sku TEXT NOT NULL,
+  slug NOT NULL VARCHAR(255) UNIQUE,
   name TEXT,
   UNIQUE (product_id, color_id),
   UNIQUE (sku)
@@ -602,6 +603,7 @@ select
   unit.id as unit_id,
   pv.name as product_name,
   pv.id as product_id,
+  pv.slug as slug,
   p.price as price,
   p.is_new as is_new,
   brands.name as brand,
@@ -621,6 +623,7 @@ group by
   pv.id,
   p.price,
   p.is_new,
+  pv.slug,
   brands.name;
 
 -- product view 
@@ -631,7 +634,18 @@ select
  p.price as price,
  p.is_new as is_new,
  brands.name as brand,
- array_agg(jsonb_build_object('image_url', pi.image_url)) as images
+ array_agg(jsonb_build_object('image_url', pi.image_url)) as images,
+ pv.slug,
+   (
+    select
+      id
+    from
+      product_units
+    where
+      variant_id = pv.id
+    limit
+      1
+  ) as unit_id
 from 
 product_variants pv
 inner join products p on p.id = pv.product_id
@@ -642,4 +656,55 @@ group by
  pv.id,
  p.price,
  p.is_new,
- brands.name;
+ brands.name,
+ pv.slug;
+
+
+--product_detail_view
+create view product_detail_view as
+select
+  pv.id as id,
+  pv.product_id as product_id,
+  array_agg(jsonb_build_object('image_url', pvi.image_url)) as images,
+  b.name as brand,
+  pv.name as name,
+  pv.slug as slug,
+  p.price as price,
+  pv.color_id as color_id,
+  pv.sku as sku,
+  p.description as description,
+  p.care_instruction as care_instruction,
+  c.parent_id as parent_category_id,
+    (
+    select
+      id
+    from
+      product_units
+    where
+      variant_id = pv.id
+    limit
+      1
+  ) as unit_id
+from
+  product_variants pv
+  inner join products p on p.id = pv.product_id
+  inner join brands b on b.id = p.brand_id
+  inner join product_variant_images pvi on pvi.variant_id = pv.id
+  inner join categories c on c.id = p.category_id
+group by
+  pv.id,
+  pv.product_id,
+  b.name,
+  pv.name,
+  pv.slug,
+  p.price,
+  pv.color_id,
+  pv.slug,
+  pv.color_id,
+  pv.sku,
+  p.description,
+  p.care_instruction,
+  c.parent_id;
+
+
+  

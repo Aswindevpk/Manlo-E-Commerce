@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import useProductImages from "./useProductImages";
-import Spinner from "../../ui/Spinner";
 
 const Images = styled.div`
     display: grid;
@@ -14,16 +12,11 @@ const ProductImg = styled.img`
     cursor: pointer;
 `;
 
-function ProductImages() {
-    const { isLoading, productImages } = useProductImages()
-
-    if(isLoading || !productImages){
-        return <Spinner/>
-    }
+function ProductImages({images}:{images:{image_url:string}[]}) {
 
     return (
         <Images>
-            {productImages.map(image=>(
+            {images.map(image=>(
             <ProductImg src={image.image_url} />
             ))}
         </Images>

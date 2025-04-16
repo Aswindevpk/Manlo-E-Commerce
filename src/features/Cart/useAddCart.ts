@@ -7,7 +7,7 @@ import { AddtoCart } from "../../services/apiCart";
 function useAddCart() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
-  const variationId = searchParams.get("variation");
+  const variationId = searchParams.get("unit");
   const { user } = useUser();
   const userId = user?.id;
 

@@ -1,18 +1,18 @@
 import supabase from "./supabase";
 
 export async function AddToWishlist({
-  variationId,
+  unitId,
   userId,
 }: {
-  variationId: string | null;
+  unitId: string | null;
   userId: string | undefined;
 }) {
   if (!userId) throw new Error("User not logged in");
-  if (!variationId) throw new Error("no product found");
+  if (!unitId) throw new Error("no product found");
 
   const { data, error } = await supabase
     .from("wishlist")
-    .insert([{ user_id: userId, product_unit_id: variationId }]);
+    .insert([{ user_id: userId, product_unit_id: unitId }]);
 
   if (error) throw new Error(error.message);
   return data;

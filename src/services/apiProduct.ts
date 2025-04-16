@@ -1,6 +1,7 @@
 import {
   Product,
-  ProductVariation,
+  productDetail,
+  ProductUnit
 } from "../types";
 import supabase from "./supabase";
 
@@ -14,26 +15,6 @@ export async function searchProducts(query: string):Promise<Product[]> {
   if (error) {
     console.error("Error fetching search results:", error);
     throw new Error("Could not fetch search results.");
-  }
-
-  return data;
-}
-
-
-
-export async function getProduct({ productId }:{
-  productId: string | undefined;
-}) {
-  //product
-  const { data, error } = await supabase
-    .from("product")
-    .select("*,brand(*),productCategory(*))")
-    .eq("id", productId)
-    .single();
-
-  if (error || !data) {
-    console.error(error);
-    throw new Error("Product not found!");
   }
 
   return data;
@@ -75,7 +56,7 @@ export async function getProductColors({
 export async function getProductSizes({
   sizeCategoryId,
 }: {
-  sizeCategoryId: number;
+  sizeCategoryId: string;
 }) {
   //product
   const { data, error } = await supabase
@@ -92,15 +73,15 @@ export async function getProductSizes({
 }
 
 
-
-export async function getProductItem({ productItemId }: {
-  productItemId: string;
-}) {
+export async function getProductDetail({ productSlug }: {
+  productSlug: string | undefined;
+}):Promise<productDetail> {
   //product
+  if(!productSlug) throw new Error("product does not exist")
   const { data, error } = await supabase
-    .from("product_variants")
-    .select("*,products(*,brands(*),categories(*))")
-    .eq("id", productItemId)
+    .from("product_detail_view")
+    .select("*")
+    .eq("slug", productSlug)
     .single();
 
   if (error || !data) {
@@ -108,34 +89,21 @@ export async function getProductItem({ productItemId }: {
     throw new Error("Product not found!");
   }
 
-  const formattedData = {
-    id: data.id,
-    name: data.name,
-    color_id: data.color_id,
-    product_id: data.product_id,
-    sku: data.sku,
-    price: data.products.price,
-    brand: data.products.brands,
-    description: data.products.description,
-    care_instruction: data.products.care_instruction,
-    category: data.products.categories,
-  };
-
-  return formattedData;
+  return data;
 }
 
 
-export async function getProductItemSizes({
-  productItemId,
+export async function getProductVariantSizes({
+  variantId,
 }: {
-  productItemId: number;
+  variantId: string;
 }){
   //product
 
   const { data, error } = await supabase
     .from("product_units")
     .select("size_id")
-    .eq("variant_id", productItemId);
+    .eq("variant_id", variantId);
 
   if (error) {
     console.error(error);
@@ -149,18 +117,19 @@ export async function getProductItemSizes({
 }
 
 
-export async function getProductVariation({
-  productItemId,
+export async function getProductUnit({
+  variantId,
   sizeId,
 }: {
-  productItemId: number;
-  sizeId?: number;
-}): Promise<ProductVariation> {
+  variantId: string;
+  sizeId?: string;
+}): Promise<ProductUnit> {
+  if(!sizeId) throw new Error("size undefined")
   //product
   const { data, error } = await supabase
     .from("product_units")
     .select("*")
-    .eq("variant_id", productItemId)
+    .eq("variant_id", variantId)
     .eq("size_id", sizeId)
     .single();
 
@@ -174,7 +143,7 @@ export async function getProductVariation({
 
 
 
-export async function getProductItemIdByColor({
+export async function getProductVariantByColor({
   productId,
   colorId,
 }:{
@@ -183,36 +152,30 @@ export async function getProductItemIdByColor({
 } ) {
   //product
   const { data, error } = await supabase
-    .from("product_variants")
-    .select("id")
-    .eq("product_id", productId)
-    .eq("color_id", colorId)
-    .single();
+  .from("product_variants")
+  .select(`
+    slug,
+    product_units!inner(id)
+  `)
+  .eq("product_id", productId)
+  .eq("color_id", colorId)
+  .limit(1, { foreignTable: 'product_units' }) // Only get first unit
+  .single();
+
 
   if (error || !data) {
     console.error(error);
     throw new Error("Product not found!");
   }
 
-  return data;
-}
-
-
-export async function getProductImages({
-  productItemId,
-}: {
-  productItemId: string | undefined;
-}) {
-  //product
-  const { data, error } = await supabase
-    .from("product_variant_images")
-    .select("*")
-    .eq("variant_id", productItemId);
-
-  if (error || !data) {
-    console.error(error);
-    throw new Error("Product not found!");
+  const filteredData = {
+    slug:data.slug,
+    unit_id:data.product_units[0].id
   }
 
-  return data;
+  return filteredData;
 }
+
+
+
+

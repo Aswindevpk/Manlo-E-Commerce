@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components"
 import useProductSizes from "../features/Products/useProductSizes";
-import useProductItem from "../features/Products/useProductItem";
-import useProductItemSizes from "../features/Products/useProductItemSizes";
-import useProductVariation from "../features/Products/useProductVariation";
 import { useSearchParams } from "react-router-dom";
+import useProductVariantSizes from "../features/Products/useProductItemSizes";
+import useProductUnit from "../features/Products/useProductUnit";
 
 
 const SizeContainer = styled.div`
@@ -31,27 +30,28 @@ const SizeButton = styled.button<{ selected: boolean }>`
 
 
 
-function SizePicker() {
-    const { isLoading: ProductLoading, productItem } = useProductItem()
+function SizePicker({ parentCategoryId, variantId }: { parentCategoryId: string, variantId: string }) {
+    //fetches all sizes for a specific category
+    const { isLoading, sizes } = useProductSizes(parentCategoryId)
+    //fetches all sizes available for a specific variant
+    const { availableSizes } = useProductVariantSizes(variantId)
 
-    const sizeCategoryId = productItem?.category.parent_id
-    const { isLoading, sizes } = useProductSizes(sizeCategoryId)
-    const { availableSizes } = useProductItemSizes(productItem?.id)
-    const [selectedSize, setSelectedSize] = useState<number>();
-    const { isLoading: variationLoading, productVariation } = useProductVariation(productItem?.id, selectedSize)
+    const [selectedSize, setSelectedSize] = useState<string>();
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const { isLoading: unitLoading, productUnit } = useProductUnit(variantId, selectedSize)
 
 
     useEffect(() => {
-        if (productVariation) {
+        if (productUnit) {
             const newSearchParams = new URLSearchParams(searchParams); // Create a new instance
-            newSearchParams.set("variation", productVariation.id.toString());
+            newSearchParams.set("unit", productUnit.id.toString());
             setSearchParams(newSearchParams, { replace: false }); // Ensure history is preserved
         }
-    }, [productVariation, searchParams, setSearchParams, variationLoading])
+    }, [productUnit, searchParams, setSearchParams, unitLoading])
 
 
-    if (isLoading || !sizes || ProductLoading) {
+    if (isLoading || !sizes) {
         return <h1>loading</h1>
     }
 

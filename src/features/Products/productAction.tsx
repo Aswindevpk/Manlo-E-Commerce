@@ -14,20 +14,20 @@ function ProductAction() {
     const [searchParams] = useSearchParams()
     const { addCart, isAddingToCart } = useAddCart();
 
-    let variationId = null
+    let unitId = null
     if (searchParams) {
-        variationId = searchParams.get("variation")
+        unitId = searchParams.get("unit")
     }
 
     return (
         <Cta>
             <Button
                 onClick={() => addCart()}
-                disabled={isAddingToCart || !variationId}
+                disabled={isAddingToCart || !unitId}
                 size="large">
-                {variationId ? "Add to Cart" : "Select a Size"}
+                {unitId ? "Add to Cart" : "Select a Size"}
             </Button>
-            <WishlistButton/>
+            <WishlistButton unitId={unitId}/>
         </Cta>
     )
 }

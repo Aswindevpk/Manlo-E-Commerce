@@ -1,14 +1,32 @@
-export type CartItem ={
-  id:string;
-  user_id:string;
-  qty:number;
+export type productDetail = {
+  id: string;
+  product_id: string;
+  images: {
+    image_url: string;
+  }[];
+  brand: string;
+  name: string;
+  slug: string;
+  price: number;
+  color_id: string;
+  sku: string;
+  description: string;
+  care_instruction: string;
   unit_id:string;
-  size:string;
-  name:string
-  color:string;
-  price:number;
-  image:string
-}
+  parent_category_id: string;
+};
+
+export type CartItem = {
+  id: string;
+  user_id: string;
+  qty: number;
+  unit_id: string;
+  size: string;
+  name: string;
+  color: string;
+  price: number;
+  image: string;
+};
 
 export type Address = {
   id?: string;
@@ -29,37 +47,38 @@ export type Category = {
   parent_id: number | null;
   image: string;
   slug: string;
-  parent?:{
-    id:string;
-    name:string;
-    slug:string;
-  }
+  parent?: {
+    id: string;
+    name: string;
+    slug: string;
+  };
 };
 
-export type  wishlistItem= {
-  id: string,
-  product_name: string,
-  product_id:string,
-  unit_id:string,
-  user_id:string,
-  price: number,
-  brand: string,
-  is_new: boolean,
+export type wishlistItem = {
+  id: string;
+  product_name: string;
+  product_id: string;
+  unit_id: string;
+  user_id: string;
+  price: number;
+  brand: string;
+  is_new: boolean;
   images: {
-    image_url:string;
-  }[],
+    image_url: string;
+  }[];
 };
-
 
 export type Product = {
-  product_name: string,
-  product_id:string,
-  price: number,
-  brand: string,
-  is_new: boolean,
+  product_name: string;
+  product_id: string;
+  price: number;
+  brand: string;
+  is_new: boolean;
+  slug: string;
   images: {
-    image_url:string;
-  }[],
+    image_url: string;
+  }[];
+  unit_id: string;
 };
 
 export type ProductColor = {
@@ -82,10 +101,10 @@ export type ProductItem = {
   color_id: number;
 };
 
-export type ProductVariation = {
-  id: number;
+export type ProductUnit = {
+  id: string;
   created_at: string;
-  product_item_id: number;
-  qty_in_stock: number;
-  size_id: number;
+  variant_id: string;
+  stock_quantity: number;
+  size_id: string;
 };

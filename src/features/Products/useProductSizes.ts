@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getProductSizes } from "../../services/apiProduct";
 
-function useProductSizes(sizeCategoryId:number) {
+function useProductSizes(sizeCategoryId:string) {
 
   const {
     isLoading,
