@@ -706,5 +706,151 @@ group by
   p.care_instruction,
   c.parent_id;
 
+DROP VIEW IF EXISTS order_view;
+CREATE VIEW order_view AS 
+select 
+o.id as id,
+o.order_number as order_number,
+o.user_id as user_id,
+o.price as price,
+o.created_at as order_date,
+o.shipping_status as shipping_status,
+o.payment_status as payment_status,
+o.quantity as qty,
+o.estimated_delivery as estimated_delivery,
+pv.name as product_name,
+s.name as size,
+c.name as color,
+  (
+    select
+      image_url
+    from
+      product_variant_images
+    where
+      variant_id = pv.id
+    limit
+      1
+  ) as image
+from orders o
+inner join product_units pu on pu.id = o.product_unit_id
+inner join product_variants pv on pv.id = pu.variant_id
+inner join sizes s on s.id = pu.size_id
+inner join colors c on c.id = pv.color_id;
+
+
+
+CREATE OR REPLACE FUNCTION place_orders(user_id_param UUID)
+RETURNS JSONB
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    cart_item RECORD;
+    order_result JSONB := '[]'::JSONB;
+    order_id UUID;
+    order_errors TEXT[] := ARRAY[]::TEXT[];
+BEGIN
+    -- Begin transaction
+    BEGIN
+        -- Lock rows for the user's cart items to prevent race conditions
+        LOCK TABLE carts IN SHARE MODE;
+        
+        -- Check if cart is empty
+        IF NOT EXISTS (SELECT 1 FROM carts WHERE user_id = user_id_param) THEN
+            RETURN jsonb_build_object('error', 'Cart is empty');
+        END IF;
+        
+        -- Process each cart item as a separate order
+        FOR cart_item IN 
+            SELECT 
+                c.id AS cart_id,
+                c.product_unit_id,
+                c.quantity,
+                pu.variant_id,
+                pu.stock_quantity,
+                p.price
+            FROM carts c
+            JOIN product_units pu ON c.product_unit_id = pu.id
+            JOIN product_variants pv ON pu.variant_id = pv.id
+            JOIN products p ON pv.product_id = p.id
+            WHERE c.user_id = user_id_param
+        LOOP
+            -- Check stock availability
+            IF cart_item.stock_quantity < cart_item.quantity THEN
+                order_errors := array_append(
+                    order_errors, 
+                    format('Insufficient stock for product unit %s (available: %s, requested: %s)', 
+                           cart_item.product_unit_id, cart_item.stock_quantity, cart_item.quantity)
+                );
+                CONTINUE;
+            END IF;
+            
+            -- Generate order number
+            DECLARE
+                order_number TEXT := 'ORD-' || to_char(now(), 'YYYYMMDD') || '-' || substr(gen_random_uuid()::TEXT, 1, 8);
+            BEGIN
+                -- Create the order
+                INSERT INTO orders (
+                    user_id,
+                    product_unit_id,
+                    address_id,
+                    quantity,
+                    order_number,
+                    price,
+                    shipping_status,
+                    payment_status
+                ) VALUES (
+                    user_id_param,
+                    cart_item.product_unit_id,
+                    (SELECT id FROM addresses WHERE user_id = user_id_param AND is_default = TRUE LIMIT 1),
+                    cart_item.quantity,
+                    order_number,
+                    cart_item.price * cart_item.quantity,
+                    'processing',
+                    'unpaid'
+                ) RETURNING id INTO order_id;
+                
+                -- Update stock
+                UPDATE product_units
+                SET stock_quantity = stock_quantity - cart_item.quantity
+                WHERE id = cart_item.product_unit_id;
+                
+                -- Remove from cart
+                DELETE FROM carts WHERE id = cart_item.cart_id;
+                
+                -- Add to result
+                order_result := order_result || jsonb_build_object(
+                    'order_id', order_id,
+                    'order_number', order_number,
+                    'product_unit_id', cart_item.product_unit_id,
+                    'quantity', cart_item.quantity,
+                    'price', cart_item.price * cart_item.quantity
+                );
+            END;
+        END LOOP;
+        
+        -- If any errors occurred, rollback and return them
+        IF array_length(order_errors, 1) > 0 THEN
+            RETURN jsonb_build_object(
+                'success', false,
+                'errors', order_errors,
+                'orders_placed', order_result
+            );
+        END IF;
+        
+        -- Commit if everything succeeded
+        RETURN jsonb_build_object(
+            'success', true,
+            'orders', order_result
+        );
+    EXCEPTION
+        WHEN OTHERS THEN
+            -- Rollback on any error
+            RETURN jsonb_build_object(
+                'error', SQLERRM,
+                'success', false
+            );
+    END;
+END;
+$$;
 
   

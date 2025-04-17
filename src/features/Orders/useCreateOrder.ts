@@ -1,42 +1,25 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
 import supabase from '../../services/supabase';
 
 
-
-
-export function useCreateOrder() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-
-  const createOrder = async (orders:[]) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Insert each item as a separate order
+export const usePlaceOrders = () => {
+  return useMutation({
+    mutationFn: async (userId: string |undefined) => {
       const { data, error } = await supabase
-        .from('orders')
-        .insert(orders)
-        .select();
-
-      if (error) throw error;
-
-      // Optionally you could send the user to a confirmation page
-      navigate('/order-confirm', {
-        state: {
-          orderId: data?.[0]?.id, // or a list of order ids
-        },
-      });
-
+        .rpc('place_orders', { user_id_param: userId });
+      if (error) {
+        throw new Error(error.message);
+      }
+      
       return data;
-    } catch (err) {
-      console.error('Order creation error:', err??null);
-    } finally {
-      setLoading(false);
+    },
+    onSuccess: (data) => {
+      // You can add additional success handling here
+      console.log('Orders placed successfully:', data.orders);
+    },
+    onError: (error: Error) => {
+      // You can add additional error handling here
+      console.error('Order placement failed:', error.message);
     }
-  };
-
-  return { createOrder, loading, error };
-}
+  });
+};

@@ -5,6 +5,7 @@ import Spinner from "../ui/Spinner";
 import useGetAllWishlist from "../features/Wishlist/useGetAllWishlist";
 import ProductItem from "../ui/ProductItem";
 import { useUser } from "../features/Auth/useUser";
+import EmptyWishlist from "../ui/EmptyWishlist";
 
 const Container = styled.div`
     display: grid;
@@ -21,6 +22,12 @@ function Wishlist() {
   if (isLoading || !wishlist) {
     return <Spinner />
   }
+
+  if(wishlist.length === 0){
+    return <EmptyWishlist/>
+  }
+
+
   return (
     <Container>
       {wishlist?.map(product => (

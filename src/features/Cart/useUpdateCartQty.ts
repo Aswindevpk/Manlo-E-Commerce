@@ -8,11 +8,13 @@ function useUpdateCartQty() {
   const { mutate: updateCartQuantity, isPending } = useMutation({
     mutationFn: UpdateCartQty,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cartCount"] }); // Refresh cart data
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["cartCount"] }),
+        queryClient.invalidateQueries({ queryKey: ["cart"] })
+      ]);
     },
-
-    onError: () => {
-      toast.error("Failed to update quantity");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

@@ -16,6 +16,13 @@ const SectionHeader = styled.section`
   justify-content: space-between;
 `;
 
+const StyledImg = styled.img`
+    height: 60px;
+    width: 50px;
+    object-fit: cover;
+    aspect-ratio: 1/1;
+`;
+
 
 function SubTable() {
   const { isLoading, subCategories } = useSubCategories()
@@ -42,11 +49,11 @@ function SubTable() {
           render={(category) => (
             <Table.Row key={category.id}>
               <div>{category.name}</div>
-              <div>{category.image}</div>
+              <StyledImg src={category.image}></StyledImg>
               <div>{category.parent.name}</div>
               <div>
                 <a>Edit</a>/
-                <a>Delete</a>
+                <a>Unlist</a>
               </div>
               {/* <Tag type={customers.is_blocked ? "red" : "green"}>{customers.is_blocked ? "blocked" : "active"}</Tag> */}
             </Table.Row>

@@ -2,7 +2,9 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import useProductColors from "../features/Products/useProductColors";
 import { getProductVariantByColor } from "../services/apiProduct";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import SpinnerMini from "./SpinnerMini";
 
 
 const Container = styled.div`
@@ -33,39 +35,46 @@ const ColorSwatch = styled.div<{ color: string }>`
 
 
 function ColorPicker({ productId, selectedColorId }: { productId: string, selectedColorId: string }) {
-    const [selectedColor, setSelectedColor] = useState("")
+    const [selectedColor, setSelectedColor] = useState(selectedColorId ? selectedColorId : "")
     const { isLoading, colors } = useProductColors({ productId })
-    
-    const navigate = useNavigate()
+    const [isChangingVariant,setIsChangingVariant] = useState(false)
 
+    //current product slug
+    const { productSlug } = useParams();
+
+    const navigate = useNavigate()
 
     //set the color of selected product
     useEffect(() => {
-        if (selectedColorId) {
+        if (selectedColorId !== selectedColor) {
             setSelectedColor(selectedColorId);
         }
-    }, [selectedColorId]);
+    }, [selectedColorId, selectedColor]);
 
-
-    //navigate to product page according to color selected
-    useEffect(() => {
-        const fetchProductId = async () => {
-            if (selectedColorId !== selectedColor && selectedColor) {
-                try {
-                    const product = await getProductVariantByColor({ productId, colorId: selectedColor });
-                    navigate(`/product/${product.slug}?unit=${product.unit_id}`)
-                } catch (error) {
-                    console.error("Error fetching product ID:", error);
-                }
+    async function changeVariant(colorId:string){
+        setSelectedColor(colorId)
+        setIsChangingVariant(true)
+        try{
+            const product = await getProductVariantByColor({productId,colorId})
+            if(product.slug === productSlug){
+                setIsChangingVariant(false)
+                return;
             }
-        };
-
-        fetchProductId();
-    }, [selectedColor, productId, navigate, selectedColorId]);
-
-    if (isLoading || !colors) {
-        return <h1>loading</h1>
+            setIsChangingVariant(false)
+            navigate(`/product/${product.slug}?unit=${product.unit_id}`)
+        }catch(error){
+            toast.error("error changing color")
+            console.log(error)
+            setIsChangingVariant(false)
+        }
     }
+
+
+    if (isLoading || !colors || isChangingVariant ) {
+        return <SpinnerMini />
+    }
+
+    if (!colors || colors.length === 0) return <p>No colors available</p>;
 
     return (
         <Container>
@@ -73,7 +82,8 @@ function ColorPicker({ productId, selectedColorId }: { productId: string, select
                 <ColorButton
                     key={color.id}
                     selected={color.id === selectedColor}
-                    onClick={() => setSelectedColor(color.id)}
+                    disabled={isChangingVariant}
+                    onClick={() => changeVariant(color.id)}
                 >
                     <ColorSwatch
                         color={color.hex_code}

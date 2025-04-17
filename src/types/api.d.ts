@@ -1,3 +1,19 @@
+export type Order = {
+  id:string;
+  order_number:string;
+  price:number;
+  order_date:string;
+  shipping_status:string;
+  payment_status:string;
+  qty:number;
+  image:string;
+  estimated_delivery:string;
+  product_name:string;
+  size:string;
+  color:string;
+}
+
+
 export type productDetail = {
   id: string;
   product_id: string;

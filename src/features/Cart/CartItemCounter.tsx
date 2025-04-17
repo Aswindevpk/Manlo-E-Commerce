@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
-import { useState } from "react";
 import useUpdateCartQty from "./useUpdateCartQty";
 
 
@@ -11,19 +10,16 @@ const ProductCounter = styled.div`
 `;
 
 function CartItemCounter({ cartItemId, itemQty }: { cartItemId: string; itemQty: number }) {
-    const [quantity, setQuantity] = useState(itemQty)
     const { updateCartQuantity, isPending } = useUpdateCartQty();
 
     function incQuantity() {
-        const newQty = quantity + 1;
-        setQuantity(newQty);
+        const newQty = itemQty + 1;
         updateCartQuantity({ cartItemId, newQty });
     }
 
     function decQuantity() {
-        if (quantity > 1) {
-            const newQty = quantity - 1;
-            setQuantity(newQty);
+        if (itemQty > 1) {
+            const newQty = itemQty - 1;
             updateCartQuantity({ cartItemId, newQty });
         }
     }
@@ -35,7 +31,7 @@ function CartItemCounter({ cartItemId, itemQty }: { cartItemId: string; itemQty:
                 onClick={() => incQuantity()}
                 disabled={isPending}
             >+</Button>
-            <span>{quantity}</span>
+            <span>{itemQty}</span>
             <Button
                 size="small"
                 onClick={() => decQuantity()}

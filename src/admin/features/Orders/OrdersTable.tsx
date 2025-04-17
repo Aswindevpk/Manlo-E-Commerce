@@ -2,8 +2,8 @@ import styled from "styled-components";
 import Heading from "../../../ui/Heading";
 import Button from "../../../ui/Button";
 import Table from "../../components/Table";
-import useMainCategories from "./useMainCategory";
 import Spinner from "../../../ui/Spinner";
+import useGetOrders from "./useGetOrders";
 
 const Container = styled.section`
   display: flex;
@@ -16,18 +16,13 @@ const SectionHeader = styled.section`
   justify-content: space-between;
 `;
 
-const StyledImg = styled.img`
-    height: 60px;
-    width: 50px;
-    object-fit: cover;
-    aspect-ratio: 1/1;
-`;
 
 
 
 
-function MainTable() {
-  const { isLoading, mainCategories } = useMainCategories()
+
+function OrdersTable() {
+  const { isLoading, orders } = useGetOrders()
 
   if(isLoading){
     return <Spinner/>
@@ -36,21 +31,21 @@ function MainTable() {
   return (
     <Container>
       <SectionHeader>
-        <Heading>MainCategories</Heading>
+        <Heading>Orders</Heading>
         <Button>Add New</Button>
       </SectionHeader>
       <Table columns="1fr 1fr 1fr">
         <Table.Header>
-          <div>Name</div>
-          <div>Image</div>
+          <div>Order Number</div>
+          <div>Status</div>
           <div>Action</div>
         </Table.Header>
         <Table.Body
-          data={mainCategories}
-          render={(category) => (
-            <Table.Row key={category.id}>
-              <div>{category.name}</div>
-              <StyledImg src={category.image}></StyledImg>
+          data={orders}
+          render={(order) => (
+            <Table.Row key={order.id}>
+              <div>{order.order_number}</div>
+              <div>{order.shipping_status}</div>
               <div>
                 <a>Edit</a>/
                 <a>Unlist</a>
@@ -62,4 +57,4 @@ function MainTable() {
   )
 }
 
-export default MainTable
+export default OrdersTable

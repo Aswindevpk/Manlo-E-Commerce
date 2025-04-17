@@ -6,7 +6,7 @@ function useForgotPass() {
   const { mutate: forgotPass, isPending } = useMutation({
     mutationFn: forgotPassword,
     onSuccess: () => {
-      toast.success("Link sent to Email, Check Email!");
+      toast.success("If this email exists, you will receive a password reset link");
     },
     onError: (err) => {
       toast.error(err.message);

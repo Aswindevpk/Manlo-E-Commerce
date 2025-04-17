@@ -24,7 +24,7 @@ export async function getCart({
 }: {
   userId: string | undefined;
 }): Promise<CartItem[]> {
-  if(!userId) return []
+  if (!userId) return [];
   const { data, error: cartItemsError } = await supabase
     .from("cart_item_view")
     .select("*")
@@ -45,25 +45,29 @@ export async function AddtoCart({
   variationId: string | null;
   userId: string | undefined;
 }) {
-
-  if(!variationId || !userId) throw new Error("product and user details not provided")
+  if (!variationId || !userId)
+    throw new Error("product and user details not provided");
   // Check if the item already exists
   const { data: existingItem } = await supabase
     .from("carts")
-    .select("*")
+    .select("*,product_units(stock_quantity)")
     .eq("user_id", userId)
     .eq("product_unit_id", variationId)
     .maybeSingle();
 
   if (existingItem) {
-    // If exists, update the quantity
-    const { data, error } = await supabase
-      .from("carts")
-      .update({ quantity: existingItem.quantity + 1 })
-      .eq("id", existingItem.id);
+    if (existingItem.product_units.stock_quantity > existingItem.quantity) {
+      // If exists, update the quantity
+      const { data, error } = await supabase
+        .from("carts")
+        .update({ quantity: existingItem.quantity + 1 })
+        .eq("id", existingItem.id);
 
-    if (error) throw error;
-    return data;
+      if (error) throw error;
+      return data;
+    } else {
+      throw new Error("stock limit exceeded!");
+    }
   } else {
     // Otherwise, insert a new row
     const { data, error } = await supabase
@@ -89,10 +93,23 @@ export async function UpdateCartQty({
 }) {
   if (newQty < 1) throw new Error("Quantity must be at least 1");
 
-  const { error } = await supabase
+  // check if the quantity exceeds the stock
+  const { data: existingItem } = await supabase
     .from("carts")
-    .update({ quantity: newQty })
-    .eq("id", cartItemId);
+    .select("*,product_units(stock_quantity)")
+    .eq("id", cartItemId)
+    .single()
 
-  if (error) throw new Error("Could not update quantity");
+  if(newQty <= existingItem?.product_units.stock_quantity){
+    //only updates if the stock is within
+    const { error } = await supabase
+      .from("carts")
+      .update({ quantity: newQty })
+      .eq("id", cartItemId);
+      if (error) throw new Error("Could not update quantity");
+  }else{
+    throw new Error("Stock Limit Exceeded!")
+  }
+
+
 }

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
+import { Order } from "../../types";
 /* 🔹 Styled Components */
 const OrderContainer = styled.div`
   background: #fff;
@@ -107,23 +108,8 @@ const DeliveryDate = styled.div`
   padding: 8px 16px;
 `;
 
-type Props={
-  order:{
-    price:number;
-    id:string;
-    order_number:string;
-    image:string;
-    productName:string;
-    shipTo:string;
-    orderDate:string;
-    shipping_status:string;
-    quantity:number;
-    description:string;
-    estimated_delivery:string;
-  }
-}
 
-const OrderItem = ({ order }:Props) => {
+const OrderItem = ({ order }:{order:Order}) => {
   return (
     <OrderContainer>
       <OrderHeader>
@@ -136,12 +122,8 @@ const OrderItem = ({ order }:Props) => {
           <Value>€{order.price}</Value>
         </OrderInfo>
         <OrderInfo>
-          <Label>SHIP TO</Label>
-          <Value>{order.shipTo}</Value>
-        </OrderInfo>
-        <OrderInfo>
           <Label>ORDER PLACED</Label>
-          <Value>{order.orderDate}</Value>
+          <Value>{order.order_date}</Value>
         </OrderInfo>
       </OrderHeader>
 
@@ -150,14 +132,14 @@ const OrderItem = ({ order }:Props) => {
         <div style={{display:"flex"}}>
           <Image src={order.image} alt="Product" />
           <ProductInfo>
-            <ProductTitle>{order.productName}</ProductTitle>
+            <ProductTitle>{order.product_name}</ProductTitle>
             <ShippedTag>{order.shipping_status}</ShippedTag>
-            <ProductDetails>{order.description}</ProductDetails>
+            <ProductDetails>{order.size} / {order.color}</ProductDetails>
           </ProductInfo>
         </div>
         <QtyContainer>
           <QtyLabel>Qty:</QtyLabel>
-          <QtyValue>{order.quantity}</QtyValue>
+          <QtyValue>{order.qty}</QtyValue>
         </QtyContainer>
         <ButtonContainer>
           <Button>Order Details</Button>

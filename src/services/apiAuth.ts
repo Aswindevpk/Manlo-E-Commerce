@@ -7,11 +7,14 @@ export async function signup({ email, password }:  {
   email: string;
   password: string;
 }) {
+
   //signup
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
   });
+
+  if(data.user?.user_metadata.email !== email) throw new Error("Invalid Email")
 
   if (error) throw new Error(error.message);
 
@@ -76,17 +79,6 @@ export async function login({ email, password }: {
 
 
 export async function forgotPassword({ email }: { email: string }) {
-  // Check if email exists in the database
-  const { data: userData, error: fetchError } = await supabase
-    .from("users") // Ensure your users table is accessible
-    .select("id")
-    .eq("email", email)
-    .maybeSingle();
-
-  if (fetchError || !userData) {
-    throw new Error("No account found with this email.");
-  }
-
   // If email exists, send reset password link
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: APP_URL + "/update-pass",

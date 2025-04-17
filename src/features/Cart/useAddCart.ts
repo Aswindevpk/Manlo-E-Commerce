@@ -20,7 +20,7 @@ function useAddCart() {
       ]);
       toast.success("Added to Cart!");
     },
-    onError: () => toast.error("There was an error while adding to cart in."),
+    onError: (error) => toast.error(error.message),
   });
 
   return { addCart, isAddingToCart };

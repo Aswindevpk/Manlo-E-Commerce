@@ -4,6 +4,7 @@ import useProductSizes from "../features/Products/useProductSizes";
 import { useSearchParams } from "react-router-dom";
 import useProductVariantSizes from "../features/Products/useProductItemSizes";
 import useProductUnit from "../features/Products/useProductUnit";
+import SpinnerMini from "./SpinnerMini";
 
 
 const SizeContainer = styled.div`
@@ -52,7 +53,7 @@ function SizePicker({ parentCategoryId, variantId }: { parentCategoryId: string,
 
 
     if (isLoading || !sizes) {
-        return <h1>loading</h1>
+        return <SpinnerMini/>
     }
 
 
