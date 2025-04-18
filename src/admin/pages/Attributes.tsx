@@ -1,7 +1,19 @@
+import styled from "styled-components";
+import ColorsTable from "../features/Colors/ColorsTable";
+import BrandsTable from "../features/Brands/BrandsTable";
+
+const Container = styled.section`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+`;
 
 function Attributes() {
   return (
-    <div>Attributes</div>
+    <Container>
+      <ColorsTable/>
+      <BrandsTable/>
+    </Container>
   )
 }
 

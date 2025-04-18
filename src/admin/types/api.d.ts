@@ -23,18 +23,43 @@ export type Variant = {
   color_id:string;
   sku:string;
   name:string;
-  slug:string;
+  slug?:string;
   color?:{
     id:string;
     name:string;
   }
+  images?:{
+    id:string;
+    image_url:string;
+  }[]
 }
-
 
 export type Customer = {
   id?:string;
   email:string;
   username:string;
   is_blocked:boolean
+}
+
+export type Brand = {
+  id?:string;
+  name:string;
+}
+
+export type Color = {
+  id?:string;
+  name:string;
+  hex_code:string;
+}
+
+export type Category = {
+  id?:string;
+  name:string;
+  parent_id:string;
+  image:string;
+  parent?:{
+    id:string;
+    name:string;
+  }
 }
 

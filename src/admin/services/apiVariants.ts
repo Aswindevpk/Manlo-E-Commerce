@@ -28,7 +28,7 @@ export async function getVariants({productId}:{productId:string | undefined}):Pr
     if(!productId) throw new Error("productId not found")
     const { data, error } = await supabase
         .from("product_variants")
-        .select("*,color:colors(*)")
+        .select("*,color:colors(*),images:product_variant_images(id,image_url)")
         .eq("product_id",productId);
 
     if (error) throw new Error(error.message);
@@ -39,7 +39,7 @@ export async function getVariant({ variantId }: { variantId: string | undefined 
     if(!variantId) throw new Error("ProductId not found!")
     const { data, error } = await supabase
         .from("product_variants")
-        .select("*,color(*)")
+        .select("*,color:colors(*),images:product_variant_images(id,image_url)")
         .eq("id", variantId)
         .single();
 

@@ -6,6 +6,8 @@ import styled from "styled-components";
 import Heading from "../../ui/Heading";
 import Button from "../../ui/Button";
 import VariantsTable from "../features/Variants/VariantsTable";
+import Modal from "../../ui/Modal";
+import VariantForm from "../features/Variants/VariantForm";
 
 const Container = styled.div`
   display: flex;
@@ -37,7 +39,14 @@ function Product() {
 
       <SectionHeader>
         <Heading as="h3">Product Variants</Heading>
-        <Button>Add New Varient</Button>
+        <Modal>
+          <Modal.Open opens="product-form">
+            <Button>Add new Variant</Button>
+          </Modal.Open>
+          <Modal.Window name="product-form">
+            <VariantForm/>
+          </Modal.Window>
+        </Modal>
       </SectionHeader>
 
       <VariantsTable productId={productId} />

@@ -53,7 +53,7 @@ function SubTable() {
             <Table.Row key={category.id}>
               <div>{category.name}</div>
               <StyledImg src={category.image}></StyledImg>
-              <div>{category.parent.name}</div>
+              <div>{category?.parent?.name}</div>
               <div>
                 <a>Edit</a>/
                 <a>Unlist</a>
