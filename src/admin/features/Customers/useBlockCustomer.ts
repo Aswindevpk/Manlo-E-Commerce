@@ -1,28 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import supabase from "../../../services/supabase";
 import toast from "react-hot-toast";
+import { updateCustomer } from "../../services/apiCustomers";
 
 function useBlockCustomer() {
   const queryClient = useQueryClient();
 
-  const { mutate: ToggleCustomer, isPending: isRemoving } = useMutation({
-    mutationFn: async ({
-      customerId,
-      data,
-    }: {
-      customerId: string;
-      data: { is_blocked: boolean };
-    }) => {
-      const { error } = await supabase
-        .from("users")
-        .update(data)
-        .eq("id", customerId); // Remove item by ID
-
-      if (error) throw new Error(error.message);
-    },
-
-    onSuccess: () => {
-      toast.success("success");
+  const { mutate: ToggleCustomer, isPending } = useMutation({
+    mutationFn:updateCustomer,
+    onSuccess: (data) => {
+      const message = data?.is_blocked ? `Blocked ${data?.email} !`:`Un-Blocked ${data?.email} !`
+      toast.success(message);
       queryClient.invalidateQueries({queryKey:["customers"]}); // Refresh cart data
     },
 
@@ -31,7 +18,7 @@ function useBlockCustomer() {
     },
   });
 
-  return { ToggleCustomer, isRemoving };
+  return { ToggleCustomer, isPending };
 }
 
 export default useBlockCustomer;

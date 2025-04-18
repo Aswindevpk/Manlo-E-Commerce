@@ -2,8 +2,8 @@ import styled from "styled-components";
 import Heading from "../../../ui/Heading";
 import Button from "../../../ui/Button";
 import Table from "../../components/Table";
-import useSubCategories from "./useSubCategory";
 import Spinner from "../../../ui/Spinner";
+import useGetCategories from "./useCategories";
 
 const Container = styled.section`
   display: flex;
@@ -25,12 +25,15 @@ const StyledImg = styled.img`
 
 
 function SubTable() {
-  const { isLoading, subCategories } = useSubCategories()
+  const { isLoading, categories } = useGetCategories()
 
-  if(isLoading){
-    return <Spinner/>
+  if (isLoading || !categories) {
+    return <Spinner />
   }
-  
+
+  //filtereing categories
+  const subCategories = categories.filter(cat => cat.parent_id != null)
+
   return (
     <Container>
       <SectionHeader>

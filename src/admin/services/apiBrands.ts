@@ -1,12 +1,10 @@
 import supabase from "../../services/supabase";
 
-export async function getCustomers() {
+export async function getBrands() {
     const { data, error } = await supabase
-        .from("users")
-        .select("id, email, username, role,is_blocked")
-        .eq("role","user");
+        .from("brands")
+        .select("*");
 
     if (error) throw new Error(error.message);
-
     return data;
 }

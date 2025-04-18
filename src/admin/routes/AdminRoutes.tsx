@@ -8,6 +8,7 @@ import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import Settings from "../pages/Settings";
 import Categories from "../pages/Categories";
 import Attributes from "../pages/Attributes";
+import Product from "../pages/Product";
 
 function AdminRoutes() {
   return (
@@ -23,6 +24,7 @@ function AdminRoutes() {
         <Route path="attributes" element={<Attributes />} />
         <Route path="orders" element={<Orders />} />
         <Route path="products" element={<Products />} />
+        <Route path="product/:productId" element={<Product />} />
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>

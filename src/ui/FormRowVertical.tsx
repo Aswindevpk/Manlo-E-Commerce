@@ -19,7 +19,7 @@ const Error = styled.span`
 
 interface Props {
   label?: string;
-  error?: string;
+  error?: string | undefined;
   children: ReactElement<{ id?: string }>
 }
 
