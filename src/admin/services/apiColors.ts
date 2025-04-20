@@ -2,7 +2,10 @@ import supabase from "../../services/supabase";
 import { Color } from "../types";
 
 export async function getColors(): Promise<Color[]> {
-  const { data, error } = await supabase.from("colors").select("*");
+  const { data, error } = await supabase
+  .from("colors")
+  .select("*")
+  .order("name",{ascending:true})
 
   if (error) throw new Error(error.message);
   return data;

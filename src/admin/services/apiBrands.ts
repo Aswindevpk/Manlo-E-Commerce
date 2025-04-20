@@ -2,7 +2,10 @@ import supabase from "../../services/supabase";
 import { Brand } from "../types";
 
 export async function getBrands(): Promise<Brand[]> {
-  const { data, error } = await supabase.from("brands").select("*");
+  const { data, error } = await supabase
+    .from("brands")
+    .select("*")
+    .order("name", { ascending: true });
 
   if (error) throw new Error(error.message);
   return data;
@@ -39,7 +42,7 @@ export async function updateBrand({
   newData,
 }: {
   id: string;
-  newData: string;
+  newData: Brand;
 }): Promise<Brand> {
   const { data, error } = await supabase
     .from("brands")

@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import styled, { css } from "styled-components";
 import FormRowVertical from "../../../ui/FormRowVertical";
 import Button from "../../../ui/Button";
-import useGetCategories from "../Categories/useCategories";
+import useGetCategories from "../Categories/useGetCategories";
 import useGetBrands from "../Brands/useBrands";
 import Spinner from "../../../ui/Spinner";
 import useCreateProduct from "./useCreateProduct";
@@ -49,14 +49,14 @@ interface Props {
     onCloseModal?: () => void;
 }
 
-function ProductForm({ productToEdit, onCloseModal}: Props) {
+function ProductForm({ productToEdit, onCloseModal }: Props) {
     const isEditSession = Boolean(productToEdit?.id)
     const { id: editId, ...editValues } = productToEdit || {};
     const { isLoading: isLoadingCategory, categories } = useGetCategories()
     const { isLoading: isLoadingBrand, brands } = useGetBrands()
 
     //only subcategories needed for product
-    const subCategories = categories?.filter(sub=>sub.parent_id !== null)
+    const subCategories = categories?.filter(sub => sub.parent_id !== null)
 
     const { isCreating, createProduct } = useCreateProduct()
     const { isUpdating, updateProduct } = useUpdateProduct(editId)
