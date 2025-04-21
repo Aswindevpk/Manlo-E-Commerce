@@ -16,7 +16,7 @@ const StyledImg = styled.img`
 function VariantsTable({productId}:{productId:string | undefined}) {
   const { isLoading, variants } = useGetVariants({productId})
 
-  if (isLoading) {
+  if (isLoading || !variants) {
     return <Spinner />
   }
 
@@ -35,7 +35,7 @@ function VariantsTable({productId}:{productId:string | undefined}) {
           <Table.Row key={variant.id}>
             <span>
               {variant.images?.map(image=>(
-                <StyledImg key={image.id} src={image.image_url}/>
+                <StyledImg key={image.id} src={image.image_url as string}/>
               ))}
             </span>
             <span>{variant.name}</span>

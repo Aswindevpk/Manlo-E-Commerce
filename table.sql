@@ -853,4 +853,22 @@ BEGIN
 END;
 $$;
 
+
+-- for admin side 
+create view variant_sizes as
+select
+  pv.id as variant_id,
+  (
+    select
+      json_agg(json_build_object('id', s.id, 'name', s.name))
+    from
+      sizes s
+    where
+      s.category_id = c.parent_id
+  ) as sizes
+from
+  product_variants pv
+  inner join products p on pv.product_id = p.id
+  inner join categories c on c.id = p.category_id;
+
   

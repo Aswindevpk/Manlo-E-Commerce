@@ -12,8 +12,8 @@ function useUpdateVariant(editId: string | undefined) {
       queryClient.invalidateQueries({ queryKey: ["variants"] });
       queryClient.invalidateQueries({ queryKey: ["variant", editId] });
     },
-    onError: () => {
-      toast.error("error while updating variant");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

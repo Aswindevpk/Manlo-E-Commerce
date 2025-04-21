@@ -44,7 +44,7 @@ function Product() {
             <Button>Add new Variant</Button>
           </Modal.Open>
           <Modal.Window name="product-form">
-            <VariantForm/>
+            <VariantForm productId={productId}/>
           </Modal.Window>
         </Modal>
       </SectionHeader>

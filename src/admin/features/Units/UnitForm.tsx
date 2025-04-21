@@ -67,7 +67,7 @@ function UnitForm({ unitToEdit, variantId, onCloseModal }: Props) {
         formState: { errors },
     } = useForm<Unit>({
         defaultValues: isEditSession ? editValues : {
-            variant_id: "",
+            variant_id: variantId,
             stock_quantity: 0,
             size_id: ""
         }
@@ -76,9 +76,6 @@ function UnitForm({ unitToEdit, variantId, onCloseModal }: Props) {
     if (isLoading || !unitSizes) {
         return <Spinner />
     }
-
-
-
 
     const onSubmit: SubmitHandler<Unit> = (data) => {
         const formattedData = {

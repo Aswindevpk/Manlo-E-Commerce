@@ -41,13 +41,20 @@ const StyledSelect = styled.select`
   cursor: pointer;
 `;
 
+const StyledImg = styled.img`
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit:cover;
+`;
+
 
 interface Props {
     variantToEdit?: Variant | undefined;
     onCloseModal?: () => void;
+    productId?:string | undefined;
 }
 
-function VariantForm({ variantToEdit, onCloseModal }: Props) {
+function VariantForm({ variantToEdit, onCloseModal,productId }: Props) {
     const isEditSession = Boolean(variantToEdit?.id)
     const { id: editId, ...editValues } = variantToEdit || {};
 
@@ -62,15 +69,33 @@ function VariantForm({ variantToEdit, onCloseModal }: Props) {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm<Variant>({
         defaultValues: isEditSession ? editValues : {
             name: "",
             color_id: "",
-            product_id: "",
-            sku: ""
+            product_id: productId,
+            sku: "",
+            images: [
+                { image_url: "" },
+                { image_url: "" }
+            ]
         }
     });
+
+    const imageFile1 = watch('images.0.image_url') as FileList | string;
+    const imageFile2 = watch('images.1.image_url') as FileList | string;
+
+    //preview for selected image
+    //if already provided uses that
+    const preview1 = imageFile1 instanceof FileList && imageFile1.length > 0
+        ? URL.createObjectURL(imageFile1[0])
+        : imageFile1;
+
+    const preview2 = imageFile2 instanceof FileList && imageFile2.length > 0
+        ? URL.createObjectURL(imageFile2[0])
+        : imageFile2;
 
     if (isLoading) {
         return <Spinner />
@@ -78,17 +103,19 @@ function VariantForm({ variantToEdit, onCloseModal }: Props) {
 
 
     const onSubmit: SubmitHandler<Variant> = (data) => {
-        const formattedData = {
-            name: data.name,
-            color_id: data.color_id,
-            product_id: data.product_id,
-            sku: data.sku
-        };
 
+        data.images.map(image=>{
+            const newImage = typeof image.image_url === "string"
+            ? image.image_url
+            : image.image_url instanceof FileList && image.image_url.length > 0
+              ? image.image_url[0]
+              : null;
+            image.image_url = newImage
+        })
         if (isEditSession && editId) {
-            updateVariant({ id: editId, newVariant: formattedData })
+            updateVariant({ id: editId, newVariant: data })
         } else {
-            createVariant({ newVariant: formattedData })
+            createVariant({ newVariant: data })
         }
         onCloseModal?.()
     };
@@ -97,6 +124,36 @@ function VariantForm({ variantToEdit, onCloseModal }: Props) {
 
     return (
         <StyledForm onSubmit={handleSubmit(onSubmit)}>
+            <FormRowVertical label="Variant Image 1">
+                <>
+                    {preview1 &&
+                        <StyledImg src={preview1 as string} />
+                    }
+                    <StyledInput
+                        id="image1"
+                        disabled={isWorking}
+                        type="file"
+                        accept="image/*"
+                        {...register("images.0.image_url",
+                            { required: isEditSession ? false : "image is required." }
+                        )} />
+                </>
+            </FormRowVertical>
+            <FormRowVertical label="Varient Image 2" >
+                <>
+                    {preview2 &&
+                        <StyledImg src={preview2 as string} />
+                    }
+                    <StyledInput
+                        id="image"
+                        disabled={isWorking}
+                        type="file"
+                        accept="image/*"
+                        {...register("images.1.image_url",
+                            { required: isEditSession ? false : "This field is required." }
+                        )} />
+                </>
+            </FormRowVertical>
             <FormRowVertical label="Variant Name" error={errors.name?.message}>
                 <StyledInput
                     type="text"

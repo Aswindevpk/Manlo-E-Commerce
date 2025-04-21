@@ -11,8 +11,8 @@ function useCreateUnit() {
       toast.success("unit created successfully!");
       queryClient.invalidateQueries({queryKey:["units"]}); // Refresh cart data
     },
-    onError: () => {
-      toast.error("error while creating new unit");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 

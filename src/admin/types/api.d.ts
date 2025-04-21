@@ -1,3 +1,5 @@
+import Variant from "../pages/Variant";
+
 export type Product = {
   id?: string;
   name: string;
@@ -28,9 +30,12 @@ export type Variant = {
     id: string;
     name: string;
   };
-  images?: {
+  images: {
     id: string;
-    image_url: string;
+    image_url: string | File | null;
+    image_name?:string;
+    image_path?:string;
+    variant_id?:string;
   }[];
 };
 

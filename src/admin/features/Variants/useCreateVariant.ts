@@ -11,8 +11,8 @@ function useCreateVariant() {
       toast.success("variant created successfully!");
       queryClient.invalidateQueries({queryKey:["variants"]}); // Refresh cart data
     },
-    onError: () => {
-      toast.error("error while creating new variant");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
