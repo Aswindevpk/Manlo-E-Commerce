@@ -24,11 +24,10 @@ function SortBy() {
 
     return (
         <StyledSelect value={sortBy} onChange={handleChange}>
-            <option value="low-high">Availability</option>
-            <option value="high-low">Alphabetically, A-Z</option>
-            <option value="high-low">Alphabetically, Z-A</option>
-            <option value="high-low">Price, low to high</option>
-            <option value="high-low">Price, high to low</option>
+            <option value="">Sort by</option>
+            <option value="is_new-desc">New Arrivals</option>
+            <option value="price-asc">Price (Lowest to Highest)</option>
+            <option value="price-desc">Price (Highest to Lowest)</option>
         </StyledSelect>
     )
 }

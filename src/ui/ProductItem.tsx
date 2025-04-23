@@ -68,7 +68,9 @@ interface ProductItemProps {
 
 function ProductItem({ product, size = "md" }: ProductItemProps) {
   return (
-    <Product to={`/product/${product.slug}?unit=${product.unit_id}`} size={size}>
+    //fix this later
+    // <Product to={`/product/${product.slug}?unit=${product.unit_id}`} size={size}>
+    <Product to={`/product/${product.slug}`} size={size}>
       <AnimatedProductImages images={product.images} />
       <ProductInfo>
         <BrandName>{product.brand}</BrandName>

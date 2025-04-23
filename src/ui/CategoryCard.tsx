@@ -1,13 +1,9 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Category } from "../types";
 
-const CategoryList = styled.ul`
-  display: flex;
-  justify-content: center;
-  gap: 8rem;
-`;
 
-const Category = styled.li`
+
+const StyledCategoryCard = styled.li`
   position: relative;
   width: 200px; /* Fixed width */
   height: 125px; /* Fixed height */
@@ -22,7 +18,7 @@ const CategoryImage = styled.img`
   object-fit: cover;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
-  ${Category}:hover & {
+  ${StyledCategoryCard}:hover & {
     transform: scale(1.05);
     box-shadow: var(--shadow-lg);
     opacity: 0.8; /* Reduced opacity */
@@ -46,35 +42,23 @@ const CategoryText = styled.div`
   opacity: 1;
   transition: opacity 0.3s ease-in-out;
 
-  ${Category}:hover & {
+  ${StyledCategoryCard}:hover & {
     background: rgba(0, 0, 0, 0.4);
   }
 `;
 
-type category = {
-  id:string;
-  image:string;
-  slug:string;
-  name:string;
+
+interface Props {
+  category: Category
 }
 
-interface Props{
-  categories:category[]
-}
-
-function Categories({categories}:Props) {
+function CategoryCard({ category }: Props) {
   return (
-    <CategoryList>
-      {categories.map((cat, index) => (
-        <Link key={cat.id} to={"/collection/" + cat.slug}>
-          <Category key={index}>
-            <CategoryImage src={cat.image} />
-            <CategoryText>{cat.name}</CategoryText>
-          </Category>
-        </Link>
-      ))}
-    </CategoryList>
+    <StyledCategoryCard>
+      <CategoryImage src={category.image} />
+      <CategoryText>{category.name}</CategoryText>
+    </StyledCategoryCard>
   );
 }
 
-export default Categories
+export default CategoryCard;

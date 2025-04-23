@@ -38,7 +38,7 @@ const ProductList = styled.div`
 `;
 
 function SimilarProducts() {
-  const { isLoading, products } = useSearchProducts({ query: "ru" })
+  const { isLoading, products } = useSearchProducts()
 
   if(isLoading){
     return <Spinner/>

@@ -2,7 +2,8 @@ import styled from "styled-components";
 import ProductItem from "../../ui/ProductItem"
 import Filter from "../../ui/Filter";
 import SortBy from "../../ui/SortBy";
-import { Product } from "../../types";
+import Spinner from "../../ui/Spinner";
+import useSearchProducts from "./useSearchProducts";
 
 const StyledProductList = styled.div`
     display: grid;
@@ -29,8 +30,7 @@ const Container = styled.div`
 
 
 
-function 
-ProductList({ products }:{products:Product[]}) {
+function ProductList() {
     return (
         <StyledProductList>
             <SideBar>
@@ -39,11 +39,24 @@ ProductList({ products }:{products:Product[]}) {
             <TopBar>
                 <SortBy />
             </TopBar>
-            <Container>
-                {products.map(prod => (<ProductItem key={prod.product_id} size="sm" product={prod} />))}
-            </Container>
+            <ProductContainer/>
         </StyledProductList>
     )
 }
+
+
+function ProductContainer() {
+    const { isLoading, products } = useSearchProducts();
+
+    if (isLoading || !products) {
+        return <Spinner />
+    }
+    return (
+        <Container>
+            {products.map(prod => (<ProductItem key={prod.product_id} size="sm" product={prod} />))}
+        </Container>
+    )
+}
+
 
 export default ProductList

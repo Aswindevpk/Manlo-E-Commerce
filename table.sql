@@ -626,38 +626,54 @@ group by
   pv.slug,
   brands.name;
 
+
+
 -- product view 
-create view product_view as
+create view product_search_view as
 select
  pv.name as product_name,
  pv.id as product_id,
+ pv.sku as sku,
+ pv.slug as slug,
  p.price as price,
  p.is_new as is_new,
- brands.name as brand,
- array_agg(jsonb_build_object('image_url', pi.image_url)) as images,
- pv.slug,
-   (
-    select
-      id
-    from
-      product_units
-    where
-      variant_id = pv.id
-    limit
-      1
-  ) as unit_id
+ b.name as brand,
+ c.name as color,
+ subcat.slug as "type",
+ maincat.slug as category,
+
+-- Sizes with stock per variant
+(
+  select json_agg(jsonb_build_object(
+    'id', pu.id,
+    'size', s.name,
+    'stock', pu.stock_quantity
+  ))
+    from product_units pu
+    inner join sizes s on s.id = pu.size_id
+    where pu.variant_id = pv.id
+) as sizes,
+
+ -- Aggregate images
+ array_agg(jsonb_build_object('image_url', pi.image_url)) as images
 from 
 product_variants pv
 inner join products p on p.id = pv.product_id
-inner join brands on brands.id = p.brand_id
+inner join brands b on b.id = p.brand_id
+inner join colors c on c.id = pv.color_id
+inner join categories subcat on subcat.id = p.category_id
+inner join categories maincat on maincat.id = subcat.parent_id
 left join product_variant_images pi on pi.variant_id = pv.id
 group by
  pv.name,
  pv.id,
+ pv.slug,
  p.price,
  p.is_new,
- brands.name,
- pv.slug;
+ b.name,
+ subcat.slug, 
+ maincat.slug,
+ c.name;
 
 
 --product_detail_view
@@ -706,6 +722,8 @@ group by
   p.care_instruction,
   c.parent_id;
 
+
+
 DROP VIEW IF EXISTS order_view;
 CREATE VIEW order_view AS 
 select 
@@ -739,121 +757,6 @@ inner join colors c on c.id = pv.color_id;
 
 
 
-CREATE OR REPLACE FUNCTION place_orders(user_id_param UUID)
-RETURNS JSONB
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    cart_item RECORD;
-    order_result JSONB := '[]'::JSONB;
-    order_id UUID;
-    order_errors TEXT[] := ARRAY[]::TEXT[];
-BEGIN
-    -- Begin transaction
-    BEGIN
-        -- Lock rows for the user's cart items to prevent race conditions
-        LOCK TABLE carts IN SHARE MODE;
-        
-        -- Check if cart is empty
-        IF NOT EXISTS (SELECT 1 FROM carts WHERE user_id = user_id_param) THEN
-            RETURN jsonb_build_object('error', 'Cart is empty');
-        END IF;
-        
-        -- Process each cart item as a separate order
-        FOR cart_item IN 
-            SELECT 
-                c.id AS cart_id,
-                c.product_unit_id,
-                c.quantity,
-                pu.variant_id,
-                pu.stock_quantity,
-                p.price
-            FROM carts c
-            JOIN product_units pu ON c.product_unit_id = pu.id
-            JOIN product_variants pv ON pu.variant_id = pv.id
-            JOIN products p ON pv.product_id = p.id
-            WHERE c.user_id = user_id_param
-        LOOP
-            -- Check stock availability
-            IF cart_item.stock_quantity < cart_item.quantity THEN
-                order_errors := array_append(
-                    order_errors, 
-                    format('Insufficient stock for product unit %s (available: %s, requested: %s)', 
-                           cart_item.product_unit_id, cart_item.stock_quantity, cart_item.quantity)
-                );
-                CONTINUE;
-            END IF;
-            
-            -- Generate order number
-            DECLARE
-                order_number TEXT := 'ORD-' || to_char(now(), 'YYYYMMDD') || '-' || substr(gen_random_uuid()::TEXT, 1, 8);
-            BEGIN
-                -- Create the order
-                INSERT INTO orders (
-                    user_id,
-                    product_unit_id,
-                    address_id,
-                    quantity,
-                    order_number,
-                    price,
-                    shipping_status,
-                    payment_status
-                ) VALUES (
-                    user_id_param,
-                    cart_item.product_unit_id,
-                    (SELECT id FROM addresses WHERE user_id = user_id_param AND is_default = TRUE LIMIT 1),
-                    cart_item.quantity,
-                    order_number,
-                    cart_item.price * cart_item.quantity,
-                    'processing',
-                    'unpaid'
-                ) RETURNING id INTO order_id;
-                
-                -- Update stock
-                UPDATE product_units
-                SET stock_quantity = stock_quantity - cart_item.quantity
-                WHERE id = cart_item.product_unit_id;
-                
-                -- Remove from cart
-                DELETE FROM carts WHERE id = cart_item.cart_id;
-                
-                -- Add to result
-                order_result := order_result || jsonb_build_object(
-                    'order_id', order_id,
-                    'order_number', order_number,
-                    'product_unit_id', cart_item.product_unit_id,
-                    'quantity', cart_item.quantity,
-                    'price', cart_item.price * cart_item.quantity
-                );
-            END;
-        END LOOP;
-        
-        -- If any errors occurred, rollback and return them
-        IF array_length(order_errors, 1) > 0 THEN
-            RETURN jsonb_build_object(
-                'success', false,
-                'errors', order_errors,
-                'orders_placed', order_result
-            );
-        END IF;
-        
-        -- Commit if everything succeeded
-        RETURN jsonb_build_object(
-            'success', true,
-            'orders', order_result
-        );
-    EXCEPTION
-        WHEN OTHERS THEN
-            -- Rollback on any error
-            RETURN jsonb_build_object(
-                'error', SQLERRM,
-                'success', false
-            );
-    END;
-END;
-$$;
-
-
 -- for admin side 
 create view variant_sizes as
 select
@@ -870,5 +773,121 @@ from
   product_variants pv
   inner join products p on pv.product_id = p.id
   inner join categories c on c.id = p.category_id;
+
+
+
+  create or replace function place_order_single_cod(
+  p_user_id uuid,
+  p_product_unit_id uuid,
+  p_address_id uuid,
+  p_quantity int
+)
+--returns nothing as result
+returns table(
+  order_id uuid
+)
+language plpgsql
+as $$
+declare
+  current_stock int;
+  price int;
+  new_order_id uuid := gen_random_uuid();
+begin
+  -- 1. Lock the product_units row to prevent others from changing it
+  select pu.stock_quantity,p.price into current_stock, price
+  from product_units pu 
+  inner join product_variants pv on pv.id = pu.variant_id
+  inner join products p on p.id = pv.product_id
+  where pu.id = p_product_unit_id for update;
+
+  -- 2. Check if there is enough stock
+  if current_stock < p_quantity then
+    raise exception 'Not Enough Stock';
+  end if;
+
+  -- 3. Create the order
+  insert into orders(id,user_id,product_unit_id,quantity,address_id,payment_method,payment_status,price)
+  values (new_order_id,p_user_id,p_product_unit_id,p_quantity,p_address_id,'cod','unpaid',price);
+  -- 4.Reduce stock
+  update product_units
+  set stock_quantity = stock_quantity - p_quantity
+  where id = p_product_unit_id;
+
+  -- 5.Remove item from cart
+  delete from carts 
+  where user_id=p_user_id and product_unit_id = p_product_unit_id;
+
+  -- 6. return success with order_id
+  return query select new_order_id;
+end;
+$$;
+
+
+
+select
+  *
+from
+  place_order_single_cod (
+    'a518e5f9-e82a-40fa-8bb8-52df7c7a6c97', -- user_id
+    '6fd6282b-a347-4ea0-9558-3151a5cd5ed5', -- product_unit_id
+    '9b930cda-efc6-40ff-be04-712878d4915c', -- address_id
+    1 -- quantity
+  );
+
+
+
+  CREATE OR REPLACE VIEW product_catalog_view AS
+SELECT
+  p.id AS product_id,
+  p.name AS product_name,
+  p.description,
+  p.price,
+  p.is_new,
+  p.care_instruction,
+  c.id AS category_id,
+  c.name AS category_name,
+  c.slug AS category_slug,
+  b.id AS brand_id,
+  b.name AS brand_name,
+  
+  pv.id AS variant_id,
+  pv.name AS variant_name,
+  pv.slug AS variant_slug,
+  pv.sku,
+
+  col.id AS color_id,
+  col.name AS color_name,
+  col.hex_code AS color_hex,
+
+  s.id AS size_id,
+  s.name AS size_name,
+
+  pu.stock_quantity,
+
+  AVG(r.rating) AS average_rating,
+  COUNT(r.id) AS review_count
+
+FROM products p
+JOIN categories c ON p.category_id = c.id
+LEFT JOIN brands b ON p.brand_id = b.id
+
+-- Product variant (e.g., red/blue)
+JOIN product_variants pv ON pv.product_id = p.id
+JOIN colors col ON col.id = pv.color_id
+
+-- Size-specific stock
+JOIN product_units pu ON pu.variant_id = pv.id
+JOIN sizes s ON s.id = pu.size_id
+
+-- Reviews (optional join, some products may not have reviews)
+LEFT JOIN reviews r ON r.product_variant_id = pv.id
+
+GROUP BY 
+  p.id, c.id, b.id,
+  pv.id, col.id,
+  s.id, pu.stock_quantity;
+
+
+
 
   

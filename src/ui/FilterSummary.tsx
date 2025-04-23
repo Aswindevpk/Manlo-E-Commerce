@@ -41,7 +41,10 @@ const CloseButton = styled.span`
 function FilterSummary() {
     const [searchParams, setSearchParams] = useSearchParams()
 
-    const allFilters = Array.from(searchParams.entries()).filter((v) => v[0] !== "q");
+    //remove sortby and search from list
+    const allFilters = Array.from(searchParams.entries()).filter(
+        ([key]) => key !== "q" && key !== "sortBy"
+      );
 
 
     function removeFilter(key: string, value: string) {

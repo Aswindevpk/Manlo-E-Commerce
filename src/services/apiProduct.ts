@@ -1,16 +1,68 @@
-import {
-  Product,
-  productDetail,
-  ProductUnit
-} from "../types";
+import { Product, productDetail, ProductUnit } from "../types";
+import Filter from "../ui/Filter";
 import supabase from "./supabase";
 
+interface Filter {
+  field: string;
+  values: string[] | null; // Support both string and number filters
+}
 
-export async function searchProducts(query: string):Promise<Product[]> {
-  const { data, error } = await supabase
-  .from("product_view")
-  .select("*")
-  .ilike("product_name", `%${query}%`);
+interface SortBy {
+  field: string;
+  direction: string;
+}
+
+interface searchProductsProps {
+  filters?: Filter[];
+  sortBy?: SortBy;
+  searchQuery: string;
+  collectionSlug?: string | null;
+}
+
+export async function searchProducts({
+  collectionSlug,
+  searchQuery,
+  filters,
+  sortBy,
+}: searchProductsProps): Promise<Product[]> {
+  // This is base query
+  let query = supabase
+    .from("product_search_view")
+    .select("product_name,product_id,price,brand,is_new,slug,images,is_new", {
+      count: "exact",
+    });
+
+
+  //filter by collection slug
+  if (collectionSlug) {
+    query = query.or(
+      `type.eq.${collectionSlug},category.eq.${collectionSlug}`
+    );
+  }
+
+  //add searchQuery if any
+  if (searchQuery) {
+    query = query.ilike("product_name", `%${searchQuery}%`);
+  }
+
+  // Apply filter dynamically
+  if (filters && filters?.length > 0) {
+    filters.forEach((filter: Filter) => {
+      if (filter.values) {
+        query = query.in(filter.field, filter.values);
+      }
+    });
+  }
+
+  //apply sort
+  if (sortBy)
+    query = query.order(sortBy.field, {
+      ascending: sortBy.direction === "asc",
+    });
+
+
+  //use count for later pagination
+  const { data, error } = await query;
 
   if (error) {
     console.error("Error fetching search results:", error);
@@ -20,11 +72,10 @@ export async function searchProducts(query: string):Promise<Product[]> {
   return data;
 }
 
-
-interface Color{
-  hex_code:string;
-  id:string;
-  name:string;
+interface Color {
+  hex_code: string;
+  id: string;
+  name: string;
 }
 
 type ColorResponse = {
@@ -35,7 +86,7 @@ export async function getProductColors({
   productId,
 }: {
   productId: string;
-}):Promise<Color[]> {
+}): Promise<Color[]> {
   //product
   const { data, error } = await supabase
     .from("product_variants")
@@ -47,11 +98,10 @@ export async function getProductColors({
     throw new Error("Product not found!");
   }
 
-  const colors = (data as ColorResponse[]).map(item => item.colors).flat();
+  const colors = (data as ColorResponse[]).map((item) => item.colors).flat();
 
   return colors;
 }
-
 
 export async function getProductSizes({
   sizeCategoryId,
@@ -72,12 +122,13 @@ export async function getProductSizes({
   return data;
 }
 
-
-export async function getProductDetail({ productSlug }: {
+export async function getProductDetail({
+  productSlug,
+}: {
   productSlug: string | undefined;
-}):Promise<productDetail> {
+}): Promise<productDetail> {
   //product
-  if(!productSlug) throw new Error("product does not exist")
+  if (!productSlug) throw new Error("product does not exist");
   const { data, error } = await supabase
     .from("product_detail_view")
     .select("*")
@@ -92,12 +143,11 @@ export async function getProductDetail({ productSlug }: {
   return data;
 }
 
-
 export async function getProductVariantSizes({
   variantId,
 }: {
   variantId: string;
-}){
+}) {
   //product
 
   const { data, error } = await supabase
@@ -112,10 +162,8 @@ export async function getProductVariantSizes({
 
   const sizes = data.map((item) => item.size_id);
 
-  
   return sizes;
 }
-
 
 export async function getProductUnit({
   variantId,
@@ -124,7 +172,7 @@ export async function getProductUnit({
   variantId: string;
   sizeId?: string;
 }): Promise<ProductUnit> {
-  if(!sizeId) throw new Error("size undefined")
+  if (!sizeId) throw new Error("size undefined");
   //product
   const { data, error } = await supabase
     .from("product_units")
@@ -141,27 +189,26 @@ export async function getProductUnit({
   return data;
 }
 
-
-
 export async function getProductVariantByColor({
   productId,
   colorId,
-}:{
+}: {
   productId: string;
   colorId: string;
-} ) {
+}) {
   //product
   const { data, error } = await supabase
-  .from("product_variants")
-  .select(`
+    .from("product_variants")
+    .select(
+      `
     slug,
     product_units!inner(id)
-  `)
-  .eq("product_id", productId)
-  .eq("color_id", colorId)
-  .limit(1, { foreignTable: 'product_units' }) // Only get first unit
-  .single();
-
+  `
+    )
+    .eq("product_id", productId)
+    .eq("color_id", colorId)
+    .limit(1, { foreignTable: "product_units" }) // Only get first unit
+    .single();
 
   if (error || !data) {
     console.error(error);
@@ -169,13 +216,9 @@ export async function getProductVariantByColor({
   }
 
   const filteredData = {
-    slug:data.slug,
-    unit_id:data.product_units[0].id
-  }
+    slug: data.slug,
+    unit_id: data.product_units[0].id,
+  };
 
   return filteredData;
 }
-
-
-
-

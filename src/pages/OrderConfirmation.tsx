@@ -1,3 +1,4 @@
+import { BiCheckCircle } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,12 +14,7 @@ const Container = styled.div`
 
 const Card = styled.div`
   background-color: white;
-  padding: 3rem 2rem;
-  border-radius: 2xl;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   text-align: center;
-  max-width: 500px;
-  width: 100%;
 `;
 
 const IconWrapper = styled.div`
@@ -38,14 +34,14 @@ const Subtitle = styled.p`
   margin-bottom: 2rem;
 `;
 
-const OrderDetails = styled.div`
-  background-color: var(--color-light-gray);
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
-  text-align: left;
-  font-size: 0.9rem;
-`;
+// const OrderDetails = styled.div`
+//   background-color: var(--color-light-gray);
+//   padding: 1rem;
+//   border-radius: 12px;
+//   margin-bottom: 2rem;
+//   text-align: left;
+//   font-size: 0.9rem;
+// `;
 
 const Button = styled(Link)`
   background-color: var(--color-dark-gray);
@@ -62,20 +58,18 @@ const Button = styled(Link)`
 
 const OrderConfirmation = () => {
     const userName = "test"
-    const orderId = null
   return (
     <Container>
       <Card>
         <IconWrapper>
-          {/* <CheckCircle size={64} /> */}
+          <BiCheckCircle size={64} />
         </IconWrapper>
         <Title>Thank you, {userName || "Customer"}!</Title>
         <Subtitle>Your order has been placed successfully.</Subtitle>
-        <OrderDetails>
-          <strong>Order ID:</strong> {orderId || "MENLO-000123"}<br />
+        {/* <OrderDetails>
           <strong>Status:</strong> Confirmed<br />
           <strong>Payment:</strong> Successful
-        </OrderDetails>
+        </OrderDetails> */}
         <Button to="/shop">Continue Shopping</Button>
       </Card>
     </Container>

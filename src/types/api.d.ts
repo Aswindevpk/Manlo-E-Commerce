@@ -57,19 +57,6 @@ export type Address = {
   pincode: string;
 };
 
-export type Category = {
-  id: string;
-  name: string;
-  parent_id: number | null;
-  image: string;
-  slug: string;
-  parent?: {
-    id: string;
-    name: string;
-    slug: string;
-  };
-};
-
 export type wishlistItem = {
   id: string;
   product_name: string;
@@ -94,7 +81,6 @@ export type Product = {
   images: {
     image_url: string;
   }[];
-  unit_id: string;
 };
 
 export type ProductColor = {
@@ -123,4 +109,33 @@ export type ProductUnit = {
   variant_id: string;
   stock_quantity: number;
   size_id: string;
+};
+
+export type Brand = {
+  id:string;
+  name:string;
+}
+
+export type Color = {
+  id:string;
+  name:string;
+  hex_code:string;
+}
+
+export type Size = {
+  id:string;
+  name:string;
+  category_id?:string;
+}
+
+export type Category = {
+  id: string;
+  name: string;
+  parent_id: number | null;
+  image: string;
+  slug: string;
+  parent: {
+    id: string;
+    slug: string;
+  } | null;
 };

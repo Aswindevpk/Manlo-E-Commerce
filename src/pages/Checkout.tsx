@@ -103,7 +103,7 @@ function Checkout() {
                             <h2>TOTAL</h2>
                             <p>₹ {subTotal}</p>
                         </Row>
-                        {addressId && <CheckoutButton cartItems={cartItems} addressId={addressId} />}
+                        {addressId && <CheckoutButton addressId={addressId} />}
                     </Summary>
                 </Wrapper>
             </StyledCheckout>

@@ -1,21 +1,17 @@
-import { useMutation } from '@tanstack/react-query';
-import supabase from '../../services/supabase';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { PlaceOrders } from '../../services/apiOrders';
 
 
 export const usePlaceOrders = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: async (userId: string |undefined) => {
-      const { data, error } = await supabase
-        .rpc('place_orders', { user_id_param: userId });
-      if (error) {
-        throw new Error(error.message);
-      }
-      
-      return data;
-    },
-    onSuccess: (data) => {
+    mutationFn:PlaceOrders,
+    onSuccess: () => {
       // You can add additional success handling here
-      console.log('Orders placed successfully:', data.orders);
+      queryClient.invalidateQueries({ queryKey: ["cartCount"] });
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      console.log('Orders placed successfully');
     },
     onError: (error: Error) => {
       // You can add additional error handling here
