@@ -9,7 +9,11 @@ import Spinner from "../../ui/Spinner";
 
 const StyledFilter = styled.div`
   width: 100%;
-  background: var(--color-grey-50);
+  background: var(--color-white);
+  border: 1px solid var(--color-grey-200);
+  border-radius: 8px;
+  padding: 2rem;
+  height: fit-content;
 `;
 
 

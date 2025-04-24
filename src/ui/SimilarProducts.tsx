@@ -13,7 +13,7 @@ const ProductWrapper = styled.div`
 const ProductList = styled.div`
   display: flex;
   justify-content: space-around;
-  width: 90vw;
+  width: 80vw;
   padding: 4rem 0;
   gap: 4rem;
   overflow: hidden;

@@ -12,7 +12,7 @@ function Shop() {
       <HeroSection />
       <ServiceHighlights />
       <Row type="vertical">
-        <Heading as="h3" center={true}>CATEGORIES</Heading>
+        <Heading as="h2" center={true}>CATEGORIES</Heading>
         <CategoryList />
       </Row>
       <NewArrivals />

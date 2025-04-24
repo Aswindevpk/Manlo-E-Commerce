@@ -4,6 +4,9 @@ import Filter from "../Filter/Filter";
 import SortBy from "../../ui/SortBy";
 import Spinner from "../../ui/Spinner";
 import useSearchProducts from "./useSearchProducts";
+import EmptyState from "../../ui/EmptyState";
+import { HiOutlineSearchCircle } from "react-icons/hi";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const StyledProductList = styled.div`
     display: grid;
@@ -47,16 +50,33 @@ function ProductList() {
 
 function ProductContainer() {
     const { isLoading, products } = useSearchProducts();
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams();
+
 
     if (isLoading || !products) {
         return <Spinner />
     }
-    return (
-        <Container>
-            {products.map(prod => (<ProductItem key={prod.product_id} size="sm" product={prod} />))}
-        </Container>
-    )
-}
+
+    if (products.length === 0) {
+        const query = searchParams.get("q") || "";
+        const message = `We couldn’t find anything for "${query}". Try different keywords or browse all products.`;
+        return (
+            <EmptyState
+                icon={<HiOutlineSearchCircle />}
+                title="No results found"
+                message={message}
+                buttonText="Browse Products"
+                onButtonClick={() => navigate("/shop")}
+            />
+        );
+    }
+
+return (
+    <Container>
+        {products.map(prod => (<ProductItem key={prod.product_id} size="sm" product={prod} />))}
+    </Container>
+)}
 
 
 export default ProductList

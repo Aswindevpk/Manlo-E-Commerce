@@ -13,6 +13,7 @@ const ContentWrapper = styled.main`
   background-color: var(--color-grey-50);
   width: 100%;
   padding: 4rem;
+  padding-bottom:10rem;
 `;
 
 

@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../../ui/Button";
+import Heading from "../../ui/Heading";
 
 
 const Container = styled.div`
@@ -9,6 +10,9 @@ const Container = styled.div`
 `;
 const FilterSummaryHeader = styled.div`
     display: flex;
+    border-bottom: 2px solid var(--color-brand-800);
+    padding-bottom: 1rem;
+    align-items: center;
     justify-content: space-between;
 `;
 
@@ -74,12 +78,12 @@ function FilterSummary() {
 
     return (
         <Container>
-            {allFilters.length > 0 &&
-                <FilterSummaryHeader>
-                    <span>FILTER BY</span>
+            <FilterSummaryHeader>
+                <Heading as="h3" center={true}>FILTER</Heading>
+                {allFilters.length > 0 &&
                     <Button size="small" onClick={() => ClearFilter()}>Clear all</Button>
-                </FilterSummaryHeader>
-            }
+                }
+            </FilterSummaryHeader>
             <ActiveFiltersContainer>
                 {allFilters.map(([key, value], index) => (
                     <FilterTag key={`${key}-${value}-${index}`}>
