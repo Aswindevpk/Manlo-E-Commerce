@@ -1,29 +1,30 @@
 import styled from 'styled-components'
-import Header from '../ui/Header'
-import Footer from '../ui/Footer'
+import Footer from '../components/Footer'
 import { Outlet } from "react-router-dom"
+import Navbar from '../components/Navbar/Navbar'
 
-const StyledAppLayout = styled.div`
-    display: grid;
-    grid-template-rows:auto 1fr auto;
-    min-height: 100vh;
-`
+const AppLayoutContainer = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+`;
 
-const Main = styled.main`
-    background-color:var(--color-grey-50);
-    max-width: 100vw;
-    padding: 4rem;
-`
+const ContentWrapper = styled.main`
+  background-color: var(--color-grey-50);
+  width: 100%;
+  padding: 4rem;
+`;
+
 
 function AppLayout() {
     return (
-        <StyledAppLayout>
-            <Header />
-            <Main>
+        <AppLayoutContainer>
+            <Navbar />
+            <ContentWrapper>
                 <Outlet />
-            </Main>
+            </ContentWrapper>
             <Footer />
-        </StyledAppLayout>
+        </AppLayoutContainer>
     )
 }
 

@@ -1,5 +1,5 @@
 import { Product, productDetail, ProductUnit } from "../types";
-import Filter from "../ui/Filter";
+import Filter from "../features/Filter/Filter";
 import supabase from "./supabase";
 
 interface Filter {
@@ -32,12 +32,9 @@ export async function searchProducts({
       count: "exact",
     });
 
-
   //filter by collection slug
   if (collectionSlug) {
-    query = query.or(
-      `type.eq.${collectionSlug},category.eq.${collectionSlug}`
-    );
+    query = query.or(`type.eq.${collectionSlug},category.eq.${collectionSlug}`);
   }
 
   //add searchQuery if any
@@ -59,7 +56,6 @@ export async function searchProducts({
     query = query.order(sortBy.field, {
       ascending: sortBy.direction === "asc",
     });
-
 
   //use count for later pagination
   const { data, error } = await query;

@@ -701,6 +701,7 @@ select
     limit
       1
   ) as unit_id
+  
 from
   product_variants pv
   inner join products p on p.id = pv.product_id
@@ -833,59 +834,6 @@ from
     '9b930cda-efc6-40ff-be04-712878d4915c', -- address_id
     1 -- quantity
   );
-
-
-
-  CREATE OR REPLACE VIEW product_catalog_view AS
-SELECT
-  p.id AS product_id,
-  p.name AS product_name,
-  p.description,
-  p.price,
-  p.is_new,
-  p.care_instruction,
-  c.id AS category_id,
-  c.name AS category_name,
-  c.slug AS category_slug,
-  b.id AS brand_id,
-  b.name AS brand_name,
-  
-  pv.id AS variant_id,
-  pv.name AS variant_name,
-  pv.slug AS variant_slug,
-  pv.sku,
-
-  col.id AS color_id,
-  col.name AS color_name,
-  col.hex_code AS color_hex,
-
-  s.id AS size_id,
-  s.name AS size_name,
-
-  pu.stock_quantity,
-
-  AVG(r.rating) AS average_rating,
-  COUNT(r.id) AS review_count
-
-FROM products p
-JOIN categories c ON p.category_id = c.id
-LEFT JOIN brands b ON p.brand_id = b.id
-
--- Product variant (e.g., red/blue)
-JOIN product_variants pv ON pv.product_id = p.id
-JOIN colors col ON col.id = pv.color_id
-
--- Size-specific stock
-JOIN product_units pu ON pu.variant_id = pv.id
-JOIN sizes s ON s.id = pu.size_id
-
--- Reviews (optional join, some products may not have reviews)
-LEFT JOIN reviews r ON r.product_variant_id = pv.id
-
-GROUP BY 
-  p.id, c.id, b.id,
-  pv.id, col.id,
-  s.id, pu.stock_quantity;
 
 
 

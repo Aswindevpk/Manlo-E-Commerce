@@ -4,6 +4,8 @@ import styled from "styled-components";
 import AnimatedProductImages from "./AnimatedProductImages";
 // import ColorSwatch from "./ColorSwatch";
 import { Product as ProductType } from "../types";
+import { formatCurrency } from "../utils/helpers";
+
 
 
 const Product = styled(Link) <{ size: "sm" | "md" }>`
@@ -76,7 +78,7 @@ function ProductItem({ product, size = "md" }: ProductItemProps) {
         <BrandName>{product.brand}</BrandName>
         <ProductName>{product.product_name}</ProductName>
         {/* <ColorSwatch productId={product.product_id} /> */}
-        <Price>RS. {product.price}.00</Price>
+        <Price>{formatCurrency(product.price)}</Price>
       </ProductInfo>
       {/* <WishlistToggle>
         <CiHeart size={30} color="white" />

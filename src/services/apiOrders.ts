@@ -42,3 +42,14 @@ export async function PlaceOrders({ userId, addressId }: PlaceOrdersProps) {
 
   return orderIds;
 }
+
+
+export async function getOrder({ orderId }: { orderId: string | undefined }) {
+  const { data, error } = await supabase
+    .from("order_view")
+    .select("*")
+    .eq("order_id", orderId); // parent_id IS NULL for main categories
+
+  if (error) throw new Error(error.message);
+  return data;
+}

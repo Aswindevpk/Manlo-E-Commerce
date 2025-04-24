@@ -14,6 +14,7 @@ import AdminLogin from "./admin/pages/AdminLogin"
 
 import AdminRoutes from "./admin/routes/AdminRoutes"
 import AppRoutes from "./routes/AppRoutes"
+import ScrollToTop from "./components/ScrollToTop";
 
 
 //React query config
@@ -34,6 +35,7 @@ function App() {
         <GlobalStyle />
         {/* Hashrouter for git */}
         <Router>
+          <ScrollToTop />
           <Routes>
             {/* Main Protected Routes (Normal user routes) */}
             <Route path="/*" element={<AppRoutes />}></Route>

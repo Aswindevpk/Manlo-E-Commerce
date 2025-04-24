@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import Button from "../../ui/Button";
 import { Order } from "../../types";
-/* 🔹 Styled Components */
+import { formatCurrency, formatDate } from "../../utils/helpers";
+import { Link } from "react-router-dom";
+
+
+
+
 const OrderContainer = styled.div`
   background: #fff;
   margin:2rem 0rem;
@@ -30,7 +35,8 @@ const Label = styled.span`
 
 const Value = styled.span`
   font-size: 14px;
-  font-weight: bold;
+  font-weight:600;
+  font-family: var(--font-secondary);
   color: var(--color-dark-gray);
 `;
 
@@ -119,11 +125,11 @@ const OrderItem = ({ order }:{order:Order}) => {
         </OrderInfo>
         <OrderInfo>
           <Label>TOTAL</Label>
-          <Value>€{order.price}</Value>
+          <Value>{formatCurrency(order.price)}</Value>
         </OrderInfo>
         <OrderInfo>
           <Label>ORDER PLACED</Label>
-          <Value>{order.order_date}</Value>
+          <Value>{formatDate(order.order_date)}</Value>
         </OrderInfo>
       </OrderHeader>
 
@@ -142,7 +148,9 @@ const OrderItem = ({ order }:{order:Order}) => {
           <QtyValue>{order.qty}</QtyValue>
         </QtyContainer>
         <ButtonContainer>
+          <Link to={`${order.id}`}>
           <Button>Order Details</Button>
+          </Link>
         </ButtonContainer>
       </OrderContent>
 

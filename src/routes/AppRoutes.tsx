@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import UserProtectedRoute from "./UserProtectedRoute";
 import AppLayout from "./AppLayout";
-import Home from "../pages/Home";
 import Product from "../pages/Product";
 import Order from "../pages/Order";
 import Profile from "../pages/Profile";
@@ -26,24 +25,23 @@ function AppRoutes() {
                     <AppLayout />
                 </UserProtectedRoute>
             }>
-                <Route index element={<Home />} />
+                <Route index element={<Shop />} />
                 <Route path="product/:productSlug" element={<Product />} />
                 <Route path="order/:orderId" element={<Order />} />
                 <Route path="user" element={<Profile />}>
                     <Route index element={<Navigate to="profile" replace />} />
                     <Route path="profile" element={<UserDetails />} />
                     <Route path="addresses" element={<Addresses />} />
-                    <Route path="orders" element={<Order />} />
+                    <Route path="orders" element={<Orders />} />
+                    <Route path="orders/:orderId" element={<Order />} />
                 </Route>
                 <Route path="collection/:collectionSlug" element={<Collection />} />
-                <Route path="orders" element={<Orders />} />
                 <Route path="cart" element={<Cart />} />
-                <Route path="shop" element={<Shop />} />
                 <Route path="search" element={<Search />} />
                 <Route path="checkout" element={<Checkout />} />
                 <Route path="wishlist" element={<Wishlist />} />
                 <Route path="order-confirm" element={<OrderConfirmation />} />
-                <Route path="update-pass" element={<UpdatePassword />} /> 
+                <Route path="update-pass" element={<UpdatePassword />} />
             </Route>
         </Routes>
     );

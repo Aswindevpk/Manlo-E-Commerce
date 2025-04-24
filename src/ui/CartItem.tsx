@@ -2,9 +2,35 @@ import styled from "styled-components";
 import CartItemRemove from "../features/Cart/CartItemRemove";
 import CartItemCounter from "../features/Cart/CartItemCounter";
 import { CartItem as CartItemType } from "../types";
+import { formatCurrency } from "../utils/helpers";
+
+
+interface Props {
+    Item: CartItemType
+}
+
+function CartItem({ Item }: Props) {
+    return (
+        <Container>
+            <ProductContainer>
+                <Img src={Item.image} />
+                <ProductDetails>
+                    <h3>{Item.name}</h3>
+                    <ProductPrice>{formatCurrency(Item.price)}</ProductPrice>
+                    <p>{Item.size}/{Item.color}</p>
+                </ProductDetails>
+            </ProductContainer>
+            <CartItemCounter itemQty={Item.qty} cartItemId={Item.id} />
+            <CartItemRemove cartId={Item.id} />
+        </Container>
+    )
+}
+
+export default CartItem
 
 const Container = styled.div`
     border: 2px solid var(--color-brand-100);
+    border-radius:8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -13,6 +39,7 @@ const Container = styled.div`
 `;
 
 const Img = styled.img`
+    border-radius: 4px;
     width: 90px;
     height: 120px;
 `;
@@ -30,29 +57,5 @@ const ProductDetails = styled.div`
 `;
 
 const ProductPrice = styled.h5`
-    /* font-family: var(--font-secondary); */
+    font-family: var(--font-secondary);
 `;
-
-interface Props {
-    Item: CartItemType
-}
-
-
-function CartItem({ Item }: Props) {
-    return (
-        <Container>
-            <ProductContainer>
-                <Img src={Item.image} />
-                <ProductDetails>
-                    <h3>{Item.name}</h3>
-                    <ProductPrice>₹ {Item.price}</ProductPrice>
-                    <p>{Item.size}/{Item.color}</p>
-                </ProductDetails>
-            </ProductContainer>
-            <CartItemCounter itemQty={Item.qty} cartItemId={Item.id} />
-            <CartItemRemove cartId={Item.id} />
-        </Container>
-    )
-}
-
-export default CartItem

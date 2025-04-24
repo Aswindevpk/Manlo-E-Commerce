@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import CartItem from "../ui/CartItem";
-
 import useCart from "../features/Cart/useCart";
 import CartSummary from "../features/Cart/CartSummary";
-import EmptyCart from "../ui/EmptyCart";
 import Spinner from "../ui/Spinner";
+import EmptyState from "../ui/EmptyState";
+import { CiShoppingCart } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 const StyledCart = styled.main`
     display: flex;
@@ -22,16 +23,28 @@ const Wrapper = styled.div`
 
 const CartProducts = styled.div`
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 `;
 
 
 function Cart() {
     const { isLoading, cartItems } = useCart()
+    const navigate = useNavigate();
+
     if (isLoading || !cartItems) {
-        return <Spinner/>
+        return <Spinner />
     }
-    if(cartItems.length ===0){
-        return <EmptyCart/>
+
+    if (cartItems.length === 0) {
+        return <EmptyState
+            icon={<CiShoppingCart />}
+            title="Your cart is empty"
+            message="Start adding items to your cart now!"
+            buttonText="Shop Now"
+            onButtonClick={() => navigate("/")}
+        />
     }
 
     return (
@@ -40,13 +53,13 @@ function Cart() {
                 <h2>Shopping cart</h2>
                 <CartProducts>
                     {cartItems.map(Item => (
-                        <CartItem key={Item.id} Item={Item}/>
+                        <CartItem key={Item.id} Item={Item} />
                     ))}
                 </CartProducts>
             </Wrapper>
             <Wrapper>
                 <h2>Summary</h2>
-                <CartSummary cartItems={cartItems}/>
+                <CartSummary cartItems={cartItems} />
             </Wrapper>
         </StyledCart>
     )

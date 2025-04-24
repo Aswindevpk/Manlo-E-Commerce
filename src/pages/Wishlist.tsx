@@ -5,12 +5,15 @@ import Spinner from "../ui/Spinner";
 import useGetAllWishlist from "../features/Wishlist/useGetAllWishlist";
 import ProductItem from "../ui/ProductItem";
 import { useUser } from "../features/Auth/useUser";
-import EmptyWishlist from "../ui/EmptyWishlist";
+import EmptyState from "../ui/EmptyState";
+import { CiHeart } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
+import Row from "../ui/Row";
 
 const Container = styled.div`
-    display: grid;
-    grid-template-columns:1fr 1fr 1fr;
-    grid-auto-rows:1fr;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-around;
     gap: 4rem;
 `;
 
@@ -18,20 +21,27 @@ function Wishlist() {
   const { wishlist, isLoading } = useGetAllWishlist()
   const { removeFromWishlist, isRemoving } = useDeleteWishlist();
   const { user } = useUser()
+  const navigate = useNavigate();
 
   if (isLoading || !wishlist) {
     return <Spinner />
   }
 
-  if(wishlist.length === 0){
-    return <EmptyWishlist/>
+  if (wishlist.length === 0) {
+    return <EmptyState
+      icon={<CiHeart />}
+      title="Your cart is empty"
+      message="Start adding items to your cart now!"
+      buttonText="Shop Now"
+      onButtonClick={() => navigate("/")}
+    />
   }
 
 
   return (
     <Container>
       {wishlist?.map(product => (
-        <div key={product.id}>
+        <Row type="vertical" key={product.id}>
           <ProductItem product={product} size="sm" />
           <Button
             onClick={() => removeFromWishlist({ unitId: product.unit_id, userId: user?.id })}
@@ -39,7 +49,7 @@ function Wishlist() {
           >
             Remove
           </Button>
-        </div>
+        </Row>
       )
       )}
     </Container>

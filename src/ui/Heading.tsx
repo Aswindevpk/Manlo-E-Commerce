@@ -6,8 +6,8 @@ const Heading = styled.h1<{ as: "h1" | "h2" | "h3" | "h4", center?: boolean }>`
         font-weight:600;
     `}
     ${(props) => props.as === "h2" && css`
-        font-size: 2rem;
-        font-weight:600;
+        font-size: 2.4rem;
+        font-weight:700;
     `}
     ${(props) => props.as === "h3" && css`
         font-size: 2rem;

@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import StyledDivider from "./StyledDivider"
+import StyledDivider from "../ui/StyledDivider"
 
 const StyledFooter = styled.div`
     padding: 4rem 5rem;

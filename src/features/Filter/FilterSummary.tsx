@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "../../ui/Button";
 
 
 const Container = styled.div`
@@ -44,7 +44,7 @@ function FilterSummary() {
     //remove sortby and search from list
     const allFilters = Array.from(searchParams.entries()).filter(
         ([key]) => key !== "q" && key !== "sortBy"
-      );
+    );
 
 
     function removeFilter(key: string, value: string) {
@@ -62,7 +62,7 @@ function FilterSummary() {
     }
 
     function ClearFilter() {
-        const filterKeys = ["color", "size", "price"];
+        const filterKeys = ["color", "brand", "category", "type"];
 
         filterKeys.forEach((key) => {
             searchParams.delete(key); // Directly remove the filter key from searchParams

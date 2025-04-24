@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ProductItem from "../../ui/ProductItem"
-import Filter from "../../ui/Filter";
+import Filter from "../Filter/Filter";
 import SortBy from "../../ui/SortBy";
 import Spinner from "../../ui/Spinner";
 import useSearchProducts from "./useSearchProducts";
@@ -39,7 +39,7 @@ function ProductList() {
             <TopBar>
                 <SortBy />
             </TopBar>
-            <ProductContainer/>
+            <ProductContainer />
         </StyledProductList>
     )
 }
