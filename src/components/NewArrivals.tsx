@@ -1,34 +1,15 @@
-import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
 import Heading from "../ui/Heading";
 import styled from "styled-components";
 import ProductItem from "../ui/ProductItem";
 import useGetProducts from "../hooks/useGetProducts";
+import Spinner from "../ui/Spinner";
 
 function NewArrivals() {
-  const { products } = useGetProducts({ isNew: true });
-  const controls = useAnimation();
+  const {isLoading, products } = useGetProducts({ isNew: true });
 
-  useEffect(() => {
-    if (!products || products.length === 0) return;
-
-    const loopScroll = async () => {
-      while (true) {
-        await controls.start({
-          x: "-100%",
-          transition: {
-            duration: 120,
-            ease: "linear",
-          },
-        });
-        await controls.set({ x: "0%" });
-      }
-    };
-
-    loopScroll();
-  }, [products, controls]);
-
-
+  if(isLoading){
+    return <Spinner/>
+  }
 
   return (
     <>
@@ -36,17 +17,11 @@ function NewArrivals() {
         NEW ARRIVALS
       </Heading>
       <ProductWrapper>
-        <ScrollContainer>
-          <MotionList animate={controls}>
+          <ProductList >
             {products?.map((prod) => (
               <ProductItem size="sm" key={prod.product_id} product={prod} />
             ))}
-            {/* Duplicate for seamless looping */}
-            {products?.map((prod) => (
-              <ProductItem size="sm" key={`dup-${prod.product_id}`} product={prod} />
-            ))}
-          </MotionList>
-        </ScrollContainer>
+          </ProductList>
       </ProductWrapper>
     </>
   );
@@ -59,16 +34,29 @@ const ProductWrapper = styled.div`
   justify-content: center;
 `;
 
-const ScrollContainer = styled.div`
-  width: 90vw;
-  overflow: hidden;
-`;
-
-const MotionList = styled(motion.div)` 
+const ProductList = styled.div`
   display: flex;
+  justify-content: space-around;
+  width: 80vw;
+  padding-bottom: 4rem ;
   gap: 4rem;
-  white-space: nowrap;
-  width: max-content;
+  overflow: hidden;
+  overflow-x: auto; /* Enables horizontal scrolling */
+  white-space: nowrap; /* Prevents items from wrapping */
+  scrollbar-width: thin; /* Firefox scrollbar */
+  scrollbar-color: #888 #f1f1f1;
+
   scroll-snap-type: x mandatory;
-  scroll-snap-align: start;
+    scroll-snap-align: start;
+
+  &::-webkit-scrollbar {
+    height: 4px; /* Adjust scrollbar height */
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
