@@ -5,7 +5,6 @@ import useGetReviews from "./useGetReviews";
 import { Review } from "../../types";
 import Spinner from "../../ui/Spinner";
 import EmptyState from "../../ui/EmptyState";
-import { useNavigate } from "react-router-dom";
 import { BiCommentDetail } from "react-icons/bi";
 
 
