@@ -1,16 +1,34 @@
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
 import Heading from "../ui/Heading";
 import styled from "styled-components";
 import ProductItem from "../ui/ProductItem";
-import useSearchProducts from "../features/Products/useSearchProducts";
-import Spinner from "../ui/Spinner";
-
+import useGetProducts from "../hooks/useGetProducts";
 
 function NewArrivals() {
-  const { isLoading, products } = useSearchProducts()
+  const { products } = useGetProducts({ isNew: true });
+  const controls = useAnimation();
 
-  if(isLoading){
-    return <Spinner/>
-  }
+  useEffect(() => {
+    if (!products || products.length === 0) return;
+
+    const loopScroll = async () => {
+      while (true) {
+        await controls.start({
+          x: "-100%",
+          transition: {
+            duration: 120,
+            ease: "linear",
+          },
+        });
+        await controls.set({ x: "0%" });
+      }
+    };
+
+    loopScroll();
+  }, [products, controls]);
+
+
 
   return (
     <>
@@ -18,45 +36,39 @@ function NewArrivals() {
         NEW ARRIVALS
       </Heading>
       <ProductWrapper>
-        <ProductList>
-          {products?.map(prod => (<ProductItem size="sm" key={prod.product_id} product={prod} />))}
-        </ProductList>
+        <ScrollContainer>
+          <MotionList animate={controls}>
+            {products?.map((prod) => (
+              <ProductItem size="sm" key={prod.product_id} product={prod} />
+            ))}
+            {/* Duplicate for seamless looping */}
+            {products?.map((prod) => (
+              <ProductItem size="sm" key={`dup-${prod.product_id}`} product={prod} />
+            ))}
+          </MotionList>
+        </ScrollContainer>
       </ProductWrapper>
     </>
   );
 }
 
 export default NewArrivals;
-
 const ProductWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const ProductList = styled.div`
-  display: flex;
-  justify-content: space-around;
-  width: 80vw;
-  padding-bottom: 4rem;
-  gap: 4rem;
+const ScrollContainer = styled.div`
+  width: 90vw;
   overflow: hidden;
-  overflow-x: auto; /* Enables horizontal scrolling */
-  white-space: nowrap; /* Prevents items from wrapping */
-  scrollbar-width: thin; /* Firefox scrollbar */
-  scrollbar-color: #888 #f1f1f1;
+`;
 
+const MotionList = styled(motion.div)` 
+  display: flex;
+  gap: 4rem;
+  white-space: nowrap;
+  width: max-content;
   scroll-snap-type: x mandatory;
-    scroll-snap-align: start;
-
-  &::-webkit-scrollbar {
-    height: 4px; /* Adjust scrollbar height */
-  }
-  &::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
+  scroll-snap-align: start;
 `;

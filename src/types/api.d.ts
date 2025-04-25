@@ -1,18 +1,17 @@
 export type Order = {
-  id:string;
-  order_number:string;
-  price:number;
-  order_date:string;
-  shipping_status:string;
-  payment_status:string;
-  qty:number;
-  image:string;
-  estimated_delivery:string;
-  product_name:string;
-  size:string;
-  color:string;
-}
-
+  id: string;
+  order_number: string;
+  price: number;
+  order_date: string;
+  shipping_status: "Ordered" | "Processing" | "Shipped" | "Delivered";
+  payment_status: string;
+  qty: number;
+  image: string;
+  estimated_delivery: string;
+  product_name: string;
+  size: string;
+  color: string;
+};
 
 export type productDetail = {
   id: string;
@@ -28,7 +27,7 @@ export type productDetail = {
   sku: string;
   description: string;
   care_instruction: string;
-  unit_id:string;
+  unit_id: string;
   parent_category_id: string;
 };
 
@@ -112,21 +111,21 @@ export type ProductUnit = {
 };
 
 export type Brand = {
-  id:string;
-  name:string;
-}
+  id: string;
+  name: string;
+};
 
 export type Color = {
-  id:string;
-  name:string;
-  hex_code:string;
-}
+  id: string;
+  name: string;
+  hex_code: string;
+};
 
 export type Size = {
-  id:string;
-  name:string;
-  category_id?:string;
-}
+  id: string;
+  name: string;
+  category_id?: string;
+};
 
 export type Category = {
   id: string;
@@ -138,4 +137,12 @@ export type Category = {
     id: string;
     slug: string;
   } | null;
+};
+
+export type Review = {
+  id: string;
+  product_slug: string;
+  username: string;
+  rating: number;
+  comment: string;
 };

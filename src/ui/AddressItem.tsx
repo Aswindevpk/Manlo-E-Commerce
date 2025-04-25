@@ -9,14 +9,17 @@ import useDeleteAddress from "../features/Profile/useDeleteAddress";
 import AddressForm from "../features/Cart/AddressForm";
 
 const Container = styled.div`
-    border: 2px solid var(--color-brand-600);
-    min-height: 100px;
-    max-height: 200px;
-    padding: 2rem;
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    justify-content: space-between;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  min-height: 100px;
+  max-height: 200px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #e5e7eb;
 `;
 
 interface Address {

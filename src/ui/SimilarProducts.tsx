@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import Heading from "./Heading";
-import useSearchProducts from "../features/Products/useSearchProducts";
 import ProductItem from "./ProductItem";
 import Spinner from "./Spinner";
+import useProductDetail from "../features/Products/useProductDetail";
+import useGetProducts from "../hooks/useGetProducts";
 
 const ProductWrapper = styled.div`
     display: flex;
@@ -38,14 +39,15 @@ const ProductList = styled.div`
 `;
 
 function SimilarProducts() {
-  const { isLoading, products } = useSearchProducts()
+  const { productData } = useProductDetail()
+  const { isLoading, products } = useGetProducts({ brand: productData?.brand })
 
-  if(isLoading){
-    return <Spinner/>
+  if (isLoading) {
+    return <Spinner />
   }
   return (
     <>
-      <Heading center={true} as="h1">Similar Products</Heading>
+      <Heading center={true} as="h2">MORE FROM {productData?.brand.toUpperCase()}</Heading>
       <ProductWrapper>
         <ProductList>
           {products?.map(prod => (<ProductItem size="sm" key={prod.product_id} product={prod} />))}

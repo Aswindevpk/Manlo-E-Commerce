@@ -5,116 +5,6 @@ import { formatCurrency, formatDate } from "../../utils/helpers";
 import { Link } from "react-router-dom";
 
 
-
-
-const OrderContainer = styled.div`
-  background: #fff;
-  margin:2rem 0rem;
-
-  border: 2px solid var(--color-brand-300);
-`;
-
-const OrderHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 2px solid var(--color-brand-100);
-  padding-bottom: 12px;
-`;
-
-const OrderInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Label = styled.span`
-  font-size: 12px;
-  color: var(--color-muted-blue);
-`;
-
-const Value = styled.span`
-  font-size: 14px;
-  font-weight:600;
-  font-family: var(--font-secondary);
-  color: var(--color-dark-gray);
-`;
-
-
-const OrderContent = styled.div`
-  display: grid;
-  grid-template-columns: 4fr 1fr 2fr;
-  align-items: center;
-  padding: 16px;
-  padding-top: 16px;
-`;
-
-const Image = styled.img`
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  object-fit: cover;
-`;
-
-const ProductInfo = styled.div`
-  padding: 0 16px;
-`;
-
-const ProductTitle = styled.h3`
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--color-dark-gray);
-`;
-
-const ShippedTag = styled.span`
-  background: #d4edda;
-  color: #155724;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  margin-top: 4px;
-  display: inline-block;
-`;
-
-const ProductDetails = styled.p`
-  font-size: 14px;
-  color: var(--color-muted-blue);
-  margin-top: 4px;
-`;
-
-const QtyContainer = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-`;
-
-const QtyLabel = styled.span`
-  color: var(--color-muted-blue);
-`;
-
-const QtyValue = styled.span`
-  font-weight: bold;
-  margin-left: 4px;
-  color: var(--color-dark-gray);
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-
-
-const DeliveryDate = styled.div`
-  font-size: 14px;
-  color: var(--color-dark-gray);
-  font-weight: bold;
-  border-top:2px solid var(--color-brand-100);
-  padding: 8px 16px;
-`;
-
-
 const OrderItem = ({ order }:{order:Order}) => {
   return (
     <OrderContainer>
@@ -162,4 +52,122 @@ const OrderItem = ({ order }:{order:Order}) => {
 
 export default OrderItem;
 
+const OrderContainer = styled.div`
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  margin: 2rem 0;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+`;
+
+const OrderHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-grey-200);
+  background: var(--color-grey-50);
+`;
+
+const OrderInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+`;
+
+const Label = styled.span`
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-grey-400);
+  letter-spacing: 0.5px;
+`;
+
+const Value = styled.span`
+  font-size: 1.4rem;
+  font-family:var(--font-secondary);
+  font-weight: 500;
+  color: #111827;
+`;
+
+const OrderContent = styled.div`
+  display: grid;
+  grid-template-columns: 4fr 1fr 2fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem;
+`;
+
+const Image = styled.img`
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+`;
+
+const ProductInfo = styled.div`
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const ProductTitle = styled.h3`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-brand-800);
+  margin: 0;
+`;
+
+const ShippedTag = styled.span`
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  width: fit-content;
+`;
+
+const ProductDetails = styled.p`
+  font-size: 1rem;
+  color: #6b7280;
+  margin-top: 4px;
+`;
+
+const QtyContainer = styled.div`
+  font-size: 0.9rem;
+  text-align: center;
+`;
+
+const QtyLabel = styled.span`
+  font-size: 1.4rem;
+  color: #6b7280;
+`;
+
+const QtyValue = styled.span`
+  font-weight: 600;
+  margin-left: 4px;
+  font-size: 1.4rem;
+  color: #111827;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  height: 100%;
+`;
+
+const DeliveryDate = styled.div`
+  background: var(--color-grey-50);
+  font-size:1.2rem;
+  color: var(--color-brand-900);
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-grey-200);
+`;
 

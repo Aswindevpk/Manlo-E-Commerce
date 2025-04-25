@@ -6,8 +6,49 @@ import ProductImages from "./ProductImages";
 import ProductAction from "./productAction";
 import Spinner from "../../ui/Spinner";
 import useProductDetail from "./useProductDetail";
+import { formatCurrency } from "../../utils/helpers";
 
 
+
+function ProductDetail() {
+    const { isLoading, productData } = useProductDetail()
+
+    if (isLoading || !productData) {
+        return <Spinner />
+    }
+
+    return (
+        <Main>
+            <ProductImages images={productData.images} />
+            <Details>
+                <div>
+                    <BrandName>{productData.brand}</BrandName>
+                    <ProductName>{productData.name.toUpperCase()}</ProductName>
+                    <Price>{formatCurrency(productData.price)}/-</Price>
+                    <Para>MRP including all taxes.</Para>
+                </div>
+                <StyledDivider />
+                <Section>
+                    <SectionHeader>Colors</SectionHeader>
+                    <ColorPicker productId={productData.product_id} selectedColorId={productData.color_id} />
+                </Section>
+                <StyledDivider />
+                <Section>
+                    <SectionHeader>sizes</SectionHeader>
+                    <SizePicker parentCategoryId={productData.parent_category_id} variantId={productData.id} />
+                </Section>
+                <ProductAction />
+                <Section>
+                    <SectionHeader>SKU : {productData.sku}</SectionHeader>
+                    <SectionHeader>Description : {productData.description}</SectionHeader>
+                    <SectionHeader>care Instruction : {productData.care_instruction}</SectionHeader>
+                </Section>
+            </Details>
+        </Main>
+    )
+}
+
+export default ProductDetail
 
 const Main = styled.main`
     padding: 4rem 0;
@@ -62,46 +103,3 @@ const SectionHeader = styled.p`
     color: var(--color-grey-500);
     text-transform:uppercase;
 `;
-
-
-
-
-function ProductDetail() {
-    const { isLoading, productData } = useProductDetail()
-
-    if (isLoading || !productData) {
-        return <Spinner />
-    }
-
-    return (
-        <Main>
-            <ProductImages images={productData.images} />
-            <Details>
-                <div>
-                    <BrandName>{productData.brand}</BrandName>
-                    <ProductName>{productData.name}</ProductName>
-                    <Price>Rs. {productData.price}/-</Price>
-                    <Para>MRP including all taxes.</Para>
-                </div>
-                <StyledDivider />
-                <Section>
-                    <SectionHeader>Colors</SectionHeader>
-                    <ColorPicker productId={productData.product_id} selectedColorId={productData.color_id} />
-                </Section>
-                <StyledDivider />
-                <Section>
-                    <SectionHeader>sizes</SectionHeader>
-                    <SizePicker parentCategoryId={productData.parent_category_id} variantId={productData.id} />
-                </Section>
-                <ProductAction />
-                <Section>
-                    <SectionHeader>SKU : {productData.sku}</SectionHeader>
-                    <SectionHeader>Description : {productData.description}</SectionHeader>
-                    <SectionHeader>care Instruction : {productData.care_instruction}</SectionHeader>
-                </Section>
-            </Details>
-        </Main>
-    )
-}
-
-export default ProductDetail

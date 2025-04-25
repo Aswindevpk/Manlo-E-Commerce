@@ -68,6 +68,37 @@ export async function searchProducts({
   return data;
 }
 
+export async function getProducts({
+  isNew = false,
+  brand = null,
+}: {
+  isNew?: boolean;
+  brand?: string | null;
+}): Promise<Product[]> {
+  // This is base query
+  let query = supabase
+    .from("product_search_view")
+    .select("product_name,product_id,price,brand,is_new,slug,images,is_new,category");
+
+  if (isNew) {
+    query = query.eq("is_new", true);
+  }
+
+  //match to parent categoryId
+  if (brand) {
+    query = query.eq("brand", brand);
+  }
+
+  const { data, error } = await query.limit(10);
+
+  if (error) {
+    console.error("Error fetching search results:", error);
+    throw new Error("Could not fetch search results.");
+  }
+
+  return data;
+}
+
 interface Color {
   hex_code: string;
   id: string;

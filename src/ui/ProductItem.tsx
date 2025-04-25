@@ -76,7 +76,7 @@ function ProductItem({ product, size = "md" }: ProductItemProps) {
       <AnimatedProductImages images={product.images} />
       <ProductInfo>
         <BrandName>{product.brand}</BrandName>
-        <ProductName>{product.product_name}</ProductName>
+        <ProductName>{product.product_name.toUpperCase()}</ProductName>
         {/* <ColorSwatch productId={product.product_id} /> */}
         <Price>{formatCurrency(product.price)}</Price>
       </ProductInfo>

@@ -1,6 +1,7 @@
+import { Order } from "../types";
 import supabase from "./supabase";
 
-export async function getOrders({ userId }: { userId: string | undefined }) {
+export async function getOrders({ userId }: { userId: string | undefined }):Promise<Order[]> {
   const { data, error } = await supabase
     .from("order_view")
     .select("*")
@@ -44,11 +45,15 @@ export async function PlaceOrders({ userId, addressId }: PlaceOrdersProps) {
 }
 
 
-export async function getOrder({ orderId }: { orderId: string | undefined }) {
+export async function getOrder({ orderId }: { orderId: string | undefined }):Promise<Order> {
+  if(!orderId) throw new Error("id not found")
   const { data, error } = await supabase
     .from("order_view")
     .select("*")
-    .eq("order_id", orderId); // parent_id IS NULL for main categories
+    .eq("id", orderId)
+    .single(); 
+
+  console.log(data)
 
   if (error) throw new Error(error.message);
   return data;

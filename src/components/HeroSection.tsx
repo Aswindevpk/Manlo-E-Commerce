@@ -6,8 +6,8 @@ const HeroSection = () => {
       <HeroImg src="hero-1.jpg" alt="Hero banner" />
       <Overlay />
       <Content>
-        <h1>Discover Your Style</h1>
-        <p>Fresh drops. Classic fits. Everything for the modern man.</p>
+        <h1>DISCOVER YOUR STYLE</h1>
+        <p>FRESH DROPS. CLASSIC FITS. EVERYTHING FOR THE MODERN MAN.</p>
       </Content>
     </HeroWrapper>
   );

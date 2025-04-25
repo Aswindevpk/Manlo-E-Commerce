@@ -3,7 +3,7 @@ import Heading from "../ui/Heading";
 import StyledDivider from "../ui/StyledDivider";
 import ProductDetail from "../features/Products/ProductDetail";
 import SimilarProducts from "../ui/SimilarProducts";
-import ReviewList from "../features/Reviews/ReviewList";
+import ProductReviews from "../features/Reviews/ProductReviews";
 
 const Section = styled.div`
     padding: 4rem 0rem;
@@ -20,8 +20,9 @@ function Product() {
       </Section>
       <StyledDivider />
       <Section>
-        <Heading center={true}>Reviews</Heading>
-        <ReviewList />
+        <Heading as="h2" center={true}>REVIEWS</Heading>
+        <ProductReviews/>
+        {/* <ReviewList /> */}
       </Section>
     </>
   )

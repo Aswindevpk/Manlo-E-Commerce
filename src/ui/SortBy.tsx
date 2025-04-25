@@ -8,6 +8,7 @@ const StyledSelect = styled.select`
     background-color:var(--color-grey-200);
     font-weight: 500;
     border: none;
+    text-transform:uppercase;
 `;
 
 

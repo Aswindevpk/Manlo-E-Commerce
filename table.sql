@@ -837,5 +837,44 @@ from
 
 
 
+  create view reviews_view as
+select 
+r.id as id,
+r.rating as rating,
+r.review_text as comment,
+pv.slug as product_slug,
+u.username as username
+from reviews r
+inner join product_variants pv on pv.id = r.product_variant_id
+inner join users u on u.id = r.user_id;
+
+
+const dummyOrder = {
+  id: "ORD-102938",
+  created_at: "2025-04-20T10:00:00Z",
+  status: "Delivered",
+  isCancellable: true,
+  shipping_address: {
+    name: "Alex Johnson",
+    phone: "+1 555-123-4567",
+    line1: "123 Ocean Avenue",
+    city: "Los Angeles",
+    state: "CA",
+    postal_code: "90001",
+    country: "USA",
+  },
+  subtotal: 80,
+  shipping_fee: 5,
+  total: 85,
+  product: {
+    name: "Minimalist Cotton Shirt",
+    image: "https://via.placeholder.com/80",
+    quantity: 1,
+    price: 80,
+  },
+};
+
+
+
 
   

@@ -36,8 +36,8 @@ type EmptyStateProps = {
   icon: React.ReactNode;
   title: string;
   message: string;
-  buttonText: string;
-  onButtonClick: () => void;
+  buttonText?: string;
+  onButtonClick?: () => void;
 };
 
 const EmptyState = ({ icon, title, message, buttonText, onButtonClick }: EmptyStateProps) => {
@@ -46,7 +46,9 @@ const EmptyState = ({ icon, title, message, buttonText, onButtonClick }: EmptySt
       <IconWrapper>{icon}</IconWrapper>
       <Title>{title}</Title>
       <Description>{message}</Description>
+      {buttonText && onButtonClick &&
       <Button onClick={onButtonClick}>{buttonText}</Button>
+      }
     </Container>
   );
 };
