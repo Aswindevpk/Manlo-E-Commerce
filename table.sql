@@ -727,34 +727,62 @@ group by
 
 DROP VIEW IF EXISTS order_view;
 CREATE VIEW order_view AS 
-select 
-o.id as id,
-o.order_number as order_number,
-o.user_id as user_id,
-o.price as price,
-o.created_at as order_date,
-o.shipping_status as shipping_status,
-o.payment_status as payment_status,
-o.quantity as qty,
-o.estimated_delivery as estimated_delivery,
-pv.name as product_name,
-s.name as size,
-c.name as color,
-  (
-    select
-      image_url
-    from
-      product_variant_images
-    where
-      variant_id = pv.id
-    limit
-      1
-  ) as image
-from orders o
-inner join product_units pu on pu.id = o.product_unit_id
-inner join product_variants pv on pv.id = pu.variant_id
-inner join sizes s on s.id = pu.size_id
-inner join colors c on c.id = pv.color_id;
+select
+  o.id as id,
+  o.order_number as order_number,
+  o.user_id as user_id,
+  o.price as price,
+  o.created_at as created_at,
+  o.shipping_status as shipping_status,
+  o.payment_status as payment_status,
+  o.quantity as qty,
+  o.estimated_delivery as estimated_delivery,
+  s.name as size,
+  c.name as color,
+    json_build_object(
+    'name',
+    pv.name,
+    'image',
+    (
+      select
+        image_url
+      from
+        product_variant_images
+      where
+        variant_id = pv.id
+      limit
+        1
+    ),
+    'quantity',
+        o.quantity,
+    'price',
+    o.price
+  ) as product,
+   json_build_object(
+    'first_name',
+    a.first_name,
+    'last_name',
+    a.last_name,
+    'phone',
+    a.phone,
+    'line1',
+    a.line1,
+    'line2',
+    a.line2,
+    'city',
+    a.city,
+    'state',
+    a.state,
+    'pincode',
+    a.pincode
+  ) as shipping_address
+from
+  orders o
+  inner join product_units pu on pu.id = o.product_unit_id
+  inner join product_variants pv on pv.id = pu.variant_id
+  inner join sizes s on s.id = pu.size_id
+  inner join addresses a on a.id = o.address_id
+  inner join colors c on c.id = pv.color_id;
 
 
 

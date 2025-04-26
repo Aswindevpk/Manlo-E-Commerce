@@ -1,17 +1,33 @@
 export type Order = {
   id: string;
   order_number: string;
+  user_id: string;
   price: number;
-  order_date: string;
-  shipping_status: "Ordered" | "Processing" | "Shipped" | "Delivered";
+  created_at: string; // ISO string
+  shipping_status: "ordered" | "processing" | "shipped" | "delivered";
   payment_status: string;
   qty: number;
-  image: string;
-  estimated_delivery: string;
-  product_name: string;
+  estimated_delivery: string | null; // assuming it can sometimes be null
   size: string;
   color: string;
+  product: {
+    name: string;
+    image: string ;
+    quantity: number;
+    price: number;
+  };
+  shipping_address: {
+    first_name: string;
+    last_name: string;
+    phone: string;
+    line1: string;
+    line2: string | null; // optional line2
+    city: string;
+    state: string;
+    pincode: string;
+  };
 };
+
 
 export type productDetail = {
   id: string;

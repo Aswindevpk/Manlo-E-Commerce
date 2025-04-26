@@ -19,16 +19,16 @@ const OrderItem = ({ order }:{order:Order}) => {
         </OrderInfo>
         <OrderInfo>
           <Label>ORDER PLACED</Label>
-          <Value>{formatDate(order.order_date)}</Value>
+          <Value>{formatDate(order.created_at)}</Value>
         </OrderInfo>
       </OrderHeader>
 
       {/* Order Content */}
       <OrderContent>
         <div style={{display:"flex"}}>
-          <Image src={order.image} alt="Product" />
+          <Image src={order.product.image} alt="Product" />
           <ProductInfo>
-            <ProductTitle>{order.product_name}</ProductTitle>
+            <ProductTitle>{order.product.name}</ProductTitle>
             <ShippedTag>{order.shipping_status}</ShippedTag>
             <ProductDetails>{order.size} / {order.color}</ProductDetails>
           </ProductInfo>

@@ -11,6 +11,7 @@ import Attributes from "../pages/Attributes";
 import Product from "../pages/Product";
 import Variant from "../pages/Variant";
 import Category from "../pages/Category";
+import Order from "../pages/Order";
 
 function AdminRoutes() {
   return (
@@ -26,6 +27,7 @@ function AdminRoutes() {
         <Route path="category/:categoryId" element={<Category />} />
         <Route path="attributes" element={<Attributes />} />
         <Route path="orders" element={<Orders />} />
+        <Route path="order/:orderId" element={<Order />} />
         <Route path="products" element={<Products />} />
         <Route path="product/:productId" element={<Product />} />
         <Route path="variant/:variantId" element={<Variant />} />

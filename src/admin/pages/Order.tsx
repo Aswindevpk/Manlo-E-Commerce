@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Button from "../ui/Button";
-import { formatCurrency,formatDate } from "../utils/helpers";
-import useGetOrder from "../features/Orders/useGetOrder";
-import Spinner from "../ui/Spinner";
+import useGetOrder from "../../features/Orders/useGetOrder";
+import Spinner from "../../ui/Spinner";
+import { formatCurrency, formatDate } from "../../utils/helpers";
+import OrderForm from "../features/Orders/OrderForm";
 
 
 const statuses = ["ordered", "processing", "shipped", "delivered"];
@@ -47,6 +47,11 @@ function Order() {
         </Product>
       </Section>
 
+      <Section>
+        <SectionTitle>Order Action</SectionTitle>
+        <OrderForm/>
+      </Section>
+
       <Card>
         <CardSection>
           <SectionTitle>Ship To</SectionTitle>
@@ -74,18 +79,9 @@ function Order() {
             <span>Total:</span>
             <span>{formatCurrency(order.price)}</span>
           </SummaryRow>
-          <Button>Download Invoice</Button>
         </CardSection>
       </Card>
-      <Section>
-        <SectionTitle>Return & Cancellation</SectionTitle>
-        <p>Returns accepted within 10 days of delivery.</p>
-        {order && (
-          <Button onClick={() => alert("Cancel order logic here")}>
-            Cancel Order
-          </Button>
-        )}
-      </Section>
+
     </Container>
   );
 }
@@ -96,7 +92,6 @@ export default Order;
 
 const Container = styled.div`
   max-width: 900px;
-  margin:0rem auto;
   padding: 2rem;
   background:var(--color-grey-0);
   border-radius: 12px;
