@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { HiOutlineCog6Tooth, HiOutlineHome, HiOutlineUsers } from "react-icons/hi2";
+import { HiOutlineHome, HiOutlineUsers } from "react-icons/hi2";
 import styled from "styled-components";
 import { BsCartCheck } from "react-icons/bs";
 import { CiBoxes, CiBoxList } from "react-icons/ci";
@@ -100,14 +100,14 @@ function MainNav() {
           </span>
         </StyledNavLink>
       </li>
-      <li>
+      {/* <li>
         <StyledNavLink to="settings">
           <HiOutlineCog6Tooth />
           <span>
             Settings
           </span>
         </StyledNavLink>
-      </li>
+      </li> */}
     </NavList>
   )
 }

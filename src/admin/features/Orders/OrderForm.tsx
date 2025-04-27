@@ -57,7 +57,7 @@ function OrderForm() {
 
     return (
         <StyledForm onSubmit={handleSubmit(onSubmit)}>
-            <FormRowVertical label="Shipping status" error={errors.shipping_status?.message}>
+            <FormRowVertical label="Change Shipping status" error={errors.shipping_status?.message}>
                 <StyledSelect
                     disabled={isUpdating}
                     {...register("shipping_status", { required: "size is required" })}>

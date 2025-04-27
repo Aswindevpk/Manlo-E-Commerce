@@ -17,6 +17,7 @@ export type Product = {
     id: string;
     name: string;
   };
+  is_listed:boolean;
 };
 
 export type Variant = {
@@ -62,6 +63,7 @@ export type Category = {
   name: string;
   parent_id: string | null;
   image: string | File |null;
+  is_listed?:boolean;
   parent?: {
     id: string;
     name: string;

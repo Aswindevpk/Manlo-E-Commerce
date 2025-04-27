@@ -5,6 +5,8 @@ import Table from "../../components/Table";
 import Spinner from "../../../ui/Spinner";
 import useGetOrders from "./useGetOrders";
 import { Link } from "react-router-dom";
+import { formatCurrency } from "../../../utils/helpers";
+
 
 const Container = styled.section`
   display: flex;
@@ -48,9 +50,9 @@ function OrdersTable() {
               <div>{order.product.name}</div>
               <div>{order.payment_status}</div>
               <div>{order.shipping_status}</div>
-              <div>{order.price}</div>
-              <Link
-                to={`/admin/order/${order.id}`}>view</Link>
+              <div>{formatCurrency(order.price)}</div>
+              <Button as={Link}
+                to={`/admin/order/${order.id}`}>view</Button>
             </Table.Row>
           )} />
       </Table>

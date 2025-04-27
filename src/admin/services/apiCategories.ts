@@ -50,6 +50,7 @@ export async function createCategory({
   return data;
 }
 
+
 export async function updateCategory({
   id,
   newData,
@@ -114,3 +115,23 @@ export async function getCategory({
   if (error) throw new Error(error.message);
   return data;
 }
+
+
+export async function UpdateCategoryListing({
+  categoryId,
+  isListed,
+}: {
+  categoryId: string | undefined;
+  isListed: boolean;
+}): Promise<Category> {
+  const { data, error } = await supabase
+    .from("categories")
+    .update({ is_listed: isListed })
+    .eq("id", categoryId)
+    .select("*, parent:parent_id(id, name)")
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data;
+}
+

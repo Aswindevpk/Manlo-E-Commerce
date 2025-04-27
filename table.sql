@@ -629,6 +629,7 @@ group by
 
 
 -- product view 
+drop view if exists product_search_view;
 create view product_search_view as
 select
  pv.name as product_name,
@@ -664,6 +665,10 @@ inner join colors c on c.id = pv.color_id
 inner join categories subcat on subcat.id = p.category_id
 inner join categories maincat on maincat.id = subcat.parent_id
 left join product_variant_images pi on pi.variant_id = pv.id
+where subcat.is_listed = true
+  and maincat.is_listed = true
+  and p.is_listed = true
+  and pv.is_listed = true
 group by
  pv.name,
  pv.id,

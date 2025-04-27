@@ -1,7 +1,7 @@
 import supabase from "../../services/supabase";
 import { Product } from "../types";
 
-export async function createProduct({newProduct}:{newProduct:Product}):Promise<Product> {
+export async function createProduct({newProduct}:{newProduct:Partial<Product>}):Promise<Product> {
     const { data, error } = await supabase
         .from("products")
         .insert([newProduct])
@@ -12,7 +12,7 @@ export async function createProduct({newProduct}:{newProduct:Product}):Promise<P
     return data;
 }
 
-export async function updateProduct({id,newProduct}:{id:string,newProduct:Product}):Promise<Product> {
+export async function updateProduct({id,newProduct}:{id:string | undefined,newProduct:Partial<Product>}):Promise<Product> {
     const { data, error } = await supabase
         .from("products")
         .update([newProduct])

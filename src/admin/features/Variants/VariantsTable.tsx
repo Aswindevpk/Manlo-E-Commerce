@@ -3,6 +3,7 @@ import Spinner from "../../../ui/Spinner";
 import { Link } from "react-router-dom";
 import useGetVariants from "./useGetVariants";
 import styled from "styled-components";
+import Button from "../../../ui/Button";
 
 const StyledImg = styled.img`
     height: 60px;
@@ -42,7 +43,7 @@ function VariantsTable({productId}:{productId:string | undefined}) {
             <span>{variant.color?.name}</span>
             <span>{variant.sku}</span>
             <span>
-              <Link to={`/admin/variant/${variant.id}`}>view</Link>
+              <Button as={Link} to={`/admin/variant/${variant.id}`}>view</Button>
             </span>
           </Table.Row>
         )} />
