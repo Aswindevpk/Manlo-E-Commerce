@@ -8,8 +8,12 @@ const Images = styled.div`
 
 const ProductImg = styled.img`
     width: 100%;
-    height: 600px;
+    height: 550px;
     cursor: pointer;
+
+    @media (max-width: 768px) {
+        height: 250px;
+  }
 `;
 
 function ProductImages({images}:{images:{image_url:string}[]}) {

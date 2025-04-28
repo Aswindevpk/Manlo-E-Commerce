@@ -13,6 +13,10 @@ const StyledProductList = styled.div`
     grid-template-columns:1fr 4fr;
     grid-template-rows:2rem auto;
     gap: 4rem;
+
+    @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SideBar = styled.div`
@@ -25,9 +29,10 @@ const TopBar = styled.div`
 `;
 
 const Container = styled.div`
-    display: grid;
-    grid-template-columns:1fr 1fr 1fr;
-    grid-auto-rows:1fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 4rem;
 `;
 
@@ -38,7 +43,7 @@ function ProductList() {
         <StyledProductList>
             <SideBar>
                 <Filter />
-            </SideBar>
+            </SideBar> 
             <TopBar>
                 <SortBy />
             </TopBar>

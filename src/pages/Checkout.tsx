@@ -17,6 +17,10 @@ const StyledCheckout = styled.main`
     gap: 4rem;
     grid-template-columns: 2fr 1fr;
     grid-template-rows:auto 1fr;
+
+    @media (max-width: 768px) {
+        grid-template-columns:  1fr;
+  }
 `;
 
 const Row = styled.div`

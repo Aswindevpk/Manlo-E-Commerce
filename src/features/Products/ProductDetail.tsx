@@ -55,6 +55,10 @@ const Main = styled.main`
     display: grid;
     gap: 3rem;
     grid-template-columns: 60vw 1fr;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+  }
 `;
 
 const Details = styled.div`

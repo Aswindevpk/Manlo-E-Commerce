@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const StyledCart = styled.main`
     display: flex;
     gap: 10rem;
+    flex-wrap: wrap;
     justify-content: space-between;
 `;
 

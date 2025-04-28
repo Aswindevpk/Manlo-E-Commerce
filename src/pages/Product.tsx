@@ -9,7 +9,6 @@ const Section = styled.div`
     padding: 4rem 0rem;
 `
 
-
 function Product() {
   return (
     <>
@@ -22,7 +21,6 @@ function Product() {
       <Section>
         <Heading as="h2" center={true}>REVIEWS</Heading>
         <ProductReviews/>
-        {/* <ReviewList /> */}
       </Section>
     </>
   )
