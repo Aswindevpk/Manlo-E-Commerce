@@ -7,6 +7,7 @@ import useCategoryList from "./useCategoryList";
 const StyledCategoryList = styled.ul`
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 8rem;
 `;
 

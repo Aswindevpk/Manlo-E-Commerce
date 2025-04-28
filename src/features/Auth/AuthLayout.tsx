@@ -2,14 +2,21 @@ import { ReactElement } from "react";
 import styled from "styled-components";
 import Heading from "../../ui/Heading";
 
-const Layout = styled.main`
+const Container = styled.main`
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 48rem;
-  align-content: center;
+  display: flex;
   justify-content: center;
-  gap: 2rem;
+  align-items: center;
   background-color: var(--color-grey-50);
+`;
+
+
+const Layout = styled.main`
+  display: flex;
+  flex-direction: column;
+  width: clamp(200px, 90%, 450px);
+  gap: 2rem;
+  height: fit-content;
 `;
 
 const Logo = styled.h3`
@@ -24,11 +31,13 @@ interface Props {
 
 function AuthLayout({ header, children }: Props) {
   return (
-    <Layout>
-      <Logo>MANLO</Logo>
-      <Heading as="h3">{header}</Heading>
-      {children}
-    </Layout>
+    <Container>
+      <Layout>
+        <Logo>MANLO</Logo>
+        <Heading as="h3">{header}</Heading>
+        {children}
+      </Layout>
+    </Container>
   )
 }
 

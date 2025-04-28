@@ -4,7 +4,21 @@ import StyledDivider from "../ui/StyledDivider"
 const StyledFooter = styled.div`
     padding: 4rem 5rem;
     display: grid;
+    gap:2rem;
     grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;
+
+    @media (max-width: 64rem) { /* ≤1024px (lg) */
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 48rem) { /* ≤768px (md) */
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 40rem) { /* ≤640px (sm) */
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
 `
 
 

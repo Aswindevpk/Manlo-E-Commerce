@@ -68,7 +68,7 @@ function UserForm() {
         {errors.username && <p>{errors.username.message}</p>}
       </div>
 
-      {/* <div>
+      <div>
         <Input
           type="email"
           placeholder="Email"
@@ -81,7 +81,7 @@ function UserForm() {
           })}
         />
         {errors.email && <p>{errors.email.message}</p>}
-      </div> */}
+      </div> 
       <Button type="submit" disabled={isUpdating}>
         {isUpdating ? <SpinnerMini/> : "Update Profile"}
       </Button>

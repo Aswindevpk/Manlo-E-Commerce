@@ -59,4 +59,8 @@ const ProductList = styled.div`
   &::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  @media (max-width: 768px) {
+    width: 90vw;
+  }
 `;

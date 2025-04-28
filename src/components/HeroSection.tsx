@@ -23,6 +23,10 @@ const HeroWrapper = styled.section`
   width: 100%;
   border-radius:16px;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: 30vh;
+  }
 `;
 
 const HeroImg = styled.img`
@@ -58,14 +62,13 @@ const Content = styled.div`
   @media (max-width: 768px) {
     left: 5%;
     right: 5%;
-    text-align: center;
 
     h1 {
-      font-size: 2rem;
+      font-size: 2.4rem;
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
     }
   }
 `;

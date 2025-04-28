@@ -42,6 +42,10 @@ const Wrapper = styled.section`
   justify-content: space-around;
   flex-wrap: wrap;
   padding: 4rem 2rem;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Service = styled.div`

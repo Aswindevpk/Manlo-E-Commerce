@@ -14,6 +14,11 @@ const ContentWrapper = styled.main`
   width: 100%;
   padding: 4rem;
   padding-bottom:10rem;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    padding-bottom:8rem;
+  }
 `;
 
 
