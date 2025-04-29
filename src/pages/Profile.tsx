@@ -6,6 +6,9 @@ import { CiLocationOn, CiShoppingCart, CiUser } from "react-icons/ci";
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const SideBar = styled.div`
@@ -17,6 +20,16 @@ const SideBar = styled.div`
   gap: 0.8rem;
   min-height: 500px;
   height: 100%;
+
+  @media (max-width: 768px) {
+    margin: 0;
+    padding: 1rem;
+    flex-direction: row;
+    height: 6rem;
+    min-height: auto;
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
 const Section = styled.section`
@@ -36,6 +49,12 @@ const NavItem = styled(NavLink)`
     font-weight: 500;
     padding: 1.2rem 2.4rem;
     transition: all 0.3s;
+
+    @media (max-width: 768px) {
+    font-size: 1.4rem;
+    padding: 0.4rem 0.8rem;
+    gap: 0.5rem;
+  }
   }
 
   /* This works because react-router places the active class on the active NavLink */
@@ -66,14 +85,14 @@ function Profile() {
   return (
     <Container>
       <SideBar>
-        <NavItem to={"profile"}>
+        <NavItem to={"account"}>
           <CiUser />
           <span>
-            Profile
+            Account
           </span>
         </NavItem>
         <NavItem to={"addresses"}>
-          <CiLocationOn/>
+          <CiLocationOn />
           <span>
             Addresses
           </span>
@@ -86,7 +105,7 @@ function Profile() {
         </NavItem>
       </SideBar>
       <Section>
-        <Outlet/>
+        <Outlet />
       </Section>
     </Container>
   )

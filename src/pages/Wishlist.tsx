@@ -30,8 +30,8 @@ function Wishlist() {
   if (wishlist.length === 0) {
     return <EmptyState
       icon={<CiHeart />}
-      title="Your cart is empty"
-      message="Start adding items to your cart now!"
+      title="Your Wishlist is empty"
+      message="Start adding items to your wishlist now!"
       buttonText="Shop Now"
       onButtonClick={() => navigate("/")}
     />

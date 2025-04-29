@@ -1,20 +1,28 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+
 import UserProtectedRoute from "./UserProtectedRoute";
 import AppLayout from "./AppLayout";
-import Product from "../pages/Product";
-import Order from "../pages/Order";
-import Profile from "../pages/Profile";
-import UserDetails from "../pages/UserDetails";
-import Addresses from "../pages/Addresses";
-import Collection from "../pages/Collection";
-import Orders from "../pages/Orders";
-import Cart from "../pages/Cart";
-import Shop from "../pages/Shop";
-import Search from "../pages/Search";
-import Checkout from "../pages/Checkout";
-import Wishlist from "../pages/Wishlist";
-import UpdatePassword from "../pages/UpdatePassword";
-import OrderConfirmation from "../pages/OrderConfirmation";
+import SpinnerFullPage from "./SpinnerFullPage";
+
+
+
+const Product = lazy(() => import("../pages/Product"));
+const Order = lazy(() => import("../pages/Order"));
+const Profile = lazy(() => import("../pages/Profile"));
+const Account = lazy(() => import("../pages/Account"));
+const Addresses = lazy(() => import("../pages/Addresses"));
+const Collection = lazy(() => import("../pages/Collection"));
+const Orders = lazy(() => import("../pages/Orders"));
+const Cart = lazy(() => import("../pages/Cart"));
+const Shop = lazy(() => import("../pages/Shop"));
+const Search = lazy(() => import("../pages/Search"));
+const Checkout = lazy(() => import("../pages/Checkout"));
+const Wishlist = lazy(() => import("../pages/Wishlist"));
+const UpdatePassword = lazy(() => import("../pages/UpdatePassword"));
+const OrderConfirmation = lazy(() => import("../pages/OrderConfirmation"));
+
+
 
 
 function AppRoutes() {
@@ -22,15 +30,17 @@ function AppRoutes() {
         <Routes>
             <Route path="/" element={
                 <UserProtectedRoute>
-                    <AppLayout />
+                    <Suspense fallback={<SpinnerFullPage />}>
+                        <AppLayout />
+                    </Suspense>
                 </UserProtectedRoute>
             }>
                 <Route index element={<Shop />} />
                 <Route path="product/:productSlug" element={<Product />} />
                 <Route path="order/:orderId" element={<Order />} />
                 <Route path="user" element={<Profile />}>
-                    <Route index element={<Navigate to="profile" replace />} />
-                    <Route path="profile" element={<UserDetails />} />
+                    <Route index element={<Navigate to="account" replace />} />
+                    <Route path="account" element={<Account />} />
                     <Route path="addresses" element={<Addresses />} />
                     <Route path="orders" element={<Orders />} />
                     <Route path="orders/:orderId" element={<Order />} />

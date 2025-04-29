@@ -13,6 +13,10 @@ const AddressList = styled.section`
     margin: 4rem 0rem;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
+    @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 `;
 
 

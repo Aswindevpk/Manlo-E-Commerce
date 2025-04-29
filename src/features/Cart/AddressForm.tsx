@@ -11,6 +11,7 @@ const StyledForm = styled.form`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(5, 1fr);
   gap: 2rem;
+  min-width: 280px;
 
   > div:nth-child(3),
   > div:nth-child(4) {
