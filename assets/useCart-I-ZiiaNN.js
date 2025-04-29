@@ -1,1 +1,0 @@
-import{f as n,u as o,y as c}from"./index-DRfNn9gb.js";function d(){const{user:e,isAuthenticated:r}=n(),t=e==null?void 0:e.id,{isLoading:s,data:a,error:u}=o({queryKey:["cart"],queryFn:()=>c({userId:t}),enabled:r,retry:!1});return{isLoading:s,cartItems:a,error:u}}export{d as u};

@@ -1,4 +1,4 @@
-import{j as r,h as d,H as h,d as t,G as n,R as c}from"./index-DRfNn9gb.js";import{C as x}from"./CategoryList-BwjdiAZg.js";import{P as p}from"./ProductItem-CND2-dyE.js";import{u as m}from"./useGetProducts-BPpYQT2X.js";import"./apiProduct-BmE6HX7m.js";function u(){const{isLoading:e,products:s}=m({isNew:!0});return e?r.jsx(d,{}):r.jsxs(r.Fragment,{children:[r.jsx(h,{as:"h2",center:!0,children:"NEW ARRIVALS"}),r.jsx(f,{children:r.jsx(g,{children:s==null?void 0:s.map(l=>r.jsx(p,{size:"sm",product:l},l.product_id))})})]})}const f=t.div`
+import{j as r,h as d,H as h,d as t,G as n,R as c}from"./index-B8BJ-eIj.js";import{C as x}from"./CategoryList-CGv-MEGb.js";import{P as p}from"./ProductItem-CTTYf3pq.js";import{u as m}from"./useGetProducts-DxgcHRPJ.js";import"./apiProduct-DXyLiVzx.js";function u(){const{isLoading:e,products:s}=m({isNew:!0});return e?r.jsx(d,{}):r.jsxs(r.Fragment,{children:[r.jsx(h,{as:"h2",center:!0,children:"NEW ARRIVALS"}),r.jsx(f,{children:r.jsx(g,{children:s==null?void 0:s.map(l=>r.jsx(p,{size:"sm",product:l},l.product_id))})})]})}const f=t.div`
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,4 +1,4 @@
-import{j as e,o as s,p as t,q as a,O as o,d as r,N as n}from"./index-DRfNn9gb.js";const d=r.div`
+import{j as e,o as s,p as t,q as a,O as o,d as r,N as n}from"./index-B8BJ-eIj.js";const d=r.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
   @media (max-width: 768px) {

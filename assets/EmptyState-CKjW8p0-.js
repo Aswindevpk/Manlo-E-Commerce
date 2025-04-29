@@ -1,9 +1,9 @@
-import{j as r,B as s,d as e}from"./index-DRfNn9gb.js";const a=e.div`
+import{j as r,B as s,d as e}from"./index-B8BJ-eIj.js";const a=e.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 80vh;
   text-align: center;
   padding: 2rem;
 `,l=e.h2`
