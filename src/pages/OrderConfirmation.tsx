@@ -1,78 +1,104 @@
-import { BiCheckCircle } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+
+import styled, { keyframes } from "styled-components";
+import { AiFillCheckCircle } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 
-const Container = styled.div`
-  min-height: 100vh;
-  background-color: var(--color-background);
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const PageWrapper = styled.div`
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f9fafb;
   padding: 2rem;
 `;
 
 const Card = styled.div`
-  background-color: white;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  max-width: 500px;
+  width: 100%;
   text-align: center;
-`;
+  animation: ${fadeIn} 0.4s ease-out;
 
-const IconWrapper = styled.div`
-  color: green;
-  margin-bottom: 1.5rem;
-`;
-
-const Title = styled.h2`
-  font-size: 2rem;
-  color: var(--color-dark-gray);
-  margin-bottom: 0.5rem;
-`;
-
-const Subtitle = styled.p`
-  color: var(--color-muted-blue);
-  font-size: 1rem;
-  margin-bottom: 2rem;
-`;
-
-// const OrderDetails = styled.div`
-//   background-color: var(--color-light-gray);
-//   padding: 1rem;
-//   border-radius: 12px;
-//   margin-bottom: 2rem;
-//   text-align: left;
-//   font-size: 0.9rem;
-// `;
-
-const Button = styled(Link)`
-  background-color: var(--color-dark-gray);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #2d323a;
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
   }
 `;
 
-const OrderConfirmation = () => {
-    const userName = "test"
+const IconWrapper = styled.div`
+  color: #10b981;
+  margin-bottom: 1rem;
+`;
+
+const Heading = styled.h1`
+  font-size: 2.2cherem;
+  margin-bottom: 0.5rem;
+`;
+
+const Text = styled.p`
+  color: #4b5563;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+`;
+
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+`;
+
+const Button = styled.button<{ variant?: "outline" }>`
+  padding: 0.75rem 1.5rem;
+  font-size: 1.4rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: 0.2s ease all;
+  font-weight: 500;
+  border: ${({ variant }) => (variant === "outline" ? "1px solid #d1d5db" : "none")};
+  background-color: ${({ variant }) => (variant === "outline" ? "white" : "#111827")};
+  color: ${({ variant }) => (variant === "outline" ? "#374151" : "white")};
+
+  &:hover {
+    background-color: ${({ variant }) =>
+      variant === "outline" ? "#f3f4f6" : "#1f2937"};
+  }
+`;
+
+
+function OrderConfirmation(){
+  const navigate = useNavigate();
   return (
-    <Container>
+    <PageWrapper>
       <Card>
         <IconWrapper>
-          <BiCheckCircle size={64} />
+          <AiFillCheckCircle size={80} />
         </IconWrapper>
-        <Title>Thank you, {userName || "Customer"}!</Title>
-        <Subtitle>Your order has been placed successfully.</Subtitle>
-        {/* <OrderDetails>
-          <strong>Status:</strong> Confirmed<br />
-          <strong>Payment:</strong> Successful
-        </OrderDetails> */}
-        <Button to="/shop">Continue Shopping</Button>
+        <Heading>Thank you for your order!</Heading>
+        <div>
+        <Text>Your order has been successfully placed.</Text>
+        <Text>A confirmation has been sent to <strong>Your Email</strong>.</Text>
+        </div>
+        <ButtonGroup>
+          <Button onClick={() => navigate("/")}>Continue Shopping</Button>
+          <Button variant="outline" onClick={() => navigate(`/user/orders`)}>
+            View Orders
+          </Button>
+        </ButtonGroup>
       </Card>
-    </Container>
+    </PageWrapper>
   );
 };
 

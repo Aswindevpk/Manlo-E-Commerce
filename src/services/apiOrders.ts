@@ -1,11 +1,16 @@
 import { Order } from "../types";
 import supabase from "./supabase";
 
-export async function getOrders({ userId }: { userId: string | undefined }):Promise<Order[]> {
+export async function getOrders({
+  userId,
+}: {
+  userId: string | undefined;
+}): Promise<Order[]> {
   const { data, error } = await supabase
     .from("order_view")
     .select("*")
-    .eq("user_id", userId); // parent_id IS NULL for main categories
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
   return data;
@@ -16,44 +21,64 @@ type PlaceOrdersProps = {
   addressId: string | undefined;
 };
 
+interface CartItem {
+  product_unit_id: string;
+  quantity: number;
+}
+
 export async function PlaceOrders({ userId, addressId }: PlaceOrdersProps) {
+  // Step 1: Fetch cart items for the user
   const { data: cartItems, error: cartError } = await supabase
     .from("carts")
     .select("*")
     .eq("user_id", userId);
 
-  if (cartError) throw new Error(cartError.message);
+  if (cartError) throw new Error(`Failed to fetch cart: ${cartError.message}`);
+  if (!cartItems || cartItems.length === 0) {
+    throw new Error("Cart is empty. Cannot place orders.");
+  }
 
-  const orderIds = await Promise.all(
-    cartItems.map(async (cart) => {
-      const {data:orderId, error } = await supabase.rpc("place_order_single_cod", {
-        p_user_id: userId,
-        p_product_unit_id: cart.product_unit_id,
-        p_address_id: addressId,
-        p_quantity: cart.quantity,
-      });
+  // Step 2: Place orders per item in the cart
+  const orderIds: string[] = [];
 
-      if (error) throw new Error(error.message);
+  for (const cart of cartItems as CartItem[]) {
+    const { data, error } = await supabase.rpc("place_order_single_cod", {
+      p_user_id: userId,
+      p_product_unit_id: cart.product_unit_id,
+      p_address_id: addressId,
+      p_quantity: cart.quantity,
+    });
 
-      return orderId;
-    })
-  );
+    if (error) {
+      console.error(
+        `Failed to place order for unit ${cart.product_unit_id}:`,
+        error.message
+      );
+      throw new Error(`Order failed for product unit ${cart.product_unit_id}`);
+    }
 
-  console.log(orderIds)
+    if (data) {
+      orderIds.push(data);
+    }
+  }
 
+  console.log("Placed Orders:", orderIds);
   return orderIds;
 }
 
-
-export async function getOrder({ orderId }: { orderId: string | undefined }):Promise<Order> {
-  if(!orderId) throw new Error("id not found")
+export async function getOrder({
+  orderId,
+}: {
+  orderId: string | undefined;
+}): Promise<Order> {
+  if (!orderId) throw new Error("id not found");
   const { data, error } = await supabase
     .from("order_view")
     .select("*")
     .eq("id", orderId)
-    .single(); 
+    .single();
 
-  console.log(data)
+  console.log(data);
 
   if (error) throw new Error(error.message);
   return data;

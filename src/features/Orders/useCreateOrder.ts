@@ -11,7 +11,7 @@ export const usePlaceOrders = () => {
       // You can add additional success handling here
       queryClient.invalidateQueries({ queryKey: ["cartCount"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      console.log('Orders placed successfully');
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
     onError: (error: Error) => {
       // You can add additional error handling here

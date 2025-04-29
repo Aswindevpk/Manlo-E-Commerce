@@ -84,7 +84,7 @@ function Toggle({ children }: OpenProps) {
 
 // WindowProps for the Menu
 interface WindowProps {
-    children: ReactElement;
+    children: React.ReactElement<{ onClose?: () => void }>;
 }
 
 const slideIn = {
@@ -107,6 +107,7 @@ function Menu({ children }: WindowProps) {
 
     useOutsideClickHam(close, [menuRef, toggleRef]);
 
+    const enhancedChildren = React.cloneElement(children, { onClose: close });
 
     return createPortal(
         <AnimatePresence>
@@ -126,7 +127,7 @@ function Menu({ children }: WindowProps) {
                         </ClickableIcon>
                     </StyledMenuHeader>
                     <StyledMenu>
-                        {children}
+                        {enhancedChildren}
                     </StyledMenu>
                 </StyledMenuContainer>
             )}

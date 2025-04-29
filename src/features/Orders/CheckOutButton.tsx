@@ -20,7 +20,8 @@ const CheckoutButton = ({ addressId }: Props) => {
       toast.error("select an address")
     }
     placeOrders({ userId: user?.id, addressId: addressId },{
-      onSuccess:()=>{
+      onSuccess:(data)=>{
+        console.log(data)
         navigate("/order-confirm")
       }
     });

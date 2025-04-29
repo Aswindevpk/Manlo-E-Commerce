@@ -3,7 +3,7 @@ import Button from "./Button";
 import Heading from "./Heading";
 
 const StyledConfirmDelete = styled.div`
-  width: 40rem;
+  width: clamp(250px, 70vw, 400px);
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -18,6 +18,7 @@ const StyledConfirmDelete = styled.div`
     justify-content: flex-end;
     gap: 1.2rem;
   }
+
 `;
 
 interface Props{

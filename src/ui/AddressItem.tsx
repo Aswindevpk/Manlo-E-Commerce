@@ -54,7 +54,7 @@ function AddressItem({ address }:{address:Address}) {
                     </Modal.Open>
                     <Modal.Window name="delete">
                         <ConfirmDelete
-                            resourceName="cabins"
+                            resourceName="address"
                             disabled={isDeleting}
                             onConfirm={() => {
                                 if (address.id)
