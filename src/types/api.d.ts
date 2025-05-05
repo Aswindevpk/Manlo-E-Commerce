@@ -1,10 +1,12 @@
+import { ShippingStatus } from "../enums/ShippingStatus";
+
 export type Order = {
   id: string;
   order_number: string;
   user_id: string;
   price: number;
   created_at: string; // ISO string
-  shipping_status: "ordered" | "processing" | "shipped" | "delivered";
+  shipping_status: ShippingStatus;
   payment_status: string;
   qty: number;
   estimated_delivery: string | null; // assuming it can sometimes be null

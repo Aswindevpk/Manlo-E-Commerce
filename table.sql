@@ -479,7 +479,7 @@ CREATE TABLE orders (
   quantity INT NOT NULL CHECK (quantity > 0),
   order_number VARCHAR(100) NOT NULL UNIQUE,
   price DECIMAL(10,2) NOT NULL CHECK (price >= 0),
-  shipping_status VARCHAR(20) DEFAULT 'processing', -- processing, shipped, delivered, cancelled
+  shipping_status VARCHAR(20) DEFAULT 'ordered', -- processing, shipped, delivered, cancelled
   estimated_delivery TIMESTAMP, -- Expected delivery date
   tracking_number VARCHAR(100) UNIQUE, -- Tracking number for shipment
   payment_status VARCHAR(20) DEFAULT 'unpaid', -- unpaid, paid, refunded

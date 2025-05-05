@@ -1,3 +1,4 @@
+import { ShippingStatus } from "../enums/ShippingStatus";
 import { Order } from "../types";
 import supabase from "./supabase";
 
@@ -21,13 +22,8 @@ type PlaceOrdersProps = {
   addressId: string | undefined;
 };
 
-interface CartItem {
-  product_unit_id: string;
-  quantity: number;
-}
 
 export async function PlaceOrders({ userId, addressId }: PlaceOrdersProps) {
-  // Step 1: Fetch cart items for the user
   const { data: cartItems, error: cartError } = await supabase
     .from("carts")
     .select("*")
@@ -38,31 +34,24 @@ export async function PlaceOrders({ userId, addressId }: PlaceOrdersProps) {
     throw new Error("Cart is empty. Cannot place orders.");
   }
 
-  // Step 2: Place orders per item in the cart
-  const orderIds: string[] = [];
-
-  for (const cart of cartItems as CartItem[]) {
-    const { data, error } = await supabase.rpc("place_order_single_cod", {
-      p_user_id: userId,
-      p_product_unit_id: cart.product_unit_id,
-      p_address_id: addressId,
-      p_quantity: cart.quantity,
-    });
-
-    if (error) {
-      console.error(
-        `Failed to place order for unit ${cart.product_unit_id}:`,
-        error.message
+  const orderIds = await Promise.all(
+    cartItems.map(async (cart) => {
+      const { data: orderId, error } = await supabase.rpc(
+        "place_order_single_cod",
+        {
+          p_user_id: userId,
+          p_product_unit_id: cart.product_unit_id,
+          p_address_id: addressId,
+          p_quantity: cart.quantity,
+        }
       );
-      throw new Error(`Order failed for product unit ${cart.product_unit_id}`);
-    }
 
-    if (data) {
-      orderIds.push(data);
-    }
-  }
+      if (error) throw new Error(error.message);
 
-  console.log("Placed Orders:", orderIds);
+      return orderId;
+    })
+  );
+
   return orderIds;
 }
 
@@ -83,3 +72,31 @@ export async function getOrder({
   if (error) throw new Error(error.message);
   return data;
 }
+
+
+export async function cancelOrder(orderId: string){
+
+  //checking is eligible for cancel
+  const { data, error } = await supabase
+    .from('orders')
+    .select('shipping_status')
+    .eq('id', orderId)
+    .single();
+
+  if (error || !data) throw new Error('Order not found');
+
+  if (data.shipping_status === ShippingStatus.Shipped  || data.shipping_status === ShippingStatus.Delivered) {
+    throw new Error('Cannot cancel, order already shipped or delivered.');
+  }
+
+
+  //cancelling if eligible
+  const { error: updateError } = await supabase
+    .from('orders')
+    .update({ shipping_status:ShippingStatus.Canceled})
+    .eq('id', orderId);
+
+  if (updateError) throw new Error('Error cancelling the order');
+
+  return orderId;
+};

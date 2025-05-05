@@ -1,26 +1,41 @@
 import styled from "styled-components";
 import Button from "../ui/Button";
-import { formatCurrency,formatDate } from "../utils/helpers";
+import { formatCurrency, formatDate } from "../utils/helpers";
 import useGetOrder from "../features/Orders/useGetOrder";
 import Spinner from "../ui/Spinner";
+import { ShippingStatus } from "../enums/ShippingStatus";
+import { useCancelOrder } from "../features/Orders/useCancelOrder";
+import Modal from "../ui/Modal";
+import ConfirmDelete from "../ui/ConfirmDelete";
+import Tag from "../admin/ui/Tag";
 
 
-const statuses = ["ordered", "processing", "shipped", "delivered"];
+const statuses = [
+  ShippingStatus.Ordered,
+  ShippingStatus.Processing,
+  ShippingStatus.Shipped,
+  ShippingStatus.Delivered
+];
 
 function Order() {
   const { order, isLoading } = useGetOrder()
+  const { cancelOrder, isPending } = useCancelOrder()
 
-  if(isLoading  || !order){
-    return <Spinner/>
+  if (isLoading || !order) {
+    return <Spinner />
   }
 
+  const isCancelledOrder = order.shipping_status === ShippingStatus.Canceled
+  const isReturnable = order.shipping_status === ShippingStatus.Delivered
   const currentStatusIndex = statuses.indexOf(order.shipping_status)
+
 
   return (
     <Container>
       <Header>
         <h2>Order #{order.order_number}</h2>
         <p>{formatDate(order.created_at)}</p>
+        {isCancelledOrder &&  <Tag type="red">canceled</Tag>}
       </Header>
 
       <Timeline>
@@ -74,17 +89,57 @@ function Order() {
             <span>Total:</span>
             <span>{formatCurrency(order.price)}</span>
           </SummaryRow>
-          <Button>Download Invoice</Button>
+          {/* <Button>Download Invoice</Button> */}
         </CardSection>
       </Card>
-      <Section>
-        <SectionTitle>Return & Cancellation</SectionTitle>
-        <p>Returns accepted within 10 days of delivery.</p>
-        {order && (
-          <Button onClick={() => alert("Cancel order logic here")}>
-            Cancel Order
-          </Button>
-        )}
+      <Section style={{ display: "flex", justifyContent: "space-between" }}>
+        <div>
+          <SectionTitle>Return & Cancellation</SectionTitle>
+          <p>Returns accepted within 10 days of delivery.</p>
+        </div>
+        <div>
+          {!isCancelledOrder && !isReturnable && (
+            <Modal>
+              <Modal.Open opens="delete">
+                <Button>
+                  Cancel Order
+                </Button>
+              </Modal.Open>
+              <Modal.Window name="delete">
+                <ConfirmDelete
+                  actionName="Cancel"
+                  resourceName="order"
+                  disabled={isPending}
+                  onConfirm={() => {
+                    if(order.id){
+                      cancelOrder(order.id)
+                    }
+                  }} />
+              </Modal.Window>
+            </Modal>
+          )}
+
+          {isReturnable && (
+            <Modal>
+              <Modal.Open opens="delete">
+                <Button>
+                  Return Package
+                </Button>
+              </Modal.Open>
+              <Modal.Window name="delete">
+                <ConfirmDelete
+                  actionName="Cancel"
+                  resourceName="order"
+                  disabled={isPending}
+                  onConfirm={() => {
+                    if(order.id){
+                      cancelOrder(order.id)
+                    }
+                  }} />
+              </Modal.Window>
+            </Modal>
+          )}
+        </div>
       </Section>
     </Container>
   );

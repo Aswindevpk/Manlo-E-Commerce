@@ -8,10 +8,14 @@ import { CiShoppingCart } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 
 const StyledCart = styled.main`
-    display: flex;
-    gap: 10rem;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    gap: 4rem;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows:auto 1fr;
+
+    @media (max-width: 768px) {
+        grid-template-columns:  1fr;
+    }
 `;
 
 

@@ -58,7 +58,13 @@ const Button = styled.button<ButtonProps>`
   box-shadow: var(--shadow-sm);
   ${({ size = "medium" }) => size && sizes[size]}
   ${({ variation = "primary" }) => variation && variations[variation]}
-  `
 
+
+  &:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  `
 
 export default Button

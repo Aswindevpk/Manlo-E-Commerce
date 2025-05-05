@@ -25,15 +25,16 @@ interface Props{
   resourceName:string;
   onConfirm:()=>void;
   disabled:boolean;
+  actionName?:string;
   onCloseModal?:()=>void;
 }
 
-function ConfirmDelete({ resourceName, onConfirm, disabled,onCloseModal}:Props) {
+function ConfirmDelete({actionName='Delete', resourceName, onConfirm, disabled,onCloseModal}:Props) {
   return (
     <StyledConfirmDelete>
-      <Heading as="h3">Delete {resourceName}</Heading>
+      <Heading as="h3">{actionName} {resourceName}</Heading>
       <p>
-        Are you sure you want to delete this {resourceName} permanently? This
+        Are you sure you want to {actionName} this {resourceName}? This
         action cannot be undone.
       </p>
 
@@ -42,7 +43,7 @@ function ConfirmDelete({ resourceName, onConfirm, disabled,onCloseModal}:Props) 
           Cancel
         </Button>
         <Button variation="danger" disabled={disabled} onClick={onConfirm}>
-          Delete
+          Yes, {actionName}
         </Button>
       </div>
     </StyledConfirmDelete>

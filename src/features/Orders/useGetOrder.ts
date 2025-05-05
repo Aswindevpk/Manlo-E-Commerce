@@ -10,7 +10,7 @@ function useGetOrder() {
     data: order,
     error,
   } = useQuery({
-    queryKey: ["orders",orderId],
+    queryKey: ["order",orderId],
     queryFn: () => getOrder({ orderId }),
     enabled: !!orderId,
     retry: false,
