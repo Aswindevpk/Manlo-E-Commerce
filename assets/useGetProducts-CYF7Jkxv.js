@@ -1,0 +1,1 @@
+import{u as s}from"./index-KJ9wKMvK.js";import{f as a}from"./apiProduct-C23VXKK6.js";function f({isNew:t,brand:r}){const{isLoading:e,data:o,error:u}=s({queryKey:["products",r],queryFn:()=>a({isNew:t,brand:r}),retry:!1});return{isLoading:e,products:o,error:u}}export{f as u};

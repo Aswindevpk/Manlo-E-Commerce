@@ -1,4 +1,4 @@
-import{f as r,u,b as d,j as t,h as m,C as c,R as p,B as h,d as f}from"./index-B8BJ-eIj.js";import{a as x,u as j}from"./useDeleteWishlist-B7FM996h.js";import{P as y}from"./ProductItem-CTTYf3pq.js";import{E as g}from"./EmptyState-CKjW8p0-.js";function v(){const{user:s}=r(),e=s==null?void 0:s.id,{isLoading:n,data:o,error:i}=u({queryKey:["allWishlist"],queryFn:()=>x({userId:e}),enabled:!!e});return{wishlist:o,isLoading:n,error:i}}const W=f.div`
+import{f as r,u,b as d,j as t,h as m,C as c,R as p,B as h,d as f}from"./index-KJ9wKMvK.js";import{a as x,u as j}from"./useDeleteWishlist-DaxjpuSe.js";import{P as y}from"./ProductItem-BTuBiTdJ.js";import{E as g}from"./EmptyState-ijO7v6Yj.js";function v(){const{user:s}=r(),e=s==null?void 0:s.id,{isLoading:n,data:o,error:i}=u({queryKey:["allWishlist"],queryFn:()=>x({userId:e}),enabled:!!e});return{wishlist:o,isLoading:n,error:i}}const W=f.div`
     display: flex;
     flex-wrap:wrap;
     justify-content: space-around;

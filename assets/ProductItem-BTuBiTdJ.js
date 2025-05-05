@@ -1,4 +1,4 @@
-import{r as a,j as t,d as o,i as d,L as m}from"./index-B8BJ-eIj.js";const f=o.img`
+import{r as a,j as t,d as o,i as d,L as m}from"./index-KJ9wKMvK.js";const f=o.img`
   aspect-ratio: 3/4;
   width: 100%;
   object-fit: cover;

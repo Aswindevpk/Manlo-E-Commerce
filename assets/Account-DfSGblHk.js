@@ -1,4 +1,4 @@
-import{j as e,F as r,d as s,H as t,R as a}from"./index-B8BJ-eIj.js";function n(){return e.jsxs(d,{children:[e.jsx(r,{label:"Email",children:e.jsx(i,{disabled:!0,type:"text"})}),e.jsx(r,{label:"Username",children:e.jsx(i,{type:"text"})})]})}const d=s.form`
+import{j as e,F as r,d as s,H as t,R as a}from"./index-KJ9wKMvK.js";function n(){return e.jsxs(d,{children:[e.jsx(r,{label:"Email",children:e.jsx(i,{disabled:!0,type:"text"})}),e.jsx(r,{label:"Username",children:e.jsx(i,{type:"text"})})]})}const d=s.form`
     display: flex;
     flex-direction: column;
     gap: 1.4rem;

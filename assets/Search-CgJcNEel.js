@@ -1,1 +1,0 @@
-import{j as r}from"./index-B8BJ-eIj.js";import{P as t}from"./ProductList-DiHDJYdO.js";import"./ProductItem-CTTYf3pq.js";import"./index-CBe1mJnJ.js";import"./apiProduct-DXyLiVzx.js";import"./EmptyState-CKjW8p0-.js";function a(){return r.jsx(r.Fragment,{children:r.jsx(t,{})})}export{a as default};

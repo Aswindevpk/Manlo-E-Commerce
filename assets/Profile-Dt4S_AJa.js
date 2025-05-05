@@ -1,4 +1,4 @@
-import{j as e,o as s,p as t,q as a,O as o,d as r,N as n}from"./index-B8BJ-eIj.js";const d=r.div`
+import{j as e,q as t,t as s,v as a,O as n,d as r,N as o}from"./index-KJ9wKMvK.js";const d=r.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
   @media (max-width: 768px) {
@@ -26,7 +26,7 @@ import{j as e,o as s,p as t,q as a,O as o,d as r,N as n}from"./index-B8BJ-eIj.js
 `,l=r.section`
   width: 100%;
   padding: 2rem;
-`,i=r(n)`
+`,i=r(o)`
   &:link,
   &:visited {
     display: flex;
@@ -68,4 +68,4 @@ import{j as e,o as s,p as t,q as a,O as o,d as r,N as n}from"./index-B8BJ-eIj.js
   &.active:visited svg {
     color: var(--color-brand-800);
   }
-`;function h(){return e.jsxs(d,{children:[e.jsxs(c,{children:[e.jsxs(i,{to:"account",children:[e.jsx(s,{}),e.jsx("span",{children:"Account"})]}),e.jsxs(i,{to:"addresses",children:[e.jsx(t,{}),e.jsx("span",{children:"Addresses"})]}),e.jsxs(i,{to:"orders",children:[e.jsx(a,{}),e.jsx("span",{children:"Orders"})]})]}),e.jsx(l,{children:e.jsx(o,{})})]})}export{h as default};
+`;function h(){return e.jsxs(d,{children:[e.jsxs(c,{children:[e.jsxs(i,{to:"account",children:[e.jsx(t,{}),e.jsx("span",{children:"Account"})]}),e.jsxs(i,{to:"addresses",children:[e.jsx(s,{}),e.jsx("span",{children:"Addresses"})]}),e.jsxs(i,{to:"orders",children:[e.jsx(a,{}),e.jsx("span",{children:"Orders"})]})]}),e.jsx(l,{children:e.jsx(n,{})})]})}export{h as default};
